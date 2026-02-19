@@ -2383,7 +2383,7 @@
             const colMappings = {
                 dg: ['ano', 'numero_emenda', 'codigo_siafi', 'esfera', 'autoria', 'valor_indicado', 'valor_repassado', 'objeto'],
                 exec: ['ano', 'numero_siafi', 'numero_empenho', 'data_empenho', 'descricao_item', 'valor_empenhado', 'valor_pago', 'cnpj_credor', 'razao_social_credor'],
-                plano: ['ano', 'id_plano_acao', 'id_executor', 'cnpj_executor', 'nome_executor', 'objeto', 'cnpj_beneficiario', 'beneficiario', 'codigo_emenda_parlamentar', 'valor_emenda']
+                plano: ['ano', 'cnpj_executor', 'nome_executor', 'objeto', 'cnpj_beneficiario', 'beneficiario', 'codigo_emenda_parlamentar', 'valor_emenda']
             };
             
             const prop = colMappings[dashboard][config.column];
