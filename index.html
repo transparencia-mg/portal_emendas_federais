@@ -2258,8 +2258,6 @@
             }
             else if (dashboard === 'plano') {
                 const ano = document.getElementById('anoPlano')?.value;
-                const idPlano = document.getElementById('idPlano')?.value.toLowerCase();
-                const idExecutor = document.getElementById('idExecutor')?.value.toLowerCase();
                 const executor = document.getElementById('nomeExecutor')?.value.toLowerCase();
                 const beneficiario = document.getElementById('beneficiarioPlano')?.value.toLowerCase();
                 const cnpjBeneficiario = document.getElementById('cnpjBeneficiario')?.value.toLowerCase();
@@ -2268,8 +2266,6 @@
                 
                 filteredPlano = planoExecucaoData.filter(item => {
                     if (ano && item.ano != ano) return false;
-                    if (idPlano && !(item.id_plano_acao || '').toLowerCase().includes(idPlano)) return false;
-                    if (idExecutor && !(item.id_executor || '').toLowerCase().includes(idExecutor)) return false;
                     if (executor && !(item.nome_executor || '').toLowerCase().includes(executor)) return false;
                     if (beneficiario && !(item.beneficiario || '').toLowerCase().includes(beneficiario)) return false;
                     if (cnpjBeneficiario && !(item.cnpj_beneficiario || '').toString().toLowerCase().includes(cnpjBeneficiario)) return false;
@@ -2317,8 +2313,6 @@
             }
             else if (dashboard === 'plano') {
                 document.getElementById('anoPlano').value = '';
-                document.getElementById('idPlano').value = '';
-                document.getElementById('idExecutor').value = '';
                 document.getElementById('nomeExecutor').value = '';
                 document.getElementById('beneficiarioPlano').value = '';
                 document.getElementById('cnpjBeneficiario').value = '';
