@@ -31,51 +31,50 @@
         body {
             font-family: 'Montserrat', Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--background-light);
-            padding-bottom: 15px;
-            overflow-y: hidden !important;
-            overflow-x: hidden !important;
-            min-height: auto !important;
-            height: 100vh !important;
-            position: relative;
-        }
+            overflow: hidden !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
 
         html {
-            overflow-y: hidden !important;
+            overflow: hidden !important;
             height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
         }
 
         .main-container {
-            height: calc(100vh - 150px) !important;
-            min-height: auto !important;
+            height: 100vh !important;
             overflow-y: auto !important;
             overflow-x: hidden !important;
-            position: relative;
-            -webkit-overflow-scrolling: touch;
+            padding-bottom: 20px;
         }
 
         .container.dashboard-spacing {
-            overflow: visible !important;
-            height: auto !important;
+            overflow-y: auto !important;
+            height: 100% !important;
             min-height: auto !important;
             position: relative;
         }
 
         .tab-content {
-            overflow: visible !important;
-            height: auto !important;
+            overflow-y: auto !important;
+            height: 100% !important;
             min-height: auto !important;
             position: relative;
         }
 
         .table-container {
-            height: auto !important;
+            height: 100% !important;
             min-height: auto !important;
-            overflow: visible !important;
+            overflow-y: auto !important;
             position: relative;
         }
 
         .table-fixed-header-container {
-            max-height: 500px;
+            max-height: 400px;
             overflow-y: auto;
             position: relative;
         }
@@ -2715,7 +2714,7 @@
             const paginationInfo = document.getElementById('paginationInfoPlano');
             
             if (filteredPlano.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="11" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
                 if (countElement) countElement.textContent = '0 registros';
                 if (paginationInfo) paginationInfo.textContent = 'Mostrando 0-0 de 0 registros';
                 updatePagination('plano', 1, 1);
@@ -2731,8 +2730,6 @@
             const rowsHTML = currentData.map(item => `
                 <tr>
                     <td>${item.ano || '-'}</td>
-                    <td>${item.id_plano_acao || '-'}</td>
-                    <td>${item.id_executor || '-'}</td>
                     <td>${formatarCNPJ(item.cnpj_executor)}</td>
                     <td>${item.nome_executor ? item.nome_executor.substring(0, 25) + (item.nome_executor.length > 25 ? '...' : '') : '-'}</td>
                     <td>${item.objeto ? item.objeto.substring(0, 40) + (item.objeto.length > 40 ? '...' : '') : '-'}</td>
