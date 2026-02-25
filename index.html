@@ -27,21 +27,25 @@
             --hover-blue: #006a82;
         }
         
-        /* ==================== ESTILOS GERAIS ==================== */
+        /* ==================== ESTILOS GERAIS - CORRIGIDO PARA IFRAME ==================== */
+        html {
+            overflow-y: hidden !important;
+            overflow-x: hidden !important;
+            height: auto !important;
+            min-height: auto !important;
+            position: relative;
+        }
+
         body {
             font-family: 'Montserrat', Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--background-light);
             padding-bottom: 15px;
-            overflow-y: visible !important;
+            overflow-y: hidden !important;
             overflow-x: hidden !important;
             min-height: auto !important;
             height: auto !important;
             position: relative;
-        }
-
-        html {
-            overflow-y: visible !important;
-            height: auto !important;
+            margin: 0;
         }
 
         .main-container {
@@ -65,6 +69,13 @@
             position: relative;
         }
 
+        .tab-pane {
+            overflow: visible !important;
+            height: auto !important;
+            min-height: auto !important;
+            position: relative;
+        }
+
         .table-container {
             height: auto !important;
             min-height: auto !important;
@@ -72,6 +83,10 @@
             position: relative;
         }
 
+        .row, .col, .col-*, .col-md-* {
+            overflow: visible !important;
+        }
+        
         .table-fixed-header-container {
             max-height: 500px;
             overflow-y: auto;
@@ -1046,7 +1061,7 @@
         /* ==================== RESPONSIVIDADE ==================== */
         @media (max-width: 768px) {
             body, html {
-                overflow-y: visible !important;
+                overflow-y: hidden !important;
             }
             
             .main-container, 
@@ -2005,11 +2020,92 @@
             plano: { column: 0, direction: 'asc' }
         };
 
+        // ==================== FUNÇÕES DE SCROLL E IFRAME ====================
+        function removeAllScrollIssues() {
+            console.log('Removendo problemas de scroll duplo...');
+            
+            const elements = [
+                document.body,
+                document.documentElement,
+                document.querySelector('.main-container'),
+                document.querySelector('.container.dashboard-spacing'),
+                document.querySelector('.tab-content'),
+                ...document.querySelectorAll('.tab-pane'),
+                ...document.querySelectorAll('.table-container'),
+                ...document.querySelectorAll('.row'),
+                ...document.querySelectorAll('.col'),
+                ...document.querySelectorAll('.container'),
+                ...document.querySelectorAll('.container-fluid')
+            ];
+            
+            elements.forEach(el => {
+                if (el && el.style) {
+                    el.style.overflowY = 'visible';
+                    el.style.overflowX = 'visible';
+                    el.style.overflow = 'visible';
+                }
+            });
+            
+            document.body.classList.remove('overflow-auto');
+            document.documentElement.classList.remove('overflow-auto');
+            
+            document.documentElement.style.height = 'auto';
+            document.body.style.height = 'auto';
+        }
+
+        function iframeUpdateHeight() {
+            console.log('Atualizando altura do iframe...');
+            
+            document.body.style.display = 'none';
+            document.body.offsetHeight;
+            document.body.style.display = '';
+            
+            const html = document.documentElement;
+            const body = document.body;
+            
+            const scrollHeight = Math.max(
+                body.scrollHeight, 
+                html.scrollHeight,
+                body.offsetHeight, 
+                html.offsetHeight
+            );
+            
+            const finalHeight = scrollHeight + 10;
+            
+            console.log('Altura calculada:', finalHeight);
+            
+            try {
+                window.parent.postMessage({ 
+                    iframeHeight: finalHeight 
+                }, '*');
+            } catch (error) {
+                // Ignora erro se não estiver em iframe
+            }
+            
+            return finalHeight;
+        }
+
         // ==================== INICIALIZAÇÃO ====================
         document.addEventListener('DOMContentLoaded', function() {
             updateDataAtualizacao();
             carregarTodosDados();
             setupEventListeners();
+            removeAllScrollIssues();
+            
+            // Atualiza altura do iframe após carregar
+            setTimeout(() => {
+                iframeUpdateHeight();
+            }, 1000);
+            
+            // Atualiza altura sempre que uma aba for alterada
+            const tabButtons = document.querySelectorAll('[data-bs-toggle="tab"]');
+            tabButtons.forEach(button => {
+                button.addEventListener('shown.bs.tab', function() {
+                    setTimeout(() => {
+                        iframeUpdateHeight();
+                    }, 100);
+                });
+            });
         });
 
         // ==================== FUNÇÕES DE UTILIDADE ====================
@@ -2079,6 +2175,11 @@
                 updateDashboard2();
                 updateDashboard3();
                 showLoading(false);
+                
+                // Atualiza altura do iframe após carregar dados
+                setTimeout(() => {
+                    iframeUpdateHeight();
+                }, 500);
             }).catch(error => {
                 console.error('Erro:', error);
                 showLoading(false);
@@ -2269,6 +2370,11 @@
             }
             
             showLoading(false);
+            
+            // Atualiza altura do iframe após filtros
+            setTimeout(() => {
+                iframeUpdateHeight();
+            }, 500);
         }
 
         function limparFiltros(dashboard) {
@@ -2315,6 +2421,11 @@
                 ordenarDados('plano');
                 updateDashboard3();
             }
+            
+            // Atualiza altura do iframe após limpar filtros
+            setTimeout(() => {
+                iframeUpdateHeight();
+            }, 500);
         }
 
         function filtrarTabela(dashboard) {
@@ -2342,6 +2453,11 @@
             if (dashboard === 'dg') updateDashboard1();
             else if (dashboard === 'exec') updateDashboard2();
             else if (dashboard === 'plano') updateDashboard3();
+            
+            // Atualiza altura do iframe após busca
+            setTimeout(() => {
+                iframeUpdateHeight();
+            }, 500);
         }
 
         // ==================== ORDENAÇÃO ====================
@@ -2360,6 +2476,11 @@
             if (dashboard === 'dg') updateTabelaDG();
             else if (dashboard === 'exec') updateTabelaExec();
             else if (dashboard === 'plano') updateTabelaPlano();
+            
+            // Atualiza altura do iframe após ordenação
+            setTimeout(() => {
+                iframeUpdateHeight();
+            }, 500);
         }
 
         function ordenarDados(dashboard) {
@@ -2391,6 +2512,7 @@
         function updateDashboard1() {
             updateSummaryCardsDG();
             updateTabelaDG();
+            setTimeout(iframeUpdateHeight, 300);
         }
 
         function updateSummaryCardsDG() {
@@ -2528,6 +2650,7 @@
         function updateDashboard2() {
             updateSummaryCardsExec();
             updateTabelaExec();
+            setTimeout(iframeUpdateHeight, 300);
         }
 
         function updateSummaryCardsExec() {
@@ -2665,6 +2788,7 @@
         function updateDashboard3() {
             updateSummaryCardsPlano();
             updateTabelaPlano();
+            setTimeout(iframeUpdateHeight, 300);
         }
 
         function updateSummaryCardsPlano() {
@@ -2835,6 +2959,11 @@
             if (dashboard === 'dg') updateTabelaDG();
             else if (dashboard === 'exec') updateTabelaExec();
             else if (dashboard === 'plano') updateTabelaPlano();
+            
+            // Atualiza altura do iframe após mudar página
+            setTimeout(() => {
+                iframeUpdateHeight();
+            }, 300);
         };
 
         // ==================== EXPORTAÇÃO CSV ====================
@@ -2943,6 +3072,7 @@
                 itemsPerPage.dg = parseInt(this.value);
                 currentPage.dg = 1;
                 updateTabelaDG();
+                setTimeout(iframeUpdateHeight, 300);
             });
             document.getElementById('exportCSVDG')?.addEventListener('click', () => exportarCSV('dg'));
             document.getElementById('printDG')?.addEventListener('click', () => window.print());
@@ -2958,6 +3088,7 @@
                 itemsPerPage.exec = parseInt(this.value);
                 currentPage.exec = 1;
                 updateTabelaExec();
+                setTimeout(iframeUpdateHeight, 300);
             });
             document.getElementById('exportCSVExec')?.addEventListener('click', () => exportarCSV('exec'));
             document.getElementById('printExec')?.addEventListener('click', () => window.print());
@@ -2973,6 +3104,7 @@
                 itemsPerPage.plano = parseInt(this.value);
                 currentPage.plano = 1;
                 updateTabelaPlano();
+                setTimeout(iframeUpdateHeight, 300);
             });
             document.getElementById('exportCSVPlano')?.addEventListener('click', () => exportarCSV('plano'));
             document.getElementById('printPlano')?.addEventListener('click', () => window.print());
@@ -2980,6 +3112,7 @@
 
         // ==================== ATUALIZAÇÃO PERIÓDICA ====================
         setInterval(updateDataAtualizacao, 60000);
+        setInterval(iframeUpdateHeight, 3000); // Atualiza altura a cada 3 segundos
     </script>
 </body>
 </html>
