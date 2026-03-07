@@ -1745,36 +1745,38 @@
         </div>
     </div>
 
-<!-- Cards de Download -->
+<!-- Cards de Fontes de Dados - NOVO ESTILO (igual ao modelo) -->
 <div class="row mb-4">
     <div class="col-md-6 mb-3">
         <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
-            <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">cloud_download</i> Dados Gerais de Emendas</h4>
+            <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">open_in_new</i> Portal de Dados Abertos</h4>
             <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
-                Arquivo completo com os dados gerais das emendas federais, incluindo informações sobre programas, ações, órgãos executores, beneficiários e valores.
+                Acesse o conjunto completo de dados sobre emendas federais no Portal de Dados Abertos, documentado conforme especificações Frictionless Data (dados sem fricção) para validação automática e reuso. Disponível em dados.mg.gov.br.
             </p>
             <div class="mt-4 text-end">
-                <button onclick="exportarCSV_simplificado('dg')" 
-                        class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
-                        style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease; cursor: pointer;">
-                    <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">download</i>Baixar CSV
-                </button>
+                <a href="https://dados.mg.gov.br/" 
+                   target="_blank" 
+                   class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
+                   style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease;">
+                    <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">launch</i>Acessar Portal de Dados MG
+                </a>
             </div>
         </div>
     </div>
     
     <div class="col-md-6 mb-3">
         <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
-            <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">account_balance</i> Execução PIX</h4>
+            <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">swap_horiz</i> TransfereGov Especiais</h4>
             <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
-                Dados detalhados da execução das transferências especiais via PIX, com informações sobre valores transferidos, datas e beneficiários.
+                Consulte os planos de ação das transferências especiais no TransfereGov, plataforma oficial do governo federal para acompanhamento de convênios e transferências. Acesse a consulta pública de planos de ação.
             </p>
             <div class="mt-4 text-end">
-                <button onclick="exportarCSV_simplificado('exec')" 
-                        class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
-                        style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease; cursor: pointer;">
-                    <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">download</i>Baixar CSV
-                </button>
+                <a href="https://especiais.transferegov.sistema.gov.br/transferencia-especial/plano-acao/consulta" 
+                   target="_blank" 
+                   class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
+                   style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease;">
+                    <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">launch</i>Acessar TransfereGov
+                </a>
             </div>
         </div>
     </div>
@@ -1783,21 +1785,20 @@
 <div class="row mb-4">
     <div class="col-md-6 mb-3">
         <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
-            <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">assignment</i> Plano de Execução PIX</h4>
+            <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">folder_open</i> Transparência Convênios</h4>
             <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
-                Planos de execução das emendas PIX, contendo cronogramas e metas das transferências.
+                Acesse o repositório com dados de execução de convênios federais, incluindo informações detalhadas sobre transferências, prestações de contas e documentação completa dos convênios realizados.
             </p>
             <div class="mt-4 text-end">
-                <button onclick="exportarCSV_simplificado('plano')" 
-                        class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
-                        style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease; cursor: pointer;">
-                    <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">download</i>Baixar CSV
-                </button>
+                <a href="https://drive.google.com/drive/folders/1FzCWIXr9A-1wrBNf1RwFCLdtusXJjKwd" 
+                   target="_blank" 
+                   class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
+                   style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease;">
+                    <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">launch</i>Acessar Drive
+                </a>
             </div>
         </div>
     </div>
-</div>
-
 
                 <!-- Dicionário de Dados -->
                 <div class="table-container" id="dicionario">
