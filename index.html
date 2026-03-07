@@ -897,7 +897,7 @@
         }
         
         .objeto-text {
-            font-size: 154px;
+            font-size: 15px;
             line-height: 1.6;
             color: #495057;
             background: #f8f9fa;
@@ -1682,104 +1682,136 @@
                 
             </div> <!-- Fim Dashboard 3 -->
 
-            <!-- ==================== DASHBOARD 4: DOWNLOADS E FONTES ==================== -->
-            <div class="tab-pane fade" id="dashboard4" role="tabpanel">
-                
-                <div class="data-atualizacao-container">
-                    <div class="data-atualizacao-box">
-                        <i class="material-icons">update</i>
-                        Atualizado em: <span id="data-atualizacao-dashboard4">Carregando...</span>
-                    </div>
-                </div>
+<!-- ==================== DASHBOARD 4: DOWNLOADS E FONTES ==================== -->
+<div class="tab-pane fade" id="dashboard4" role="tabpanel">
+    
+    <div class="data-atualizacao-container">
+        <div class="data-atualizacao-box">
+            <i class="material-icons">update</i>
+            Atualizado em: <span id="data-atualizacao-dashboard4">Carregando...</span>
+        </div>
+    </div>
 
-                <!-- Cards de Download -->
-                <div class="row mb-4">
-                    <div class="col-md-4 col-12">
-                        <div class="card-stats">
-                            <i class="fas fa-database fa-3x mb-3" style="color: var(--primary-dark);"></i>
-                            <h4>Dados Gerais de Emendas</h4>
-                            <p class="text-muted" style="font-size: 13px;">dados_gerais_emendas.csv</p>
-                            <div class="mt-3">
-                                <button class="btn-primary-custom w-100" onclick="downloadArquivo('dadosGerais')">
-                                    <i class="fas fa-download me-2"></i>Baixar CSV
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-12">
-                        <div class="card-stats">
-                            <i class="fas fa-chart-line fa-3x mb-3" style="color: var(--primary-dark);"></i>
-                            <h4>Execução PIX</h4>
-                            <p class="text-muted" style="font-size: 13px;">execucao_transferencias_especiais_pix.csv</p>
-                            <div class="mt-3">
-                                <button class="btn-primary-custom w-100" onclick="downloadArquivo('execucao')">
-                                    <i class="fas fa-download me-2"></i>Baixar CSV
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-12">
-                        <div class="card-stats">
-                            <i class="fas fa-tasks fa-3x mb-3" style="color: var(--primary-dark);"></i>
-                            <h4>Plano de Execução PIX</h4>
-                            <p class="text-muted" style="font-size: 13px;">plano_execucao_emendas_pix.csv</p>
-                            <div class="mt-3">
-                                <button class="btn-primary-custom w-100" onclick="downloadArquivo('planoExecucao')">
-                                    <i class="fas fa-download me-2"></i>Baixar CSV
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Cards de Download - NOVO MODELO -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
+                <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">cloud_download</i> Dados Gerais de Emendas</h4>
+                <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
+                    Arquivo completo com os dados gerais das emendas federais, incluindo informações sobre programas, ações, órgãos executores, beneficiários e valores empenhados, liquidados e pagos.
+                </p>
+                <div class="mt-4 text-end">
+                    <button onclick="downloadArquivo('dadosGerais')" 
+                            class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
+                            style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease; cursor: pointer;">
+                        <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">download</i>Baixar CSV
+                    </button>
                 </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+            <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
+                <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">account_balance</i> Execução PIX</h4>
+                <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
+                    Dados detalhados da execução das transferências especiais via PIX, com informações sobre valores transferidos, datas, beneficiários e status das operações.
+                </p>
+                <div class="mt-4 text-end">
+                    <button onclick="downloadArquivo('execucao')" 
+                            class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
+                            style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease; cursor: pointer;">
+                        <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">download</i>Baixar CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <!-- Cards de Fontes de Dados -->
-                <div class="row mb-4">
-                    <div class="col-md-4 col-12">
-                        <div class="card-stats">
-                            <i class="fas fa-external-link-alt fa-3x mb-3" style="color: var(--primary-dark);"></i>
-                            <h4>Portal de Dados Abertos</h4>
-                            <p class="text-muted" style="font-size: 13px;">dados.mg.gov.br</p>
-                            <div class="mt-3">
-                                <a href="https://dados.mg.gov.br/" target="_blank" class="btn-export w-100 d-block text-decoration-none">
-                                    <i class="fas fa-external-link-alt me-2"></i>Acessar Portal
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-12">
-                        <div class="card-stats">
-                            <i class="fas fa-exchange-alt fa-3x mb-3" style="color: var(--primary-dark);"></i>
-                            <h4>TransfereGov Especiais</h4>
-                            <p class="text-muted" style="font-size: 13px;">Consulta de Planos de Ação</p>
-                            <div class="mt-3">
-                                <a href="https://especiais.transferegov.sistema.gov.br/transferencia-especial/plano-acao/consulta" target="_blank" class="btn-export w-100 d-block text-decoration-none">
-                                    <i class="fas fa-search me-2"></i>Acessar Consulta
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-12">
-                        <div class="card-stats">
-                            <i class="fas fa-folder-open fa-3x mb-3" style="color: var(--primary-dark);"></i>
-                            <h4>Transparência Convênios</h4>
-                            <p class="text-muted" style="font-size: 13px;">Execução de Convênios Federais</p>
-                            <div class="mt-3">
-                                <a href="https://drive.google.com/drive/folders/1FzCWIXr9A-1wrBNf1RwFCLdtusXJjKwd" target="_blank" class="btn-export w-100 d-block text-decoration-none">
-                                    <i class="fas fa-external-link-alt me-2"></i>Acessar Drive
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
+                <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">assignment</i> Plano de Execução PIX</h4>
+                <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
+                    Planos de execução das emendas PIX, contendo cronogramas, metas físicas e financeiras, e detalhamento das ações previstas para cada transferência.
+                </p>
+                <div class="mt-4 text-end">
+                    <button onclick="downloadArquivo('planoExecucao')" 
+                            class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
+                            style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease; cursor: pointer;">
+                        <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">download</i>Baixar CSV
+                    </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Cards de Download -->
+<div class="row mb-4">
+    <div class="col-md-6 mb-3">
+        <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
+            <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">cloud_download</i> Dados Gerais de Emendas</h4>
+            <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
+                Arquivo completo com os dados gerais das emendas federais, incluindo informações sobre programas, ações, órgãos executores, beneficiários e valores.
+            </p>
+            <div class="mt-4 text-end">
+                <button onclick="exportarCSV_simplificado('dg')" 
+                        class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
+                        style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease; cursor: pointer;">
+                    <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">download</i>Baixar CSV
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-3">
+        <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
+            <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">account_balance</i> Execução PIX</h4>
+            <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
+                Dados detalhados da execução das transferências especiais via PIX, com informações sobre valores transferidos, datas e beneficiários.
+            </p>
+            <div class="mt-4 text-end">
+                <button onclick="exportarCSV_simplificado('exec')" 
+                        class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
+                        style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease; cursor: pointer;">
+                    <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">download</i>Baixar CSV
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6 mb-3">
+        <div class="card-stats p-4 bg-white rounded shadow-sm h-100">
+            <h4 class="fw-bold text-start mb-3"><i class="material-icons me-2">assignment</i> Plano de Execução PIX</h4>
+            <p class="text-muted text-justify" style="font-size: 13px; text-align: justify;">
+                Planos de execução das emendas PIX, contendo cronogramas e metas das transferências.
+            </p>
+            <div class="mt-4 text-end">
+                <button onclick="exportarCSV_simplificado('plano')" 
+                        class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2"
+                        style="color: var(--primary-dark); background-color: white; border: 1px solid var(--primary-dark); border-radius: 4px; transition: all 0.3s ease; cursor: pointer;">
+                    <i class="material-icons me-2" style="font-size: 16px; vertical-align: middle;">download</i>Baixar CSV
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
                 <!-- Dicionário de Dados -->
                 <div class="table-container" id="dicionario">
                     <div class="table-header">
                         <h3 class="table-title"><i class="fas fa-book me-2"></i>Dicionário de Dados</h3>
-                        <span class="table-badge">Versão 1.0</span>
                     </div>
                     <div class="p-4">
                         <table class="dicionario-tabela">
+
+                            <tbody>
+                                <!-- Emendas Geral -->
+                                <tr class="dicionario-secao">
+                                    <td colspan="3">EMENDAS GERAIS</td>
+                                </tr>
                             <thead>
                                 <tr>
                                     <th>Tabela</th>
@@ -1787,11 +1819,6 @@
                                     <th>Descrição</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <!-- Emendas Geral -->
-                                <tr class="dicionario-secao">
-                                    <td colspan="3">EMENDAS GERAIS</td>
-                                </tr>
                                 <tr><td>Emendas Geral</td><td>Esfera</td><td>Descrição da Esfera que irá repassar os recursos.</td></tr>
                                 <tr><td>Emendas Geral</td><td>Modalidade</td><td>Classificação da emenda, por exemplo, individual, de bancada, de comissão, ou de relator.</td></tr>
                                 <tr><td>Emendas Geral</td><td>Autoria</td><td>Informações sobre o parlamentar ou comissão que apresentou a emenda.</td></tr>
@@ -1810,6 +1837,13 @@
                                 <tr class="dicionario-secao">
                                     <td colspan="3">EXECUÇÃO TRANSFERÊNCIAS ESPECIAIS</td>
                                 </tr>
+                            <thead>
+                                <tr>
+                                    <th>Tabela</th>
+                                    <th>Campo</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
                                 <tr><td>Execução</td><td>Nº SIAFI</td><td>Número de controle do Sistema de Administração Financeira do Estado de Minas Gerais - SIAFI MG</td></tr>
                                 <tr><td>Execução</td><td>Ano Empenho</td><td>Ano em que o empenho foi emitido</td></tr>
                                 <tr><td>Execução</td><td>Nº Empenho</td><td>Número sequencial do empenho no exercício</td></tr>
@@ -1852,6 +1886,13 @@
                                 <tr class="dicionario-secao">
                                     <td colspan="3">PLANO DE TRANSFERÊNCIAS ESPECIAIS</td>
                                 </tr>
+                            <thead>
+                                <tr>
+                                    <th>Tabela</th>
+                                    <th>Campo</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
                                 <tr><td>Plano</td><td>id plano acao</td><td>Identificador do Plano de Ação</td></tr>
                                 <tr><td>Plano</td><td>id executor</td><td>Identificador do Executor responsável</td></tr>
                                 <tr><td>Plano</td><td>cnpj executor</td><td>CNPJ do órgão ou entidade executora</td></tr>
@@ -2887,54 +2928,165 @@
             }, 300);
         };
 
-        // ==================== EXPORTAÇÃO CSV ====================
-        function exportarCSV(dashboard) {
-            let data = [], filename = '', headers = [];
-            
-            if (dashboard === 'dg') {
-                data = filteredDG;
-                filename = 'dados_gerais_emendas.csv';
-                headers = ['Ano', 'Nº Emenda', 'Cód. SIAFI', 'Esfera', 'Autoria', 'Valor Indicado', 'Valor Repassado', 'Objeto'];
-            } else if (dashboard === 'exec') {
-                data = filteredExec;
-                filename = 'execucao_pix.csv';
-                headers = ['Ano', 'Nº SIAFI', 'Nº Empenho', 'Data Empenho', 'Descrição Item', 'Valor Empenhado', 'Valor Pago', 'CNPJ/CPF Credor', 'Razão Social'];
-            } else if (dashboard === 'plano') {
-                data = filteredPlano;
-                filename = 'plano_execucao_pix.csv';
-                headers = ['Ano', 'CNPJ Executor', 'Executor', 'Objeto', 'CNPJ Beneficiário', 'Beneficiário', 'Código Emenda', 'Valor Emenda'];
+// ==================== EXPORTAÇÃO CSV ====================
+function exportarCSV(dashboard) {
+    let filename = '';
+    let filePath = '';
+    
+    // Define o arquivo correspondente baseado no dashboard
+    if (dashboard === 'dg') {
+        filename = 'dados_gerais_emendas.csv';
+        filePath = 'data/dados_gerais_emendas.csv';
+    } else if (dashboard === 'exec') {
+        filename = 'execucao_pix.csv';
+        filePath = 'data/execucao_transferencias_especiais_pix.csv';
+    } else if (dashboard === 'plano') {
+        filename = 'plano_execucao_pix.csv';
+        filePath = 'data/plano_execucao_emendas_pix.csv';
+    } else {
+        console.error('Dashboard não reconhecido');
+        return;
+    }
+    
+    // Mostrar loading (opcional)
+    mostrarLoadingDownload(true);
+    
+    // Fazer fetch do arquivo CSV
+    fetch(filePath)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Arquivo não encontrado: ${filePath}`);
             }
-            
-            if (data.length === 0) {
-                alert('Não há dados para exportar.');
-                return;
-            }
-            
-            const csvData = data.map(item => {
-                if (dashboard === 'dg') {
-                    return [item.ano, item.numero_emenda, item.codigo_siafi, item.esfera, item.autoria, item.valor_indicado, item.valor_repassado, item.objeto];
-                } else if (dashboard === 'exec') {
-                    return [item.ano, item.numero_siafi, item.numero_empenho, item.data_empenho, item.descricao_item, item.valor_empenhado, item.valor_pago, item.cnpj_credor, item.razao_social_credor];
-                } else {
-                    return [item.ano, item.id_plano_acao, item.id_executor, item.cnpj_executor, item.nome_executor, item.objeto, item.cnpj_beneficiario, item.beneficiario, item.codigo_emenda_parlamentar, item.valor_emenda];
-                }
+            return response.text();
+        })
+        .then(csvContent => {
+            // Adicionar BOM para UTF-8 e fazer download
+            const blob = new Blob(["\uFEFF" + csvContent], { 
+                type: 'text/csv;charset=utf-8;' 
             });
             
-            const csvContent = [headers.join(';'), ...csvData.map(row => row.map(cell => `"${cell || ''}"`).join(';'))].join('\n');
-            
-            // Download do arquivo (corrigido)
-            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             
             link.setAttribute('href', url);
             link.setAttribute('download', filename);
             link.style.display = 'none';
+            
             document.body.appendChild(link);
             link.click();
+            
+            // Limpeza
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
+            
+            // Feedback de sucesso
+            mostrarMensagemSucesso(`Download de ${filename} iniciado!`);
+        })
+        .catch(error => {
+            console.error('Erro ao baixar arquivo:', error);
+            
+            // Fallback: tentar download direto pelo link (caso o fetch falhe)
+            const linkAlternativo = document.createElement('a');
+            linkAlternativo.href = filePath;
+            linkAlternativo.download = filename;
+            linkAlternativo.style.display = 'none';
+            
+            document.body.appendChild(linkAlternativo);
+            linkAlternativo.click();
+            document.body.removeChild(linkAlternativo);
+            
+            // Mostrar mensagem de erro se o fallback também falhar
+            setTimeout(() => {
+                if (!linkAlternativo.href) {
+                    alert(`Erro ao baixar ${filename}. Verifique se o arquivo existe na pasta data/`);
+                }
+            }, 500);
+        })
+        .finally(() => {
+            // Esconder loading
+            mostrarLoadingDownload(false);
+        });
+}
+
+// Função auxiliar para mostrar loading durante o download
+function mostrarLoadingDownload(show) {
+    let loadingEl = document.getElementById('loading-download');
+    
+    if (show) {
+        if (!loadingEl) {
+            loadingEl = document.createElement('div');
+            loadingEl.id = 'loading-download';
+            loadingEl.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 9999; display: flex; justify-content: center; align-items: center;">
+                    <div style="text-align: center;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Carregando...</span>
+                        </div>
+                        <p class="mt-2">Preparando download...</p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(loadingEl);
         }
+    } else {
+        if (loadingEl) {
+            loadingEl.remove();
+        }
+    }
+}
+
+// Função para mostrar mensagem de sucesso
+function mostrarMensagemSucesso(mensagem) {
+    // Criar elemento de notificação
+    const notificacao = document.createElement('div');
+    notificacao.className = 'alert alert-success alert-dismissible fade show';
+    notificacao.setAttribute('role', 'alert');
+    notificacao.style.position = 'fixed';
+    notificacao.style.top = '20px';
+    notificacao.style.right = '20px';
+    notificacao.style.zIndex = '10000';
+    notificacao.style.minWidth = '300px';
+    notificacao.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+    
+    notificacao.innerHTML = `
+        <i class="material-icons me-2" style="vertical-align: middle;">check_circle</i>
+        ${mensagem}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    
+    document.body.appendChild(notificacao);
+    
+    // Remover após 5 segundos
+    setTimeout(() => {
+        notificacao.remove();
+    }, 5000);
+}
+
+// Versão simplificada (se não precisar de loading e feedback visual)
+function exportarCSV_simplificado(dashboard) {
+    let filename = '';
+    let filePath = '';
+    
+    if (dashboard === 'dg') {
+        filename = 'dados_gerais_emendas.csv';
+        filePath = 'data/dados_gerais_emendas.csv';
+    } else if (dashboard === 'exec') {
+        filename = 'execucao_pix.csv';
+        filePath = 'data/execucao_transferencias_especiais_pix.csv';
+    } else if (dashboard === 'plano') {
+        filename = 'plano_execucao_pix.csv';
+        filePath = 'data/plano_execucao_emendas_pix.csv';
+    }
+    
+    // Download direto
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.download = filename;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 
         // ==================== COMPARTILHAMENTO ====================
         window.compartilhar = function(rede) {
