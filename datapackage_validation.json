@@ -1,19 +1,18 @@
 {
   "version": "4.16.6",
-  "time": 0.31,
+  "time": 0.3,
   "errors": [],
   "tasks": [
     {
       "resource": {
-        "description": "Insira a descrição/explicação detalhada deste recurso.",
         "dialect": {
           "delimiter": ";"
         },
         "encoding": "utf-8-sig",
         "format": "csv",
         "hashing": "md5",
-        "name": "emendas_dados_gerais",
-        "path": "data/emendas_dados_gerais.csv",
+        "name": "dados_gerais_emendas",
+        "path": "data/dados_gerais_emendas.csv",
         "profile": "tabular-data-resource",
         "schema": {
           "fields": [
@@ -76,15 +75,15 @@
           ]
         },
         "scheme": "file",
-        "title": "Insira um título humanamente legível para este recurso.",
+        "title": "Emendas Dados Gerais",
         "stats": {
-          "hash": "27141a4e04b8fbabd7c131ba8f6c7989",
-          "bytes": 133422,
+          "hash": "926a1fd885f3236b32d684d0718c6d02",
+          "bytes": 133409,
           "fields": 14,
           "rows": 419
         }
       },
-      "time": 0.028,
+      "time": 0.027,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -106,23 +105,233 @@
         "unique-error"
       ],
       "partial": false,
-      "errors": [],
+      "errors": [
+        {
+          "label": "modalide",
+          "fieldName": "modalidade",
+          "fieldNumber": 2,
+          "fieldPosition": 2,
+          "labels": [
+            "esfera",
+            "modalide",
+            "autorida",
+            "tipo_instrumento_juridico",
+            "numero_emenda",
+            "ano_emenda",
+            "codigo_siafi",
+            "codigo_sigcon_entrada",
+            "valor_indicado",
+            "valor_repassado",
+            "formula",
+            "objeto",
+            "funcao_governo",
+            "orgao_executor"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"modalide\" in field modalidade at position \"2\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "autorida",
+          "fieldName": "autoria",
+          "fieldNumber": 3,
+          "fieldPosition": 3,
+          "labels": [
+            "esfera",
+            "modalide",
+            "autorida",
+            "tipo_instrumento_juridico",
+            "numero_emenda",
+            "ano_emenda",
+            "codigo_siafi",
+            "codigo_sigcon_entrada",
+            "valor_indicado",
+            "valor_repassado",
+            "formula",
+            "objeto",
+            "funcao_governo",
+            "orgao_executor"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"autorida\" in field autoria at position \"3\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "tipo_instrumento_juridico",
+          "fieldName": "tipo_de_instrumento_juridico",
+          "fieldNumber": 4,
+          "fieldPosition": 4,
+          "labels": [
+            "esfera",
+            "modalide",
+            "autorida",
+            "tipo_instrumento_juridico",
+            "numero_emenda",
+            "ano_emenda",
+            "codigo_siafi",
+            "codigo_sigcon_entrada",
+            "valor_indicado",
+            "valor_repassado",
+            "formula",
+            "objeto",
+            "funcao_governo",
+            "orgao_executor"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"tipo_instrumento_juridico\" in field tipo_de_instrumento_juridico at position \"4\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "numero_emenda",
+          "fieldName": "numero_da_emenda",
+          "fieldNumber": 5,
+          "fieldPosition": 5,
+          "labels": [
+            "esfera",
+            "modalide",
+            "autorida",
+            "tipo_instrumento_juridico",
+            "numero_emenda",
+            "ano_emenda",
+            "codigo_siafi",
+            "codigo_sigcon_entrada",
+            "valor_indicado",
+            "valor_repassado",
+            "formula",
+            "objeto",
+            "funcao_governo",
+            "orgao_executor"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"numero_emenda\" in field numero_da_emenda at position \"5\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "ano_emenda",
+          "fieldName": "ano_da_emenda",
+          "fieldNumber": 6,
+          "fieldPosition": 6,
+          "labels": [
+            "esfera",
+            "modalide",
+            "autorida",
+            "tipo_instrumento_juridico",
+            "numero_emenda",
+            "ano_emenda",
+            "codigo_siafi",
+            "codigo_sigcon_entrada",
+            "valor_indicado",
+            "valor_repassado",
+            "formula",
+            "objeto",
+            "funcao_governo",
+            "orgao_executor"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"ano_emenda\" in field ano_da_emenda at position \"6\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "funcao_governo",
+          "fieldName": "funcao_de_governo",
+          "fieldNumber": 13,
+          "fieldPosition": 13,
+          "labels": [
+            "esfera",
+            "modalide",
+            "autorida",
+            "tipo_instrumento_juridico",
+            "numero_emenda",
+            "ano_emenda",
+            "codigo_siafi",
+            "codigo_sigcon_entrada",
+            "valor_indicado",
+            "valor_repassado",
+            "formula",
+            "objeto",
+            "funcao_governo",
+            "orgao_executor"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"funcao_governo\" in field funcao_de_governo at position \"13\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        }
+      ],
       "stats": {
-        "errors": 0
+        "errors": 6
       },
-      "valid": true
+      "valid": false
     },
     {
       "resource": {
-        "description": "Insira a descrição/explicação detalhada deste recurso.",
         "dialect": {
           "delimiter": ";"
         },
         "encoding": "utf-8-sig",
         "format": "csv",
         "hashing": "md5",
-        "name": "execucao_transferencias_especiais",
-        "path": "data/execucao_transferencias_especiais.csv",
+        "name": "execucao_transferencias_especiais_pix",
+        "path": "data/execucao_transferencias_especiais_pix.csv",
         "profile": "tabular-data-resource",
         "schema": {
           "fields": [
@@ -277,15 +486,15 @@
           ]
         },
         "scheme": "file",
-        "title": "Insira um título humanamente legível para este recurso.",
+        "title": "Execução de Emendas - Emendas PIX",
         "stats": {
-          "hash": "030cea09ff4d6b9e9021bcd4f4a0a3e3",
-          "bytes": 306983,
+          "hash": "b46fc10a07ef0eeb0ae87053c89b11b8",
+          "bytes": 306976,
           "fields": 37,
           "rows": 1294
         }
       },
-      "time": 0.121,
+      "time": 0.108,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -308,6 +517,702 @@
       ],
       "partial": false,
       "errors": [
+        {
+          "label": "numero_siafi",
+          "fieldName": "no_siafi",
+          "fieldNumber": 1,
+          "fieldPosition": 1,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"numero_siafi\" in field no_siafi at position \"1\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "numero_empenho",
+          "fieldName": "no_empenho",
+          "fieldNumber": 3,
+          "fieldPosition": 3,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"numero_empenho\" in field no_empenho at position \"3\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "modalide",
+          "fieldName": "modalidade",
+          "fieldNumber": 8,
+          "fieldPosition": 8,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"modalide\" in field modalidade at position \"8\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "elemento_despes",
+          "fieldName": "elemento_de_despesa",
+          "fieldNumber": 9,
+          "fieldPosition": 9,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"elemento_despes\" in field elemento_de_despesa at position \"9\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "item_despesa",
+          "fieldName": "item_de_despesa",
+          "fieldNumber": 10,
+          "fieldPosition": 10,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"item_despesa\" in field item_de_despesa at position \"10\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "ed_eda",
+          "fieldName": "ed_dea",
+          "fieldNumber": 13,
+          "fieldPosition": 13,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"ed_eda\" in field ed_dea at position \"13\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "valor_empenhado",
+          "fieldName": "valor_empenhado_r",
+          "fieldNumber": 16,
+          "fieldPosition": 16,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"valor_empenhado\" in field valor_empenhado_r at position \"16\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "valor_liquidado",
+          "fieldName": "valor_liquidado_r",
+          "fieldNumber": 17,
+          "fieldPosition": 17,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"valor_liquidado\" in field valor_liquidado_r at position \"17\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "valor_pago",
+          "fieldName": "valor_pago_r",
+          "fieldNumber": 18,
+          "fieldPosition": 18,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"valor_pago\" in field valor_pago_r at position \"18\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "rpnp_reestabelecido",
+          "fieldName": "rpnp_restabelecido",
+          "fieldNumber": 26,
+          "fieldPosition": 26,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"rpnp_reestabelecido\" in field rpnp_restabelecido at position \"26\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "rpp_reestabelecido",
+          "fieldName": "rpp_restabelecido",
+          "fieldNumber": 32,
+          "fieldPosition": 32,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"rpp_reestabelecido\" in field rpp_restabelecido at position \"32\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "retido_rpnp_rpp",
+          "fieldName": "retido_rpnp_e_rpp",
+          "fieldNumber": 35,
+          "fieldPosition": 35,
+          "labels": [
+            "numero_siafi",
+            "ano_empenho",
+            "numero_empenho",
+            "data_empenho",
+            "acao",
+            "categoria",
+            "grupo",
+            "modalide",
+            "elemento_despes",
+            "item_despesa",
+            "descricao_item",
+            "natureza_dea",
+            "ed_eda",
+            "fonte",
+            "procedencia",
+            "valor_empenhado",
+            "valor_liquidado",
+            "valor_pago",
+            "cnpj_cpf_credor",
+            "razao_social_credor",
+            "despesa_empenhada",
+            "despesa_liquidada",
+            "pago_orcamentario",
+            "rpnp_inscrito",
+            "rpnp_cancelado",
+            "rpnp_reestabelecido",
+            "rpnp_liquidado",
+            "rpnp_pago",
+            "rpnp_anulado_pago",
+            "rpp_inscrito",
+            "rpp_cancelado",
+            "rpp_reestabelecido",
+            "rpp_pago",
+            "rpp_anulado_pago",
+            "retido_rpnp_rpp",
+            "rpnp_anulado_retencao",
+            "rpp_anulado_retencao"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"retido_rpnp_rpp\" in field retido_rpnp_e_rpp at position \"35\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
         {
           "cell": "133817,29",
           "fieldName": "rpnp_restabelecido",
@@ -367,21 +1272,20 @@
         }
       ],
       "stats": {
-        "errors": 1
+        "errors": 13
       },
       "valid": false
     },
     {
       "resource": {
-        "description": "Insira a descrição/explicação detalhada deste recurso.",
         "dialect": {
           "delimiter": ";"
         },
         "encoding": "utf-8-sig",
         "format": "csv",
         "hashing": "md5",
-        "name": "planos_transferencias_especiais",
-        "path": "data/planos_transferencias_especiais.csv",
+        "name": "plano_execucao_emendas_pix",
+        "path": "data/plano_execucao_emendas_pix.csv",
         "profile": "tabular-data-resource",
         "schema": {
           "fields": [
@@ -452,15 +1356,15 @@
           ]
         },
         "scheme": "file",
-        "title": "Insira um título humanamente legível para este recurso.",
+        "title": "Plano de Execução - Emendas PIX",
         "stats": {
-          "hash": "aea17eb5cefcea83132bb0e5b72f2cf2",
-          "bytes": 356714,
+          "hash": "6aba48132f6c46bcc4cec6a5b7f0caf8",
+          "bytes": 356706,
           "fields": 16,
           "rows": 212
         }
       },
-      "time": 0.086,
+      "time": 0.082,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -483,6 +1387,117 @@
       ],
       "partial": false,
       "errors": [
+        {
+          "label": "codigo_emenda_parlamentar",
+          "fieldName": "codigo_emenda_e_parlamentar",
+          "fieldNumber": 14,
+          "fieldPosition": 14,
+          "labels": [
+            "id_plano_acao",
+            "id_executor",
+            "cnpj_executor",
+            "nome_executor",
+            "objeto_executor",
+            "valor_custeio",
+            "valor_capital",
+            "ano_plano_acao",
+            "modalidade_plano_acao",
+            "situacao_plano_acao",
+            "cnpj_beneficiario_plano_acao",
+            "nome_beneficiario_plano_acao",
+            "uf_beneficiario_plano_acao",
+            "codigo_emenda_parlamentar",
+            "valor_emenda",
+            "classificacao_orcamentaria_plano_trabalho"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"codigo_emenda_parlamentar\" in field codigo_emenda_e_parlamentar at position \"14\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "valor_emenda",
+          "fieldName": "valor_da_emenda",
+          "fieldNumber": 15,
+          "fieldPosition": 15,
+          "labels": [
+            "id_plano_acao",
+            "id_executor",
+            "cnpj_executor",
+            "nome_executor",
+            "objeto_executor",
+            "valor_custeio",
+            "valor_capital",
+            "ano_plano_acao",
+            "modalidade_plano_acao",
+            "situacao_plano_acao",
+            "cnpj_beneficiario_plano_acao",
+            "nome_beneficiario_plano_acao",
+            "uf_beneficiario_plano_acao",
+            "codigo_emenda_parlamentar",
+            "valor_emenda",
+            "classificacao_orcamentaria_plano_trabalho"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"valor_emenda\" in field valor_da_emenda at position \"15\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
+        {
+          "label": "classificacao_orcamentaria_plano_trabalho",
+          "fieldName": "classificacao_orcamentaria_plano_de_trabalho",
+          "fieldNumber": 16,
+          "fieldPosition": 16,
+          "labels": [
+            "id_plano_acao",
+            "id_executor",
+            "cnpj_executor",
+            "nome_executor",
+            "objeto_executor",
+            "valor_custeio",
+            "valor_capital",
+            "ano_plano_acao",
+            "modalidade_plano_acao",
+            "situacao_plano_acao",
+            "cnpj_beneficiario_plano_acao",
+            "nome_beneficiario_plano_acao",
+            "uf_beneficiario_plano_acao",
+            "codigo_emenda_parlamentar",
+            "valor_emenda",
+            "classificacao_orcamentaria_plano_trabalho"
+          ],
+          "rowPositions": [
+            1
+          ],
+          "code": "incorrect-label",
+          "name": "Incorrect Label",
+          "tags": [
+            "#table",
+            "#header",
+            "#label"
+          ],
+          "note": "",
+          "message": "Label \"classificacao_orcamentaria_plano_trabalho\" in field classificacao_orcamentaria_plano_de_trabalho at position \"16\" does not match the field name in the schema",
+          "description": "One of the data source header does not match the field name defined in the schema."
+        },
         {
           "cell": "R$ 0",
           "fieldName": "valor_custeio",
@@ -1133,13 +2148,13 @@
         }
       ],
       "stats": {
-        "errors": 18
+        "errors": 21
       },
       "valid": false
     }
   ],
   "stats": {
-    "errors": 19,
+    "errors": 40,
     "tasks": 3
   },
   "valid": false
