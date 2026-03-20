@@ -1,9 +1,8 @@
-name: emendas
-owner_org: ''
+name: emendas_federais
+owner_org: secretaria-estado-governo-segov
 profile: data-package
 resources:
-  - description: Insira a descrição/explicação detalhada deste recurso.
-    dialect:
+  - dialect:
       delimiter: ;
     encoding: utf-8-sig
     format: csv
@@ -42,9 +41,8 @@ resources:
         - name: orgao_executor
           type: string
     scheme: file
-    title: Insira um título humanamente legível para este recurso.
-  - description: Insira a descrição/explicação detalhada deste recurso.
-    dialect:
+    title: Emendas Dados Gerais
+  - dialect:
       delimiter: ;
     encoding: utf-8-sig
     format: csv
@@ -129,9 +127,8 @@ resources:
         - name: rpp_anulado_retencao
           type: integer
     scheme: file
-    title: Insira um título humanamente legível para este recurso.
-  - description: Insira a descrição/explicação detalhada deste recurso.
-    dialect:
+    title: Execução de Emendas - Transferências PIX
+  - description: dialect:
       delimiter: ;
     encoding: utf-8-sig
     format: csv
@@ -174,5 +171,5 @@ resources:
         - name: classificacao_orcamentaria_plano_de_trabalho
           type: string
     scheme: file
-    title: Insira um título humanamente legível para este recurso.
-title: Emendas
+    title: Plano Execução - Transferências PIX
+title: Emendas Federais
