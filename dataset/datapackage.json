@@ -1,18 +1,17 @@
 {
-  "name": "emendas",
-  "owner_org": "",
+  "name": "emendas_federais",
+  "owner_org": "secretaria-estado-governo-segov",
   "profile": "data-package",
   "resources": [
     {
-      "description": "Insira a descrição/explicação detalhada deste recurso.",
       "dialect": {
         "delimiter": ";"
       },
       "encoding": "utf-8-sig",
       "format": "csv",
       "hashing": "md5",
-      "name": "emendas_dados_gerais",
-      "path": "data/emendas_dados_gerais.csv",
+      "name": "dados_gerais_emendas",
+      "path": "data/dados_gerais_emendas.csv",
       "profile": "tabular-data-resource",
       "schema": {
         "fields": [
@@ -75,18 +74,17 @@
         ]
       },
       "scheme": "file",
-      "title": "Insira um título humanamente legível para este recurso."
+      "title": "Emendas Dados Gerais"
     },
     {
-      "description": "Insira a descrição/explicação detalhada deste recurso.",
       "dialect": {
         "delimiter": ";"
       },
       "encoding": "utf-8-sig",
       "format": "csv",
       "hashing": "md5",
-      "name": "execucao_transferencias_especiais",
-      "path": "data/execucao_transferencias_especiais.csv",
+      "name": "execucao_transferencias_especiais_pix",
+      "path": "data/execucao_transferencias_especiais_pix.csv",
       "profile": "tabular-data-resource",
       "schema": {
         "fields": [
@@ -241,18 +239,17 @@
         ]
       },
       "scheme": "file",
-      "title": "Insira um título humanamente legível para este recurso."
+      "title": "Execução de Emendas - Emendas PIX"
     },
     {
-      "description": "Insira a descrição/explicação detalhada deste recurso.",
       "dialect": {
         "delimiter": ";"
       },
       "encoding": "utf-8-sig",
       "format": "csv",
       "hashing": "md5",
-      "name": "planos_transferencias_especiais",
-      "path": "data/planos_transferencias_especiais.csv",
+      "name": "plano_execucao_emendas_pix",
+      "path": "data/plano_execucao_emendas_pix.csv",
       "profile": "tabular-data-resource",
       "schema": {
         "fields": [
@@ -323,8 +320,8 @@
         ]
       },
       "scheme": "file",
-      "title": "Insira um título humanamente legível para este recurso."
+      "title": "Plano de Execução - Emendas PIX"
     }
   ],
-  "title": "Emendas"
+  "title": "Emendas Federais"
 }
