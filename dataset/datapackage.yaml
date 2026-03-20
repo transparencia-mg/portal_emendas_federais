@@ -128,7 +128,7 @@ resources:
           type: integer
     scheme: file
     title: Execução de Emendas - Transferências PIX
-  - description: dialect:
+  - dialect:
       delimiter: ;
     encoding: utf-8-sig
     format: csv
