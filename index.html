@@ -549,7 +549,7 @@
                             <select class="form-select" id="modalidadeDG"><option value="">Todas</option></select>
                         </div>
                         <div class="filter-group">
-                            <label class="filter-label">Nº SIAFI</label>
+                            <label class="filter-label">CÓD. SIAFI</label>
                             <input type="text" class="form-control" id="numeroSiafi" placeholder="Ex: 9287341">
                         </div>
                         <div class="filter-group">
@@ -618,7 +618,7 @@
                                 <tr>
                                     <th class="sortable-header" onclick="ordenarTabela('dg',0)">Ano <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('dg',1)">Nº Emenda <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('dg',2)">Cód. SIAFI <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('dg',2)">CÓD. SIAFI <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('dg',3)">Esfera <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('dg',4)">Autoria <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('dg',5)">Valor Indicado <i class="material-icons">unfold_more</i></th>
@@ -651,8 +651,12 @@
                             <select class="form-select" id="anoExec"><option value="">Todos</option></select>
                         </div>
                         <div class="filter-group">
-                            <label class="filter-label">Nº SIAFI</label>
+                            <label class="filter-label">CÓD. SIAFI</label>
                             <input type="text" class="form-control" id="siafiExec" placeholder="Ex: 9287341">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Nº Emenda</label>
+                            <input type="text" class="form-control" id="numeroEmendaExec" placeholder="Ex: 81000792">
                         </div>
                         <div class="filter-group">
                             <label class="filter-label">Nº Empenho</label>
@@ -720,8 +724,9 @@
                             <thead>
                                 <tr>
                                     <th class="sortable-header" onclick="ordenarTabela('exec',0)">Ano <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('exec',1)">Nº SIAFI <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('exec',2)">Nº Empenho <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',1)">CÓD. SIAFI <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',2)">Nº Emenda <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',3)">Nº Empenho <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('exec',3)">Data Empenho <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('exec',4)">Descrição Item <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('exec',5)">Valor Empenhado <i class="material-icons">unfold_more</i></th>
@@ -732,7 +737,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tabelaExecBody">
-                                <tr><td colspan="10" class="text-center text-muted">Carregando dados...</td></tr>
+                                <tr><td colspan="12" class="text-center text-muted">Carregando dados...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -769,14 +774,18 @@
                     </div>
                     <div class="filters-row" style="margin-top:12px;">
                         <div class="filter-group">
-                            <label class="filter-label">Código Emenda</label>
-                            <input type="text" class="form-control" id="codigoEmendaParlamentar" placeholder="Ex: 2023.001">
+                            <label class="filter-label">Nº Emenda</label>
+                            <input type="text" class="form-control" id="codigoEmendaParlamentar" placeholder="Ex: 81000792">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">CÓD. SIAFI</label>
+                            <input type="text" class="form-control" id="siafiPlano" placeholder="Ex: 9287341">
                         </div>
                         <div class="filter-group">
                             <label class="filter-label">Objeto</label>
                             <input type="text" class="form-control" id="objetoPlano" placeholder="Palavras-chave...">
                         </div>
-                        <div class="filter-group" style="flex:2;"></div>
+                        <div class="filter-group" style="flex:1;"></div>
                     </div>
                     <div class="botoes-abaixo">
                         <button class="btn-pesquisa" id="aplicarFiltrosPlano"><i class="material-icons me-2">search</i>Pesquisar</button>
@@ -829,13 +838,16 @@
                                     <th class="sortable-header" onclick="ordenarTabela('plano',3)">Objeto <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('plano',4)">CNPJ Beneficiário <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('plano',5)">Beneficiário <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('plano',6)">Código Emenda <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('plano',7)">Valor Emenda <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',6)">Ano Emenda <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',7)">Nº Emenda <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',8)">Parlamentar <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',9)">CÓD. SIAFI <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',10)">Valor Emenda <i class="material-icons">unfold_more</i></th>
                                     <th style="text-align:center;width:60px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody id="tabelaPlanoBody">
-                                <tr><td colspan="9" class="text-center text-muted">Carregando dados...</td></tr>
+                                <tr><td colspan="12" class="text-center text-muted">Carregando dados...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -906,12 +918,12 @@
                                 <tr><td>Emendas Geral</td><td>Tipo de instrumento jurídico</td><td>Tipo de instrumento jurídico financiado pela emenda (convênio, portaria ou transferência especial).</td></tr>
                                 <tr><td>Emendas Geral</td><td>Número da Emenda</td><td>Número identificador da emenda parlamentar.</td></tr>
                                 <tr><td>Emendas Geral</td><td>Ano da Emenda</td><td>Ano em que a emenda foi proposta.</td></tr>
-                                <tr><td>Emendas Geral</td><td>Código SIAFI</td><td>Código do instrumento jurídico no Sistema de Administração Financeira do Governo Federal.</td></tr>
+                                <tr><td>Emendas Geral</td><td>CÓD. SIAFI</td><td>Código do instrumento jurídico no Sistema de Administração Financeira do Governo Federal.</td></tr>
                                 <tr><td>Emendas Geral</td><td>Valor Indicado</td><td>Valor financeiro indicado associado à emenda.</td></tr>
                                 <tr><td>Emendas Geral</td><td>Valor Repassado</td><td>Valor financeiro repassado associado à emenda.</td></tr>
                                 <tr><td>Emendas Geral</td><td>Objeto</td><td>Objeto da emenda.</td></tr>
                                 <tr class="dicionario-secao"><td colspan="3">EXECUÇÃO TRANSFERÊNCIAS ESPECIAIS</td></tr>
-                                <tr><td>Execução</td><td>Nº SIAFI</td><td>Número de controle do SIAFI MG.</td></tr>
+                                <tr><td>Execução</td><td>CÓD. SIAFI</td><td>Número de controle do SIAFI MG.</td></tr>
                                 <tr><td>Execução</td><td>Ano Empenho</td><td>Ano em que o empenho foi emitido.</td></tr>
                                 <tr><td>Execução</td><td>Nº Empenho</td><td>Número sequencial do empenho no exercício.</td></tr>
                                 <tr><td>Execução</td><td>Valor Empenhado (R$)</td><td>Despesa Empenhada ajustada.</td></tr>
@@ -975,6 +987,7 @@
 // ============================================================
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/transparencia-mg/portal_emendas_federais/main/dataset/data/';
 const GITHUB_API_COMMITS = 'https://api.github.com/repos/transparencia-mg/portal_emendas_federais/commits?path=dataset/data&per_page=1';
+const CONVENIOS_CSV_URL = 'https://raw.githubusercontent.com/transparencia-mg/portal_convenios_entrada/main/dataset/data/convenios.csv';
 
 const ARQUIVOS = {
     dadosGerais:   GITHUB_RAW_BASE + 'dados_gerais_emendas.csv',
@@ -985,7 +998,7 @@ const ARQUIVOS = {
 // ============================================================
 // VARIÁVEIS GLOBAIS
 // ============================================================
-let dadosGerais = [], execucaoData = [], planoExecucaoData = [];
+let dadosGerais = [], execucaoData = [], planoExecucaoData = [], conveniosData = {};
 let filteredDG = [], filteredExec = [], filteredPlano = [];
 
 let currentPage    = { dg: 1, exec: 1, plano: 1 };
@@ -1015,8 +1028,16 @@ function formatarMoeda(v) {
 function formatarCNPJ(c) {
     if (!c) return '-';
     const s = c.toString().replace(/\D/g, '');
+    // Pad with leading zeros if numeric string is shorter than expected
+    if (s.length > 0 && s.length <= 14 && s.length >= 12) {
+        const padded = s.padStart(14, '0');
+        return padded.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+    }
+    if (s.length === 11 || (s.length >= 9 && s.length < 12)) {
+        const padded = s.padStart(11, '0');
+        return padded.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+    }
     if (s.length === 14) return s.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
-    if (s.length === 11) return s.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
     return c;
 }
 
@@ -1029,6 +1050,23 @@ function parseValor(v) {
 function truncar(str, n) {
     if (!str) return '-';
     return str.length > n ? str.substring(0, n) + '...' : str;
+}
+
+function linkSiafi(siafi) {
+    if (!siafi) return '-';
+    const s = siafi.toString().trim();
+    if (!s || s === '-') return s || '-';
+    // Tenta correspondencia direta
+    let conv = conveniosData[s];
+    // Tenta como numero sem zeros a esquerda
+    if (!conv) { const n = parseInt(s, 10); if (!isNaN(n)) conv = conveniosData[n.toString()]; }
+    // Tenta com zero-padding ate 7 digitos
+    if (!conv && s.length < 7) conv = conveniosData[s.padStart(7, '0')];
+    if (conv) {
+        const url = conv.startsWith('http') ? conv : 'https://' + conv;
+        return '<a href="' + url + '" target="_blank" title="Ver Inteiro Teor do Instrumento" style="color:#1a3a5c;font-weight:600;text-decoration:underline dotted;">' + s + '&nbsp;<i class="material-icons" style="font-size:11px;vertical-align:middle;color:#b93c42;">open_in_new</i></a>';
+    }
+    return s;
 }
 
 // ============================================================
@@ -1057,11 +1095,31 @@ function carregarTodosDados() {
     Promise.all([
         carregarCSV(ARQUIVOS.dadosGerais, mapDG),
         carregarCSV(ARQUIVOS.execucao, mapExec),
-        carregarCSV(ARQUIVOS.planoExecucao, mapPlano)
+        carregarCSV(ARQUIVOS.planoExecucao, mapPlano),
+        carregarConvenios()
     ]).then(([dg, exec, plano]) => {
         dadosGerais      = dg;
         execucaoData     = exec;
         planoExecucaoData = plano;
+        // Enriquecer execucaoData com numero_emenda e ano_emenda a partir dos Dados Gerais (siafi match)
+        const siafiToEmenda = {};
+        const emendaToSiafi = {};
+        dadosGerais.forEach(d => {
+            if (d.codigo_siafi && d.numero_emenda) {
+                const k = d.codigo_siafi.toString().trim();
+                siafiToEmenda[k] = {ne: d.numero_emenda, ano: d.ano};
+                emendaToSiafi[d.numero_emenda.toString().trim() + '_' + d.ano.toString().trim()] = k;
+            }
+        });
+        execucaoData.forEach(e => {
+            const k = (e.numero_siafi||'').toString().trim();
+            if (siafiToEmenda[k]) { e.numero_emenda = siafiToEmenda[k].ne; e.ano_emenda_rel = siafiToEmenda[k].ano; }
+        });
+        // Enriquecer planoExecucaoData com codigo_siafi
+        planoExecucaoData.forEach(p => {
+            const k = (p.numero_emenda_plano||'').toString().trim() + '_' + (p.ano_emenda||'').toString().trim();
+            if (emendaToSiafi[k]) p.codigo_siafi_rel = emendaToSiafi[k];
+        });
         filteredDG       = [...dg];
         filteredExec     = [...exec];
         filteredPlano    = [...plano];
@@ -1071,6 +1129,77 @@ function carregarTodosDados() {
         updateDashboard3();
     }).catch(err => {
         console.error('Erro ao carregar dados:', err);
+    });
+}
+
+function processarLinhasConvenios(rows) {
+    const isValidUrl = s => s && s !== '' &&
+        s.toLowerCase() !== 'nan' && s.toLowerCase() !== 'none' &&
+        s.toLowerCase() !== 'null' && s.length > 10 &&
+        (s.startsWith('http') || s.startsWith('www'));
+
+    rows.forEach(row => {
+        // Coluna de cruzamento: codigo_siafi na planilha de convenios
+        const cod = (
+            row.codigo_siafi || row['codigo_siafi'] ||
+            row['Codigo_Siafi'] || row['CODIGO_SIAFI'] ||
+            row['nr_siafi'] || row['numero_siafi'] || ''
+        ).toString().trim();
+        if (!cod) return;
+
+        // Link: prefere TransfereGov, usa SIGCON se nao houver
+        const lt = (row.inteiro_teor_do_instrumento_transferegov || '').toString().trim();
+        const ls = (row.inteiro_teor_do_instrumento_sigcon || '').toString().trim();
+        const link = isValidUrl(lt) ? lt : isValidUrl(ls) ? ls : '';
+        if (!link) return;
+
+        const url = link.startsWith('http') ? link : 'https://' + link;
+        // Armazena com o codigo como veio
+        conveniosData[cod] = url;
+        // Armazena tambem sem zeros a esquerda (ex: "09123456" -> "9123456")
+        const semZero = parseInt(cod, 10);
+        if (!isNaN(semZero)) conveniosData[semZero.toString()] = url;
+    });
+}
+
+function carregarConvenios() {
+    return new Promise((resolve) => {
+        // Tenta fetch manual para ter controle total do conteudo bruto
+        fetch(CONVENIOS_CSV_URL)
+            .then(r => r.text())
+            .then(txt => {
+                // Detecta separador pela primeira linha
+                const primeiraLinha = txt.split('\n')[0] || '';
+                const delimitador = primeiraLinha.includes(';') ? ';' : ',';
+
+                const resultado = Papa.parse(txt, {
+                    header: true,
+                    delimiter: delimitador,
+                    skipEmptyLines: true
+                });
+
+                if (resultado.data && resultado.data.length > 0) {
+                    console.log('[Convenios] Separador detectado:', JSON.stringify(delimitador));
+                    console.log('[Convenios] Colunas:', Object.keys(resultado.data[0]));
+                    console.log('[Convenios] Linhas:', resultado.data.length);
+                    processarLinhasConvenios(resultado.data);
+                }
+                console.log('[Convenios] Links mapeados:', Object.keys(conveniosData).length);
+                resolve();
+            })
+            .catch(err => {
+                console.warn('[Convenios] Erro no fetch, tentando Papa.parse direto:', err.message);
+                // Fallback: Papa.parse com download (auto-detecta separador)
+                Papa.parse(CONVENIOS_CSV_URL, {
+                    download: true, header: true, skipEmptyLines: true,
+                    complete: r => {
+                        if (r.data && r.data.length > 0) processarLinhasConvenios(r.data);
+                        console.log('[Convenios] Fallback - Links mapeados:', Object.keys(conveniosData).length);
+                        resolve();
+                    },
+                    error: () => resolve()
+                });
+            });
     });
 }
 
@@ -1104,6 +1233,7 @@ function mapExec(row, i) {
         id: i + 1,
         ano: row.ano_empenho || '',
         numero_siafi: row.numero_siafi || '',
+        numero_emenda: row.numero_emenda || '',
         numero_empenho: row.numero_empenho || '',
         data_empenho: row.data_empenho || '',
         descricao_item: row.descricao_item || '',
@@ -1114,7 +1244,26 @@ function mapExec(row, i) {
     };
 }
 
+function parseCodEmenda(cod) {
+    if (!cod) return { ano_emenda: '', numero_emenda_plano: '', parlamentar: '' };
+    // Format: YYYY + 8 digits + '-' + name  e.g. "202481000792-NOME DO PARLAMENTAR"
+    const m = cod.match(/^(\d{4})(\d{8})-(.+)$/);
+    if (m) return { ano_emenda: m[1], numero_emenda_plano: m[2], parlamentar: m[3].trim() };
+    // Fallback: try split by '-'
+    const dashIdx = cod.indexOf('-');
+    if (dashIdx > 0) {
+        const prefix = cod.substring(0, dashIdx);
+        const name   = cod.substring(dashIdx + 1).trim();
+        const ano_emenda = prefix.substring(0, 4);
+        const numero_emenda_plano = prefix.substring(4);
+        return { ano_emenda, numero_emenda_plano, parlamentar: name };
+    }
+    return { ano_emenda: '', numero_emenda_plano: '', parlamentar: '' };
+}
+
 function mapPlano(row, i) {
+    const cod = row.codigo_emenda_parlamentar || '';
+    const { ano_emenda, numero_emenda_plano, parlamentar } = parseCodEmenda(cod);
     return {
         id: i + 1,
         ano: row.ano_plano_acao || '',
@@ -1123,7 +1272,11 @@ function mapPlano(row, i) {
         objeto: row.objeto_executor || '',
         cnpj_beneficiario: row.cnpj_beneficiario_plano_acao || '',
         beneficiario: row.nome_beneficiario_plano_acao || '',
-        codigo_emenda_parlamentar: row.codigo_emenda_parlamentar || '',
+        codigo_emenda_parlamentar: cod,
+        ano_emenda,
+        numero_emenda_plano,
+        parlamentar,
+        codigo_siafi_rel: '',
         valor_emenda: parseValor(row.valor_emenda)
     };
 }
@@ -1143,6 +1296,20 @@ function populaFiltros() {
     // Plano
     const anosPlano = [...new Set(planoExecucaoData.map(d => d.ano).filter(Boolean))].sort((a,b)=>b-a);
     document.getElementById('anoPlano').innerHTML = '<option value="">Todos</option>' + anosPlano.map(a=>`<option value="${a}">${a}</option>`).join('');
+
+    // Pre-select most recent year for each dashboard
+    if (anosDG.length) {
+        document.getElementById('anoDG').value = anosDG[0];
+        filteredDG = dadosGerais.filter(d => d.ano == anosDG[0]);
+    }
+    if (anosExec.length) {
+        document.getElementById('anoExec').value = anosExec[0];
+        filteredExec = execucaoData.filter(d => d.ano == anosExec[0]);
+    }
+    if (anosPlano.length) {
+        document.getElementById('anoPlano').value = anosPlano[0];
+        filteredPlano = planoExecucaoData.filter(d => d.ano == anosPlano[0]);
+    }
 }
 
 // ============================================================
@@ -1172,6 +1339,7 @@ function aplicarFiltros(dash) {
     } else if (dash === 'exec') {
         const ano  = document.getElementById('anoExec')?.value;
         const sif  = (document.getElementById('siafiExec')?.value || '').toLowerCase();
+        const neEx = (document.getElementById('numeroEmendaExec')?.value || '').toLowerCase();
         const nem  = (document.getElementById('numEmpenho')?.value || '').toLowerCase();
         const cre  = (document.getElementById('credorExec')?.value || '').toLowerCase();
         const cnpj = (document.getElementById('cnpjExec')?.value || '').toLowerCase();
@@ -1179,6 +1347,7 @@ function aplicarFiltros(dash) {
         filteredExec = execucaoData.filter(i => {
             if (ano  && i.ano != ano) return false;
             if (sif  && !(i.numero_siafi||'').toLowerCase().includes(sif)) return false;
+            if (neEx && !(i.numero_emenda||'').toLowerCase().includes(neEx)) return false;
             if (nem  && !(i.numero_empenho||'').toLowerCase().includes(nem)) return false;
             if (cre  && !(i.razao_social_credor||'').toLowerCase().includes(cre)) return false;
             if (cnpj && !(i.cnpj_credor||'').toString().toLowerCase().includes(cnpj)) return false;
@@ -1193,13 +1362,15 @@ function aplicarFiltros(dash) {
         const ben  = (document.getElementById('beneficiarioPlano')?.value || '').toLowerCase();
         const cnpj = (document.getElementById('cnpjBeneficiario')?.value || '').toLowerCase();
         const cod  = (document.getElementById('codigoEmendaParlamentar')?.value || '').toLowerCase();
+        const sifP = (document.getElementById('siafiPlano')?.value || '').toLowerCase();
         const obj  = (document.getElementById('objetoPlano')?.value || '').toLowerCase();
         filteredPlano = planoExecucaoData.filter(i => {
             if (ano  && i.ano != ano) return false;
             if (exe  && !(i.nome_executor||'').toLowerCase().includes(exe)) return false;
             if (ben  && !(i.beneficiario||'').toLowerCase().includes(ben)) return false;
             if (cnpj && !(i.cnpj_beneficiario||'').toString().toLowerCase().includes(cnpj)) return false;
-            if (cod  && !(i.codigo_emenda_parlamentar||'').toLowerCase().includes(cod)) return false;
+            if (cod  && !(i.numero_emenda_plano||'').toLowerCase().includes(cod)) return false;
+            if (sifP && !(i.codigo_siafi_rel||'').toLowerCase().includes(sifP)) return false;
             if (obj  && !(i.objeto||'').toLowerCase().includes(obj)) return false;
             return true;
         });
@@ -1212,8 +1383,8 @@ function aplicarFiltros(dash) {
 function limparFiltros(dash) {
     const ids = {
         dg:    ['anoDG','numeroEmenda','modalidadeDG','numeroSiafi','autoriaDG','esferaDG','objetoDG','searchDG'],
-        exec:  ['anoExec','siafiExec','numEmpenho','credorExec','cnpjExec','descricaoItem','searchExec'],
-        plano: ['anoPlano','nomeExecutor','beneficiarioPlano','cnpjBeneficiario','codigoEmendaParlamentar','objetoPlano','searchPlano']
+        exec:  ['anoExec','siafiExec','numeroEmendaExec','numEmpenho','credorExec','cnpjExec','descricaoItem','searchExec'],
+        plano: ['anoPlano','nomeExecutor','beneficiarioPlano','cnpjBeneficiario','codigoEmendaParlamentar','siafiPlano','objetoPlano','searchPlano']
     };
     ids[dash].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
     currentSearch[dash] = '';
@@ -1260,8 +1431,8 @@ function ordenarTabela(dash, colIndex) {
 function ordenarDados(dash) {
     const cols = {
         dg:    ['ano','numero_emenda','codigo_siafi','esfera','autoria','valor_indicado','valor_repassado','objeto'],
-        exec:  ['ano','numero_siafi','numero_empenho','data_empenho','descricao_item','valor_empenhado','valor_pago','cnpj_credor','razao_social_credor'],
-        plano: ['ano','cnpj_executor','nome_executor','objeto','cnpj_beneficiario','beneficiario','codigo_emenda_parlamentar','valor_emenda']
+        exec:  ['ano','numero_siafi','numero_emenda','numero_empenho','data_empenho','descricao_item','valor_empenhado','valor_pago','cnpj_credor','razao_social_credor'],
+        plano: ['ano','cnpj_executor','nome_executor','objeto','cnpj_beneficiario','beneficiario','ano_emenda','numero_emenda_plano','parlamentar','codigo_siafi_rel','valor_emenda']
     };
     const c = sortConfig[dash];
     const prop = cols[dash][c.column];
@@ -1377,7 +1548,7 @@ function updateTabelaDG() {
         <tr>
             <td>${item.ano||'-'}</td>
             <td>${item.numero_emenda||'-'}</td>
-            <td>${item.codigo_siafi||'-'}</td>
+            <td>${linkSiafi(item.codigo_siafi)}</td>
             <td>${item.esfera||'-'}</td>
             <td>${truncar(item.autoria,40)}</td>
             <td class="valor-monetario">${formatarMoeda(item.valor_indicado)}</td>
@@ -1394,11 +1565,91 @@ function updateTabelaDG() {
 }
 
 window.mostrarDetalhesDG = function(item) {
+    // Plano vinculado: numero_emenda (DG) == numero_emenda_plano (Plano) E ano_emenda == ano
+    const planosRel = planoExecucaoData.filter(p =>
+        p.numero_emenda_plano && item.numero_emenda &&
+        p.numero_emenda_plano.toString().trim() === item.numero_emenda.toString().trim() &&
+        (!item.ano || !p.ano_emenda || p.ano_emenda.toString().trim() === item.ano.toString().trim())
+    );
+    // Execução vinculada: codigo_siafi (DG) == numero_siafi (Exec)
+    const execRel = execucaoData.filter(e =>
+        e.numero_siafi && item.codigo_siafi &&
+        e.numero_siafi.toString().trim() === item.codigo_siafi.toString().trim()
+    );
+
+    // --- Seção Plano de Execução ---
+    const planoHtml = planosRel.length ? `
+        <div class="objeto-container" style="margin-top:12px;">
+            <div class="objeto-title"><i class="material-icons">assignment</i>PLANO DE EXECUÇÃO VINCULADO (${planosRel.length} registro${planosRel.length>1?'s':''})</div>
+            <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">
+                <thead>
+                    <tr style="background:#54697b;color:white;">
+                        <th style="padding:8px 10px;">Ano Plano</th>
+                        <th style="padding:8px 10px;">Parlamentar</th>
+                        <th style="padding:8px 10px;">Executor</th>
+                        <th style="padding:8px 10px;">Beneficiário</th>
+                        <th style="padding:8px 10px;">Objeto</th>
+                        <th style="padding:8px 10px;text-align:right;">Valor Emenda</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${planosRel.map((p,idx)=>`
+                    <tr style="background:${idx%2===0?'#fff':'#f8f9fa'}">
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${p.ano||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${p.parlamentar||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${p.nome_executor||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${p.beneficiario||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${truncar(p.objeto,50)||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(p.valor_emenda)}</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+            </div>
+        </div>` : `<div class="objeto-container" style="margin-top:12px;"><div class="objeto-title"><i class="material-icons">assignment</i>PLANO DE EXECUÇÃO VINCULADO</div><div class="objeto-text" style="color:#94a3b8;">Nenhum plano de execução encontrado para o Nº Emenda <strong>${item.numero_emenda||'N/D'}</strong>.</div></div>`;
+
+    // --- Seção Execução ---
+    const execHtml = execRel.length ? `
+        <div class="objeto-container" style="margin-top:12px;">
+            <div class="objeto-title"><i class="material-icons">receipt</i>EXECUÇÃO TRANSFERÊNCIAS PIX VINCULADA (${execRel.length} registro${execRel.length>1?'s':''})</div>
+            <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">
+                <thead>
+                    <tr style="background:#54697b;color:white;">
+                        <th style="padding:8px 10px;">CÓD. SIAFI</th>
+                        <th style="padding:8px 10px;">Nº Empenho</th>
+                        <th style="padding:8px 10px;">Data Empenho</th>
+                        <th style="padding:8px 10px;">CNPJ/CPF Credor</th>
+                        <th style="padding:8px 10px;">Credor</th>
+                        <th style="padding:8px 10px;text-align:right;">Vl. Empenhado</th>
+                        <th style="padding:8px 10px;text-align:right;">Vl. Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${execRel.map((e,idx)=>`
+                    <tr style="background:${idx%2===0?'#fff':'#f8f9fa'}">
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${linkSiafi(e.numero_siafi)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${e.numero_empenho||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${formatarData(e.data_empenho)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${formatarCNPJ(e.cnpj_credor)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${e.razao_social_credor||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(e.valor_empenhado)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(e.valor_pago)}</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+            </div>
+        </div>` : `<div class="objeto-container" style="margin-top:12px;"><div class="objeto-title"><i class="material-icons">receipt</i>EXECUÇÃO TRANSFERÊNCIAS PIX VINCULADA</div><div class="objeto-text" style="color:#94a3b8;">Nenhuma execução encontrada para o CÓD. SIAFI <strong>${item.codigo_siafi||'N/D'}</strong>.</div></div>`;
+
     document.getElementById('detailModalLabel').innerHTML = `<i class="material-icons me-2">description</i>Detalhes da Emenda — ${item.numero_emenda||'N/D'}`;
     document.getElementById('detalhesConteudo').innerHTML = `
+        <div style="background:#e8f0fe;border-left:4px solid #1a3a5c;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#1a3a5c;">
+            <i class="material-icons" style="font-size:14px;vertical-align:middle;">info</i>
+            <strong>Dados Gerais</strong> — vincula ao Plano de Execução pelo <strong>Nº Emenda</strong> e à Execução pelo <strong>CÓD. SIAFI</strong>.
+        </div>
         <div class="info-grid">
             <div class="info-card">
-                <div class="info-label">Número da Emenda</div><div class="info-value highlight">${item.numero_emenda||'-'}</div>
+                <div class="info-label">Nº Emenda</div><div class="info-value highlight">${item.numero_emenda||'-'}</div>
                 <div class="info-label" style="margin-top:8px;">Ano</div><div class="info-value">${item.ano||'-'}</div>
             </div>
             <div class="info-card">
@@ -1407,7 +1658,7 @@ window.mostrarDetalhesDG = function(item) {
             </div>
             <div class="info-card">
                 <div class="info-label">Autoria</div><div class="info-value">${item.autoria||'-'}</div>
-                <div class="info-label" style="margin-top:8px;">Código SIAFI</div><div class="info-value">${item.codigo_siafi||'-'}</div>
+                <div class="info-label" style="margin-top:8px;">CÓD. SIAFI</div><div class="info-value highlight">${linkSiafi(item.codigo_siafi)}</div>
             </div>
         </div>
         <div class="info-grid">
@@ -1417,7 +1668,9 @@ window.mostrarDetalhesDG = function(item) {
         <div class="objeto-container">
             <div class="objeto-title"><i class="material-icons">subject</i>OBJETO</div>
             <div class="objeto-text">${item.objeto||'Objeto não informado.'}</div>
-        </div>`;
+        </div>
+        ${planoHtml}
+        ${execHtml}`;
     new bootstrap.Modal(document.getElementById('detailModal')).show();
 };
 
@@ -1457,7 +1710,7 @@ function updateTabelaExec() {
     const tbody = document.getElementById('tabelaExecBody');
     const countEl = document.getElementById('countExec');
     if (!filteredExec.length) {
-        if (tbody) tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="11" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
         if (countEl) countEl.textContent = '0 registros';
         renderizarPaginacao('paginacaoExec','exec',0,1,itemsPerPage.exec); return;
     }
@@ -1466,7 +1719,7 @@ function updateTabelaExec() {
     tbody.innerHTML = data.map(item => `
         <tr>
             <td>${item.ano||'-'}</td>
-            <td>${item.numero_siafi||'-'}</td>
+            <td>${linkSiafi(item.numero_siafi)}</td>
             <td>${item.numero_empenho||'-'}</td>
             <td style="white-space:nowrap">${formatarData(item.data_empenho)}</td>
             <td>${truncar(item.descricao_item,40)}</td>
@@ -1485,15 +1738,98 @@ function updateTabelaExec() {
 }
 
 window.mostrarDetalhesExec = function(item) {
-    document.getElementById('detailModalLabel').innerHTML = `<i class="material-icons me-2">receipt</i>Detalhes da Execução`;
+    // Dados Gerais vinculados: numero_siafi (Exec) == codigo_siafi (DG)
+    const dgRel = dadosGerais.filter(d =>
+        d.codigo_siafi && item.numero_siafi &&
+        d.codigo_siafi.toString().trim() === item.numero_siafi.toString().trim()
+    );
+    // Plano vinculado: numero_emenda (DG encontrado) == numero_emenda_plano (Plano) com chave composta ano+emenda
+    const chavesDGEmenda = dgRel.map(d => d.numero_emenda.toString().trim() + '_' + d.ano.toString().trim());
+    const planosRel = planoExecucaoData.filter(p =>
+        p.numero_emenda_plano && chavesDGEmenda.some(k => {
+            const [ne, a] = k.split('_');
+            return p.numero_emenda_plano.toString().trim() === ne && (!a || !p.ano_emenda || p.ano_emenda.toString().trim() === a);
+        })
+    );
+
+    // --- Seção Dados Gerais ---
+    const dgHtml = dgRel.length ? `
+        <div class="objeto-container" style="margin-top:12px;">
+            <div class="objeto-title"><i class="material-icons">bar_chart</i>DADOS GERAIS DA EMENDA VINCULADA (${dgRel.length} registro${dgRel.length>1?'s':''})</div>
+            <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">
+                <thead>
+                    <tr style="background:#54697b;color:white;">
+                        <th style="padding:8px 10px;">Nº Emenda</th>
+                        <th style="padding:8px 10px;">Ano</th>
+                        <th style="padding:8px 10px;">Esfera</th>
+                        <th style="padding:8px 10px;">Autoria</th>
+                        <th style="padding:8px 10px;text-align:right;">Vl. Indicado</th>
+                        <th style="padding:8px 10px;text-align:right;">Vl. Repassado</th>
+                        <th style="padding:8px 10px;">Objeto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${dgRel.map((d,idx)=>`
+                    <tr style="background:${idx%2===0?'#fff':'#f8f9fa'}">
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${d.numero_emenda||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${d.ano||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${d.esfera||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${truncar(d.autoria,30)||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(d.valor_indicado)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(d.valor_repassado)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${truncar(d.objeto,50)||'-'}</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+            </div>
+        </div>` : `<div class="objeto-container" style="margin-top:12px;"><div class="objeto-title"><i class="material-icons">bar_chart</i>DADOS GERAIS DA EMENDA VINCULADA</div><div class="objeto-text" style="color:#94a3b8;">Nenhuma emenda encontrada para o CÓD. SIAFI <strong>${item.numero_siafi||'N/D'}</strong>.</div></div>`;
+
+    // --- Seção Plano de Execução ---
+    const planoHtml = planosRel.length ? `
+        <div class="objeto-container" style="margin-top:12px;">
+            <div class="objeto-title"><i class="material-icons">assignment</i>PLANO DE EXECUÇÃO VINCULADO (${planosRel.length} registro${planosRel.length>1?'s':''})</div>
+            <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">
+                <thead>
+                    <tr style="background:#54697b;color:white;">
+                        <th style="padding:8px 10px;">Ano Plano</th>
+                        <th style="padding:8px 10px;">Nº Emenda</th>
+                        <th style="padding:8px 10px;">Parlamentar</th>
+                        <th style="padding:8px 10px;">Executor</th>
+                        <th style="padding:8px 10px;">Beneficiário</th>
+                        <th style="padding:8px 10px;text-align:right;">Valor Emenda</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${planosRel.map((p,idx)=>`
+                    <tr style="background:${idx%2===0?'#fff':'#f8f9fa'}">
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${p.ano||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${p.numero_emenda_plano||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${p.parlamentar||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${p.nome_executor||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${p.beneficiario||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(p.valor_emenda)}</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+            </div>
+        </div>` : `<div class="objeto-container" style="margin-top:12px;"><div class="objeto-title"><i class="material-icons">assignment</i>PLANO DE EXECUÇÃO VINCULADO</div><div class="objeto-text" style="color:#94a3b8;">Nenhum plano de execução encontrado para este registro.</div></div>`;
+
+    document.getElementById('detailModalLabel').innerHTML = `<i class="material-icons me-2">receipt</i>Detalhes da Execução — SIAFI ${item.numero_siafi||'N/D'}`;
     document.getElementById('detalhesConteudo').innerHTML = `
+        <div style="background:#e8f0fe;border-left:4px solid #1a3a5c;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#1a3a5c;">
+            <i class="material-icons" style="font-size:14px;vertical-align:middle;">info</i>
+            <strong>Execução</strong> — vincula aos Dados Gerais pelo <strong>CÓD. SIAFI</strong> e ao Plano de Execução via <strong>Nº Emenda</strong>.
+        </div>
         <div class="info-grid">
             <div class="info-card">
-                <div class="info-label">Nº SIAFI</div><div class="info-value highlight">${item.numero_siafi||'-'}</div>
+                <div class="info-label">CÓD. SIAFI</div><div class="info-value highlight">${linkSiafi(item.numero_siafi)}</div>
                 <div class="info-label" style="margin-top:8px;">Nº Empenho</div><div class="info-value">${item.numero_empenho||'-'}</div>
             </div>
             <div class="info-card">
-                <div class="info-label">Ano</div><div class="info-value">${item.ano||'-'}</div>
+                <div class="info-label">Nº Emenda</div><div class="info-value highlight">${item.numero_emenda||'-'}</div>
+                <div class="info-label" style="margin-top:8px;">Ano</div><div class="info-value">${item.ano||'-'}</div>
                 <div class="info-label" style="margin-top:8px;">Data Empenho</div><div class="info-value">${formatarData(item.data_empenho)}</div>
             </div>
             <div class="info-card">
@@ -1508,7 +1844,9 @@ window.mostrarDetalhesExec = function(item) {
         <div class="objeto-container">
             <div class="objeto-title"><i class="material-icons">subject</i>DESCRIÇÃO DO ITEM</div>
             <div class="objeto-text">${item.descricao_item||'Descrição não informada.'}</div>
-        </div>`;
+        </div>
+        ${dgHtml}
+        ${planoHtml}`;
     new bootstrap.Modal(document.getElementById('detailModal')).show();
 };
 
@@ -1548,7 +1886,7 @@ function updateTabelaPlano() {
     const tbody = document.getElementById('tabelaPlanoBody');
     const countEl = document.getElementById('countPlano');
     if (!filteredPlano.length) {
-        if (tbody) tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="12" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
         if (countEl) countEl.textContent = '0 registros';
         renderizarPaginacao('paginacaoPlano','plano',0,1,itemsPerPage.plano); return;
     }
@@ -1562,7 +1900,9 @@ function updateTabelaPlano() {
             <td>${truncar(item.objeto,45)}</td>
             <td style="white-space:nowrap">${formatarCNPJ(item.cnpj_beneficiario)}</td>
             <td>${truncar(item.beneficiario,35)}</td>
-            <td>${item.codigo_emenda_parlamentar||'-'}</td>
+            <td style="white-space:nowrap">${item.ano_emenda||'-'}</td>
+            <td style="white-space:nowrap">${item.numero_emenda_plano||'-'}</td>
+            <td>${truncar(item.parlamentar,30)}</td>
             <td class="valor-monetario">${formatarMoeda(item.valor_emenda)}</td>
             <td style="text-align:center;">
                 <button class="btn-action" onclick='mostrarDetalhesPlano(${JSON.stringify(item).replace(/'/g,"\\'")})'  title="Ver Detalhes">
@@ -1575,13 +1915,108 @@ function updateTabelaPlano() {
 }
 
 window.mostrarDetalhesPlano = function(item) {
-    document.getElementById('detailModalLabel').innerHTML = `<i class="material-icons me-2">assignment</i>Detalhes do Plano`;
+    // Dados Gerais vinculados: numero_emenda_plano (Plano) == numero_emenda (DG) com chave composta ano+emenda
+    const dgRel = dadosGerais.filter(d =>
+        d.numero_emenda && item.numero_emenda_plano &&
+        d.numero_emenda.toString().trim() === item.numero_emenda_plano.toString().trim() &&
+        (!item.ano_emenda || !d.ano || d.ano.toString().trim() === item.ano_emenda.toString().trim())
+    );
+    // CÓD. SIAFI a partir dos dados gerais encontrados
+    const siafis = dgRel.map(d => d.codigo_siafi.toString().trim()).filter(Boolean);
+    // Execução vinculada: codigo_siafi (DG) == numero_siafi (Exec)
+    const execRel = execucaoData.filter(e =>
+        e.numero_siafi && siafis.includes(e.numero_siafi.toString().trim())
+    );
+
+    // --- Seção Dados Gerais ---
+    const dgHtml = dgRel.length ? `
+        <div class="objeto-container" style="margin-top:12px;">
+            <div class="objeto-title"><i class="material-icons">bar_chart</i>DADOS GERAIS DA EMENDA VINCULADA (${dgRel.length} registro${dgRel.length>1?'s':''})</div>
+            <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">
+                <thead>
+                    <tr style="background:#54697b;color:white;">
+                        <th style="padding:8px 10px;">Nº Emenda</th>
+                        <th style="padding:8px 10px;">Ano</th>
+                        <th style="padding:8px 10px;">CÓD. SIAFI</th>
+                        <th style="padding:8px 10px;">Esfera</th>
+                        <th style="padding:8px 10px;">Autoria</th>
+                        <th style="padding:8px 10px;text-align:right;">Vl. Indicado</th>
+                        <th style="padding:8px 10px;text-align:right;">Vl. Repassado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${dgRel.map((d,idx)=>`
+                    <tr style="background:${idx%2===0?'#fff':'#f8f9fa'}">
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${d.numero_emenda||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${d.ano||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${linkSiafi(d.codigo_siafi)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${d.esfera||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${truncar(d.autoria,30)||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(d.valor_indicado)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(d.valor_repassado)}</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+            </div>
+        </div>` : `<div class="objeto-container" style="margin-top:12px;"><div class="objeto-title"><i class="material-icons">bar_chart</i>DADOS GERAIS DA EMENDA VINCULADA</div><div class="objeto-text" style="color:#94a3b8;">Nenhum dado geral encontrado para o Nº Emenda <strong>${item.numero_emenda_plano||'N/D'}</strong>.</div></div>`;
+
+    // --- Seção Execução ---
+    const execHtml = execRel.length ? `
+        <div class="objeto-container" style="margin-top:12px;">
+            <div class="objeto-title"><i class="material-icons">receipt</i>EXECUÇÃO TRANSFERÊNCIAS PIX VINCULADA (${execRel.length} registro${execRel.length>1?'s':''})</div>
+            <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">
+                <thead>
+                    <tr style="background:#54697b;color:white;">
+                        <th style="padding:8px 10px;">CÓD. SIAFI</th>
+                        <th style="padding:8px 10px;">Nº Empenho</th>
+                        <th style="padding:8px 10px;">Data Empenho</th>
+                        <th style="padding:8px 10px;">CNPJ/CPF Credor</th>
+                        <th style="padding:8px 10px;">Credor</th>
+                        <th style="padding:8px 10px;text-align:right;">Vl. Empenhado</th>
+                        <th style="padding:8px 10px;text-align:right;">Vl. Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${execRel.map((e,idx)=>`
+                    <tr style="background:${idx%2===0?'#fff':'#f8f9fa'}">
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${linkSiafi(e.numero_siafi)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${e.numero_empenho||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${formatarData(e.data_empenho)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${formatarCNPJ(e.cnpj_credor)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${e.razao_social_credor||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(e.valor_empenhado)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(e.valor_pago)}</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+            </div>
+        </div>` : `<div class="objeto-container" style="margin-top:12px;"><div class="objeto-title"><i class="material-icons">receipt</i>EXECUÇÃO TRANSFERÊNCIAS PIX VINCULADA</div><div class="objeto-text" style="color:#94a3b8;">Nenhuma execução encontrada para o SIAFI vinculado à emenda <strong>${item.numero_emenda_plano||'N/D'}</strong>.</div></div>`;
+
+    document.getElementById('detailModalLabel').innerHTML = `<i class="material-icons me-2">assignment</i>Detalhes do Plano — ${item.parlamentar||item.codigo_emenda_parlamentar||'N/D'}`;
     document.getElementById('detalhesConteudo').innerHTML = `
+        <div style="background:#e8f0fe;border-left:4px solid #1a3a5c;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#1a3a5c;">
+            <i class="material-icons" style="font-size:14px;vertical-align:middle;">info</i>
+            <strong>Plano de Execução</strong> — vincula aos Dados Gerais pelo <strong>Nº Emenda</strong> e à Execução via <strong>CÓD. SIAFI</strong>.
+        </div>
         <div class="info-grid">
             <div class="info-card">
-                <div class="info-label">Ano</div><div class="info-value highlight">${item.ano||'-'}</div>
-                <div class="info-label" style="margin-top:8px;">Código Emenda</div><div class="info-value">${item.codigo_emenda_parlamentar||'-'}</div>
+                <div class="info-label">Ano do Plano</div><div class="info-value highlight">${item.ano||'-'}</div>
+                <div class="info-label" style="margin-top:8px;">Ano da Emenda</div><div class="info-value">${item.ano_emenda||'-'}</div>
             </div>
+            <div class="info-card">
+                <div class="info-label">Nº da Emenda</div><div class="info-value highlight">${item.numero_emenda_plano||'-'}</div>
+                <div class="info-label" style="margin-top:8px;">Parlamentar</div><div class="info-value">${item.parlamentar||'-'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Código Completo da Emenda</div><div class="info-value" style="font-size:11px;word-break:break-all;">${item.codigo_emenda_parlamentar||'-'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">CÓD. SIAFI</div><div class="info-value highlight">${linkSiafi(item.codigo_siafi_rel)}</div>
+            </div>
+        </div>
+        <div class="info-grid">
             <div class="info-card">
                 <div class="info-label">Executor</div><div class="info-value">${item.nome_executor||'-'}</div>
                 <div class="info-label" style="margin-top:8px;">CNPJ Executor</div><div class="info-value">${formatarCNPJ(item.cnpj_executor)}</div>
@@ -1590,14 +2025,14 @@ window.mostrarDetalhesPlano = function(item) {
                 <div class="info-label">Beneficiário</div><div class="info-value">${item.beneficiario||'-'}</div>
                 <div class="info-label" style="margin-top:8px;">CNPJ Beneficiário</div><div class="info-value">${formatarCNPJ(item.cnpj_beneficiario)}</div>
             </div>
-        </div>
-        <div class="info-grid">
             <div class="info-card"><div class="info-label">Valor da Emenda</div><div class="info-value">${formatarMoeda(item.valor_emenda)}</div></div>
         </div>
         <div class="objeto-container">
             <div class="objeto-title"><i class="material-icons">subject</i>OBJETO</div>
             <div class="objeto-text">${item.objeto||'Objeto não informado.'}</div>
-        </div>`;
+        </div>
+        ${dgHtml}
+        ${execHtml}`;
     new bootstrap.Modal(document.getElementById('detailModal')).show();
 };
 
@@ -1607,14 +2042,14 @@ window.mostrarDetalhesPlano = function(item) {
 function exportarCSV(dash) {
     let cabecalhos, linhas;
     if (dash === 'dg') {
-        cabecalhos = ['Ano','Nº Emenda','Código SIAFI','Esfera','Autoria','Valor Indicado','Valor Repassado','Objeto','Modalidade'];
+        cabecalhos = ['Ano','Nº Emenda','CÓD. SIAFI','Esfera','Autoria','Valor Indicado','Valor Repassado','Objeto','Modalidade'];
         linhas = filteredDG.map(i => [i.ano,i.numero_emenda,i.codigo_siafi,i.esfera,i.autoria,formatarMoeda(i.valor_indicado),formatarMoeda(i.valor_repassado),(i.objeto||'').replace(/\n/g,' '),i.modalidade].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
     } else if (dash === 'exec') {
-        cabecalhos = ['Ano','Nº SIAFI','Nº Empenho','Data Empenho','Descrição','Valor Empenhado','Valor Pago','CNPJ/CPF','Razão Social'];
-        linhas = filteredExec.map(i => [i.ano,i.numero_siafi,i.numero_empenho,formatarData(i.data_empenho),i.descricao_item,formatarMoeda(i.valor_empenhado),formatarMoeda(i.valor_pago),formatarCNPJ(i.cnpj_credor),i.razao_social_credor].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
+        cabecalhos = ['Ano','CÓD. SIAFI','Nº Emenda','Nº Empenho','Data Empenho','Descrição','Valor Empenhado','Valor Pago','CNPJ/CPF','Razão Social'];
+        linhas = filteredExec.map(i => [i.ano,i.numero_siafi,i.numero_emenda,i.numero_empenho,formatarData(i.data_empenho),i.descricao_item,formatarMoeda(i.valor_empenhado),formatarMoeda(i.valor_pago),formatarCNPJ(i.cnpj_credor),i.razao_social_credor].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
     } else {
-        cabecalhos = ['Ano','CNPJ Executor','Executor','Objeto','CNPJ Beneficiário','Beneficiário','Código Emenda','Valor Emenda'];
-        linhas = filteredPlano.map(i => [i.ano,formatarCNPJ(i.cnpj_executor),i.nome_executor,i.objeto,formatarCNPJ(i.cnpj_beneficiario),i.beneficiario,i.codigo_emenda_parlamentar,formatarMoeda(i.valor_emenda)].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
+        cabecalhos = ['Ano','CNPJ Executor','Executor','Objeto','CNPJ Beneficiário','Beneficiário','Ano Emenda','Nº Emenda','Parlamentar','CÓD. SIAFI','Código Completo','Valor Emenda'];
+        linhas = filteredPlano.map(i => [i.ano,formatarCNPJ(i.cnpj_executor),i.nome_executor,i.objeto,formatarCNPJ(i.cnpj_beneficiario),i.beneficiario,i.ano_emenda,i.numero_emenda_plano,i.parlamentar,i.codigo_siafi_rel||'',i.codigo_emenda_parlamentar,formatarMoeda(i.valor_emenda)].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
     }
     const csv  = [cabecalhos.join(';'), ...linhas].join('\n');
     const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
@@ -1633,16 +2068,16 @@ function exportarPDF(dash) {
     let head, body, titulo;
     if (dash === 'dg') {
         titulo = 'Emendas Federais — Visão Geral';
-        head = [['Ano','Nº Emenda','SIAFI','Esfera','Autoria','Vl. Indicado','Vl. Repassado','Objeto']];
+        head = [['Ano','Nº Emenda','CÓD. SIAFI','Esfera','Autoria','Vl. Indicado','Vl. Repassado','Objeto']];
         body = filteredDG.slice(0,500).map(i=>[i.ano,i.numero_emenda,i.codigo_siafi,i.esfera,truncar(i.autoria,25),formatarMoeda(i.valor_indicado),formatarMoeda(i.valor_repassado),truncar(i.objeto,40)]);
     } else if (dash === 'exec') {
         titulo = 'Emendas Federais — Execução Transferências PIX';
-        head = [['Ano','SIAFI','Empenho','Data','Descrição','Vl. Empenhado','Vl. Pago','CNPJ','Credor']];
-        body = filteredExec.slice(0,500).map(i=>[i.ano,i.numero_siafi,i.numero_empenho,formatarData(i.data_empenho),truncar(i.descricao_item,25),formatarMoeda(i.valor_empenhado),formatarMoeda(i.valor_pago),formatarCNPJ(i.cnpj_credor),truncar(i.razao_social_credor,25)]);
+        head = [['Ano','CÓD. SIAFI','Nº Emenda','Empenho','Data','Descrição','Vl. Empenhado','Vl. Pago','CNPJ','Credor']];
+        body = filteredExec.slice(0,500).map(i=>[i.ano,i.numero_siafi,i.numero_emenda,i.numero_empenho,formatarData(i.data_empenho),truncar(i.descricao_item,25),formatarMoeda(i.valor_empenhado),formatarMoeda(i.valor_pago),formatarCNPJ(i.cnpj_credor),truncar(i.razao_social_credor,25)]);
     } else {
         titulo = 'Emendas Federais — Plano de Execução PIX';
-        head = [['Ano','CNPJ Exec.','Executor','Objeto','CNPJ Benef.','Beneficiário','Cód. Emenda','Valor']];
-        body = filteredPlano.slice(0,500).map(i=>[i.ano,formatarCNPJ(i.cnpj_executor),truncar(i.nome_executor,20),truncar(i.objeto,25),formatarCNPJ(i.cnpj_beneficiario),truncar(i.beneficiario,20),i.codigo_emenda_parlamentar,formatarMoeda(i.valor_emenda)]);
+        head = [['Ano','CNPJ Exec.','Executor','Objeto','CNPJ Benef.','Beneficiário','Ano Em.','Nº Emenda','Parlamentar','CÓD. SIAFI','Valor']];
+        body = filteredPlano.slice(0,500).map(i=>[i.ano,formatarCNPJ(i.cnpj_executor),truncar(i.nome_executor,20),truncar(i.objeto,25),formatarCNPJ(i.cnpj_beneficiario),truncar(i.beneficiario,20),i.ano_emenda,i.numero_emenda_plano,truncar(i.parlamentar,20),i.codigo_siafi_rel||'-',formatarMoeda(i.valor_emenda)]);
     }
     doc.autoTable({
         head, body,
@@ -1684,7 +2119,19 @@ function compartilharLinkedIn(e,id) { e.preventDefault(); window.open(`https://w
 function compartilharWhatsApp(e,id) { e.preventDefault(); window.open(`https://wa.me/?text=${encodeURIComponent('Emendas Federais - Governo de Minas Gerais '+location.href)}`,'_blank'); document.getElementById(`shareOptions${id}`)?.classList.remove('show'); }
 
 function voltarAoTopo() {
-    (window.parent !== window ? window.parent : window).scrollTo({ top: 0, behavior: 'smooth' });
+    // Scroll this document to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
+    // If inside an iframe, ask parent to scroll to top via postMessage
+    if (window.parent !== window) {
+        try {
+            window.parent.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch(e) {}
+        try {
+            window.parent.postMessage({ type: 'scrollToTop', scrollTop: true }, '*');
+        } catch(e) {}
+    }
 }
 
 // ============================================================
