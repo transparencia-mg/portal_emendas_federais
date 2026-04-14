@@ -77,13 +77,13 @@
         "scheme": "file",
         "title": "Emendas Dados Gerais",
         "stats": {
-          "hash": "926a1fd885f3236b32d684d0718c6d02",
-          "bytes": 133409,
+          "hash": "b950a623d45119f1391a897e6eb75781",
+          "bytes": 135565,
           "fields": 14,
-          "rows": 419
+          "rows": 426
         }
       },
-      "time": 0.03,
+      "time": 0.029,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -488,10 +488,10 @@
         "scheme": "file",
         "title": "Execução de Emendas - Emendas PIX",
         "stats": {
-          "hash": "b46fc10a07ef0eeb0ae87053c89b11b8",
-          "bytes": 306976,
+          "hash": "61b3ceb5660b7ea8d3fc24086cc624eb",
+          "bytes": 310411,
           "fields": 37,
-          "rows": 1294
+          "rows": 1306
         }
       },
       "time": 0.124,
@@ -1257,8 +1257,8 @@
             "0,0",
             "0"
           ],
-          "rowNumber": 477,
-          "rowPosition": 478,
+          "rowNumber": 480,
+          "rowPosition": 481,
           "code": "type-error",
           "name": "Type Error",
           "tags": [
@@ -1267,7 +1267,7 @@
             "#cell"
           ],
           "note": "type is \"geopoint/default\"",
-          "message": "Type error in the cell \"133817,29\" in row \"478\" and field \"rpnp_restabelecido\" at position \"26\": type is \"geopoint/default\"",
+          "message": "Type error in the cell \"133817,29\" in row \"481\" and field \"rpnp_restabelecido\" at position \"26\": type is \"geopoint/default\"",
           "description": "The value does not match the schema type and format for this field."
         }
       ],
@@ -1364,7 +1364,7 @@
           "rows": 212
         }
       },
-      "time": 0.087,
+      "time": 0.092,
       "scope": [
         "hash-count-error",
         "byte-count-error",
