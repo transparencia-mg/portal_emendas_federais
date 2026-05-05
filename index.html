@@ -481,8 +481,24 @@
             .toolbar { flex-direction: column; align-items: flex-start; }
         }
 
-        /* Misc */
-        .tooltip-inner { background-color: #2f3b45 !important; color: #fff; font-size: 12px; padding: 6px 10px; border-radius: 6px; max-width: 250px; }
+        /* ============================================================
+           20. GERENCIADOR DE COLUNAS
+        ============================================================ */
+        .col-manager-dropdown { position: relative; display: inline-block; }
+        .col-manager-panel {
+            display: none; position: absolute; left: 0; top: 100%;
+            background: white; min-width: 260px; max-height: 360px; overflow-y: auto;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15); border-radius: 10px;
+            padding: 10px; z-index: 1050; border: 1px solid #dee2e6; margin-top: 5px;
+        }
+        .col-manager-panel.show { display: block; }
+        .col-manager-panel .col-item {
+            display: flex; align-items: center; gap: 8px; padding: 6px 8px;
+            border-radius: 6px; cursor: pointer; font-size: 12px; color: #1a3a5c;
+        }
+        .col-manager-panel .col-item:hover { background: #f0f4f8; }
+        .col-manager-panel .col-item input[type=checkbox] { accent-color: #1a3a5c; width: 14px; height: 14px; }
+        .col-manager-title { font-size: 11px; font-weight: 700; color: #6c757d; text-transform: uppercase; padding: 4px 8px 8px; border-bottom: 1px solid #eee; margin-bottom: 6px; } background-color: #2f3b45 !important; color: #fff; font-size: 12px; padding: 6px 10px; border-radius: 6px; max-width: 250px; }
         .fw-bold { font-weight: 700; }
         h5 { font-size: 14px; color: var(--primary-dark); padding-bottom: 8px; font-weight: 700; }
         code { font-size: 11px; background: #f0f4f8; padding: 2px 5px; border-radius: 3px; color: #1a3a5c; }
@@ -569,7 +585,7 @@
                         <div class="filter-group" style="flex:2;"></div>
                     </div>
                     <div class="botoes-abaixo">
-                        <button class="btn-pesquisa" id="aplicarFiltrosDG"><i class="material-icons me-2">search</i>Pesquisar</button>
+                        <button class="btn-pesquisa" id="aplicarFiltrosDG"><i class="material-icons me-2">tune</i>Atualizar Filtros</button>
                         <button class="btn-secondary-custom" id="limparFiltrosDG"><i class="material-icons me-2">clear</i>Limpar Filtros</button>
                     </div>
                 </div>
@@ -584,6 +600,24 @@
                     <div class="toolbar-left">
                         <button class="btn-export" id="exportCSVDG"><i class="material-icons">description</i>CSV</button>
                         <button class="btn-export" id="printDG"><i class="material-icons">print</i>PDF</button>
+                        <div class="col-manager-dropdown">
+                            <button class="btn-export" onclick="toggleColManager('dg')"><i class="material-icons">view_column</i>Colunas</button>
+                            <div class="col-manager-panel" id="colManagerDG">
+                                <div class="col-manager-title">Adicionar / Remover Colunas</div>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(0,this.checked)"> Ano</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(1,this.checked)"> Nº Emenda</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(2,this.checked)"> CÓD. SIAFI</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(3,this.checked)"> Esfera</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(4,this.checked)"> Autoria</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(5,this.checked)"> Valor Indicado</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(6,this.checked)"> Valor Repassado</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(7,this.checked)"> Objeto</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(8,this.checked)"> Modalidade</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(9,this.checked)"> Tipo Instrumento</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(10,this.checked)"> Função</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColDG(11,this.checked)"> Órgão Executor</label>
+                            </div>
+                        </div>
                         <div class="share-dropdown">
                             <button class="btn-export" onclick="toggleShare(1)"><i class="material-icons">share</i>Compartilhar</button>
                             <div class="share-options" id="shareOptions1">
@@ -624,6 +658,10 @@
                                     <th class="sortable-header" onclick="ordenarTabela('dg',5)">Valor Indicado <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('dg',6)">Valor Repassado <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('dg',7)">Objeto <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('dg',8)">Modalidade <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('dg',9)">Tipo Instrumento <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('dg',10)">Função <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('dg',11)">Órgão Executor <i class="material-icons">unfold_more</i></th>
                                     <th style="text-align:center;width:60px;">Ações</th>
                                 </tr>
                             </thead>
@@ -679,7 +717,7 @@
                         <div class="filter-group" style="flex:3;"></div>
                     </div>
                     <div class="botoes-abaixo">
-                        <button class="btn-pesquisa" id="aplicarFiltrosExec"><i class="material-icons me-2">search</i>Pesquisar</button>
+                        <button class="btn-pesquisa" id="aplicarFiltrosExec"><i class="material-icons me-2">tune</i>Atualizar Filtros</button>
                         <button class="btn-secondary-custom" id="limparFiltrosExec"><i class="material-icons me-2">clear</i>Limpar Filtros</button>
                     </div>
                 </div>
@@ -692,6 +730,32 @@
                     <div class="toolbar-left">
                         <button class="btn-export" id="exportCSVExec"><i class="material-icons">description</i>CSV</button>
                         <button class="btn-export" id="printExec"><i class="material-icons">print</i>PDF</button>
+                        <div class="col-manager-dropdown">
+                            <button class="btn-export" onclick="toggleColManager('exec')"><i class="material-icons">view_column</i>Colunas</button>
+                            <div class="col-manager-panel" id="colManagerExec">
+                                <div class="col-manager-title">Adicionar / Remover Colunas</div>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(0,this.checked)"> Ano</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(1,this.checked)"> CÓD. SIAFI (numero_siafi)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(2,this.checked)"> Nº Emenda</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(3,this.checked)"> Nº Empenho (numero_empenho)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(4,this.checked)"> Data Empenho (data_empenho)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(5,this.checked)"> Modalidade (modalide)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(6,this.checked)"> Elemento Despesa (elemento_despes)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(7,this.checked)"> Item Despesa (item_despesa)</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColExec(7.5,this.checked)"> Descrição Item (descricao_item)</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColExec(7.6,this.checked)"> Ação (acao)</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColExec(7.7,this.checked)"> Categoria (categoria)</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColExec(7.8,this.checked)"> Grupo (grupo)</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColExec(7.9,this.checked)"> Natureza DEA (natureza_dea)</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColExec(7.95,this.checked)"> ED/EDA (ed_eda)</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColExec(7.97,this.checked)"> Procedência (procedencia)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(8,this.checked)"> Fonte (fonte)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(9,this.checked)"> Razão Social Credor (razao_social_credor)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(10,this.checked)"> CNPJ/CPF Credor (cnpj_cpf_credor)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(11,this.checked)"> Valor Liquidado (valor_liquidado)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(12,this.checked)"> Valor Pago (valor_pago)</label>
+                            </div>
+                        </div>
                         <div class="share-dropdown">
                             <button class="btn-export" onclick="toggleShare(2)"><i class="material-icons">share</i>Compartilhar</button>
                             <div class="share-options" id="shareOptions2">
@@ -727,17 +791,20 @@
                                     <th class="sortable-header" onclick="ordenarTabela('exec',1)">CÓD. SIAFI <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('exec',2)">Nº Emenda <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('exec',3)">Nº Empenho <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('exec',3)">Data Empenho <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('exec',4)">Descrição Item <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('exec',5)">Valor Empenhado <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('exec',6)">Valor Pago <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('exec',7)">CNPJ/CPF <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('exec',8)">Razão Social <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',4)">Data Empenho <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',5)">Modalidade <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',6)">Elemento Despesa <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',7)">Item Despesa <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',8)">Fonte <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',9)">Razão Social Credor <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',10)">CNPJ/CPF Credor <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',11)">Valor Liquidado <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('exec',12)">Valor Pago <i class="material-icons">unfold_more</i></th>
                                     <th style="text-align:center;width:60px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody id="tabelaExecBody">
-                                <tr><td colspan="12" class="text-center text-muted">Carregando dados...</td></tr>
+                                <tr><td colspan="14" class="text-center text-muted">Carregando dados...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -782,13 +849,20 @@
                             <input type="text" class="form-control" id="siafiPlano" placeholder="Ex: 9287341">
                         </div>
                         <div class="filter-group">
+                            <label class="filter-label">Modalidade</label>
+                            <select class="form-select" id="modalidadePlano"><option value="">Todas</option></select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Situação</label>
+                            <select class="form-select" id="situacaoPlano"><option value="">Todas</option></select>
+                        </div>
+                        <div class="filter-group">
                             <label class="filter-label">Objeto</label>
                             <input type="text" class="form-control" id="objetoPlano" placeholder="Palavras-chave...">
                         </div>
-                        <div class="filter-group" style="flex:1;"></div>
                     </div>
                     <div class="botoes-abaixo">
-                        <button class="btn-pesquisa" id="aplicarFiltrosPlano"><i class="material-icons me-2">search</i>Pesquisar</button>
+                        <button class="btn-pesquisa" id="aplicarFiltrosPlano"><i class="material-icons me-2">tune</i>Atualizar Filtros</button>
                         <button class="btn-secondary-custom" id="limparFiltrosPlano"><i class="material-icons me-2">clear</i>Limpar Filtros</button>
                     </div>
                 </div>
@@ -801,6 +875,29 @@
                     <div class="toolbar-left">
                         <button class="btn-export" id="exportCSVPlano"><i class="material-icons">description</i>CSV</button>
                         <button class="btn-export" id="printPlano"><i class="material-icons">print</i>PDF</button>
+                        <div class="col-manager-dropdown">
+                            <button class="btn-export" onclick="toggleColManager('plano')"><i class="material-icons">view_column</i>Colunas</button>
+                            <div class="col-manager-panel" id="colManagerPlano">
+                                <div class="col-manager-title">Adicionar / Remover Colunas</div>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(0,this.checked)"> Ano Emenda</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(1,this.checked)"> Cód. Emenda (codigo_emenda_parlamentar)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(2,this.checked)"> CÓD. SIAFI (numero_siafi)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(3,this.checked)"> Objeto (objeto_executor)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(4,this.checked)"> Modalidade (modalidade_plano_acao)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(5,this.checked)"> Situação (situacao_plano_acao)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(6,this.checked)"> Nome Executor (nome_executor)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(7,this.checked)"> CNPJ Executor (cnpj_executor)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(8,this.checked)"> Nome Beneficiário (nome_beneficiario_plano_acao)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(9,this.checked)"> CNPJ Beneficiário (cnpj_beneficiario_plano_acao)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(10,this.checked)"> Valor Emenda (valor_emenda)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(11,this.checked)"> Valor Custeio (valor_custeio)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColPlano(12,this.checked)"> Valor Capital (valor_capital)</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColPlano(13,this.checked)"> ID Plano Ação (id_plano_acao)</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColPlano(14,this.checked)"> ID Executor (id_executor)</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColPlano(15,this.checked)"> UF Beneficiário (uf_beneficiario_plano_acao)</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColPlano(16,this.checked)"> Classificação Orçamentária (classificacao_orcamentaria_plano_trabalho)</label>
+                            </div>
+                        </div>
                         <div class="share-dropdown">
                             <button class="btn-export" onclick="toggleShare(3)"><i class="material-icons">share</i>Compartilhar</button>
                             <div class="share-options" id="shareOptions3">
@@ -832,22 +929,24 @@
                         <table class="table" id="tabelaPlano">
                             <thead>
                                 <tr>
-                                    <th class="sortable-header" onclick="ordenarTabela('plano',0)">Ano <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('plano',1)">CNPJ Executor <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('plano',2)">Executor <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',0)">Ano Emenda <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',1)">Cód. Emenda <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',2)">CÓD. SIAFI <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('plano',3)">Objeto <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('plano',4)">CNPJ Beneficiário <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('plano',5)">Beneficiário <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('plano',6)">Ano Emenda <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('plano',7)">Nº Emenda <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('plano',8)">Parlamentar <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarTabela('plano',9)">CÓD. SIAFI <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',4)">Modalidade <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',5)">Situação <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',6)">Nome Executor <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',7)">CNPJ Executor <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',8)">Beneficiário <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',9)">CNPJ Beneficiário <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarTabela('plano',10)">Valor Emenda <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',11)">Valor Custeio <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarTabela('plano',12)">Valor Capital <i class="material-icons">unfold_more</i></th>
                                     <th style="text-align:center;width:60px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody id="tabelaPlanoBody">
-                                <tr><td colspan="12" class="text-center text-muted">Carregando dados...</td></tr>
+                                <tr><td colspan="14" class="text-center text-muted">Carregando dados...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -1224,7 +1323,10 @@ function mapDG(row, i) {
         valor_indicado: parseValor(row.valor_indicado),
         valor_repassado: parseValor(row.valor_repassado),
         objeto: row.objeto || '',
-        modalidade: row.modalide || row.modalidade || ''
+        modalidade: row.modalide || row.modalidade || '',
+        tipo_instrumento: row.tipo_instrumento_juridico || row.tipo_instrumento || row.tipo_de_instrumento || '',
+        funcao: row.funcao_governo || row.funcao || row['função'] || '',
+        orgao_executor: row.orgao_executor || row['órgão_executor'] || row.orgao || ''
     };
 }
 
@@ -1236,11 +1338,22 @@ function mapExec(row, i) {
         numero_emenda: row.numero_emenda || '',
         numero_empenho: row.numero_empenho || '',
         data_empenho: row.data_empenho || '',
+        acao: row.acao || '',
+        categoria: row.categoria || '',
+        grupo: row.grupo || '',
+        modalidade: row.modalide || row.modalidade || '',
+        elemento_despesa: row.elemento_despes || row.elemento_despesa || '',
+        item_despesa: row.item_despesa || '',
         descricao_item: row.descricao_item || '',
-        valor_empenhado: parseValor(row.valor_empenhado),
-        valor_pago: parseValor(row.valor_pago),
+        natureza_dea: row.natureza_dea || '',
+        ed_eda: row.ed_eda || '',
+        fonte: row.fonte || '',
+        procedencia: row.procedencia || row.procedência || '',
         cnpj_credor: row.cnpj_cpf_credor || '',
-        razao_social_credor: row.razao_social_credor || ''
+        razao_social_credor: row.razao_social_credor || '',
+        valor_empenhado: parseValor(row.valor_empenhado),
+        valor_liquidado: parseValor(row.valor_liquidado),
+        valor_pago: parseValor(row.valor_pago)
     };
 }
 
@@ -1267,17 +1380,26 @@ function mapPlano(row, i) {
     return {
         id: i + 1,
         ano: row.ano_plano_acao || '',
+        id_plano_acao: row.id_plano_acao || '',
+        id_executor: row.id_executor || '',
         cnpj_executor: row.cnpj_executor || '',
         nome_executor: row.nome_executor || '',
         objeto: row.objeto_executor || '',
+        valor_custeio: parseValor(row.valor_custeio),
+        valor_capital: parseValor(row.valor_capital),
+        ano_plano_acao: row.ano_plano_acao || '',
+        modalidade_plano: row.modalidade_plano_acao || row.modalidade || '',
+        situacao_plano: row.situacao_plano_acao || row.situacao || '',
         cnpj_beneficiario: row.cnpj_beneficiario_plano_acao || '',
         beneficiario: row.nome_beneficiario_plano_acao || '',
+        uf_beneficiario: row.uf_beneficiario_plano_acao || '',
         codigo_emenda_parlamentar: cod,
         ano_emenda,
         numero_emenda_plano,
         parlamentar,
         codigo_siafi_rel: '',
-        valor_emenda: parseValor(row.valor_emenda)
+        valor_emenda: parseValor(row.valor_emenda),
+        classificacao_orcamentaria: row.classificacao_orcamentaria_plano_trabalho || ''
     };
 }
 
@@ -1296,6 +1418,12 @@ function populaFiltros() {
     // Plano
     const anosPlano = [...new Set(planoExecucaoData.map(d => d.ano).filter(Boolean))].sort((a,b)=>b-a);
     document.getElementById('anoPlano').innerHTML = '<option value="">Todos</option>' + anosPlano.map(a=>`<option value="${a}">${a}</option>`).join('');
+    const modalidadesPlano = [...new Set(planoExecucaoData.map(d => d.modalidade_plano).filter(Boolean))].sort();
+    const modalidadePlanoEl = document.getElementById('modalidadePlano');
+    if (modalidadePlanoEl) modalidadePlanoEl.innerHTML = '<option value="">Todas</option>' + modalidadesPlano.map(m=>`<option value="${m}">${m}</option>`).join('');
+    const situacoesPlano = [...new Set(planoExecucaoData.map(d => d.situacao_plano).filter(Boolean))].sort();
+    const situacaoPlanoEl = document.getElementById('situacaoPlano');
+    if (situacaoPlanoEl) situacaoPlanoEl.innerHTML = '<option value="">Todas</option>' + situacoesPlano.map(s=>`<option value="${s}">${s}</option>`).join('');
 
     // Pre-select most recent year for each dashboard
     if (anosDG.length) {
@@ -1364,6 +1492,8 @@ function aplicarFiltros(dash) {
         const cod  = (document.getElementById('codigoEmendaParlamentar')?.value || '').toLowerCase();
         const sifP = (document.getElementById('siafiPlano')?.value || '').toLowerCase();
         const obj  = (document.getElementById('objetoPlano')?.value || '').toLowerCase();
+        const mod  = document.getElementById('modalidadePlano')?.value || '';
+        const sit  = document.getElementById('situacaoPlano')?.value || '';
         filteredPlano = planoExecucaoData.filter(i => {
             if (ano  && i.ano != ano) return false;
             if (exe  && !(i.nome_executor||'').toLowerCase().includes(exe)) return false;
@@ -1372,6 +1502,8 @@ function aplicarFiltros(dash) {
             if (cod  && !(i.numero_emenda_plano||'').toLowerCase().includes(cod)) return false;
             if (sifP && !(i.codigo_siafi_rel||'').toLowerCase().includes(sifP)) return false;
             if (obj  && !(i.objeto||'').toLowerCase().includes(obj)) return false;
+            if (mod  && i.modalidade_plano !== mod) return false;
+            if (sit  && i.situacao_plano !== sit) return false;
             return true;
         });
         currentPage.plano = 1;
@@ -1384,7 +1516,7 @@ function limparFiltros(dash) {
     const ids = {
         dg:    ['anoDG','numeroEmenda','modalidadeDG','numeroSiafi','autoriaDG','esferaDG','objetoDG','searchDG'],
         exec:  ['anoExec','siafiExec','numeroEmendaExec','numEmpenho','credorExec','cnpjExec','descricaoItem','searchExec'],
-        plano: ['anoPlano','nomeExecutor','beneficiarioPlano','cnpjBeneficiario','codigoEmendaParlamentar','siafiPlano','objetoPlano','searchPlano']
+        plano: ['anoPlano','nomeExecutor','beneficiarioPlano','cnpjBeneficiario','codigoEmendaParlamentar','siafiPlano','objetoPlano','modalidadePlano','situacaoPlano','searchPlano']
     };
     ids[dash].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
     currentSearch[dash] = '';
@@ -1430,9 +1562,9 @@ function ordenarTabela(dash, colIndex) {
 
 function ordenarDados(dash) {
     const cols = {
-        dg:    ['ano','numero_emenda','codigo_siafi','esfera','autoria','valor_indicado','valor_repassado','objeto'],
-        exec:  ['ano','numero_siafi','numero_emenda','numero_empenho','data_empenho','descricao_item','valor_empenhado','valor_pago','cnpj_credor','razao_social_credor'],
-        plano: ['ano','cnpj_executor','nome_executor','objeto','cnpj_beneficiario','beneficiario','ano_emenda','numero_emenda_plano','parlamentar','codigo_siafi_rel','valor_emenda']
+        dg:    ['ano','numero_emenda','codigo_siafi','esfera','autoria','valor_indicado','valor_repassado','objeto','modalidade','tipo_instrumento','funcao','orgao_executor'],
+        exec:  ['ano','numero_siafi','numero_emenda','numero_empenho','data_empenho','modalidade','elemento_despesa','item_despesa','fonte','razao_social_credor','cnpj_credor','valor_liquidado','valor_pago'],
+        plano: ['ano','codigo_emenda_parlamentar','codigo_siafi_rel','objeto','modalidade_plano','situacao_plano','nome_executor','cnpj_executor','beneficiario','cnpj_beneficiario','valor_emenda','valor_custeio','valor_capital']
     };
     const c = sortConfig[dash];
     const prop = cols[dash][c.column];
@@ -1538,7 +1670,7 @@ function updateTabelaDG() {
     const tbody = document.getElementById('tabelaDGBody');
     const countEl = document.getElementById('countDG');
     if (!filteredDG.length) {
-        if (tbody) tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="13" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
         if (countEl) countEl.textContent = '0 registros';
         renderizarPaginacao('paginacaoDG','dg',0,1,itemsPerPage.dg); return;
     }
@@ -1554,6 +1686,10 @@ function updateTabelaDG() {
             <td class="valor-monetario">${formatarMoeda(item.valor_indicado)}</td>
             <td class="valor-monetario">${formatarMoeda(item.valor_repassado)}</td>
             <td>${truncar(item.objeto,55)}</td>
+            <td>${item.modalidade||'-'}</td>
+            <td>${truncar(item.tipo_instrumento,30)}</td>
+            <td>${item.funcao||'-'}</td>
+            <td>${truncar(item.orgao_executor,35)}</td>
             <td style="text-align:center;">
                 <button class="btn-action" onclick='mostrarDetalhesDG(${JSON.stringify(item).replace(/'/g,"\\'")})'  title="Ver Detalhes">
                     <i class="material-icons">visibility</i>
@@ -1710,7 +1846,7 @@ function updateTabelaExec() {
     const tbody = document.getElementById('tabelaExecBody');
     const countEl = document.getElementById('countExec');
     if (!filteredExec.length) {
-        if (tbody) tbody.innerHTML = '<tr><td colspan="11" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="14" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
         if (countEl) countEl.textContent = '0 registros';
         renderizarPaginacao('paginacaoExec','exec',0,1,itemsPerPage.exec); return;
     }
@@ -1720,13 +1856,17 @@ function updateTabelaExec() {
         <tr>
             <td>${item.ano||'-'}</td>
             <td>${linkSiafi(item.numero_siafi)}</td>
+            <td>${item.numero_emenda||'-'}</td>
             <td>${item.numero_empenho||'-'}</td>
             <td style="white-space:nowrap">${formatarData(item.data_empenho)}</td>
-            <td>${truncar(item.descricao_item,40)}</td>
-            <td class="valor-monetario">${formatarMoeda(item.valor_empenhado)}</td>
-            <td class="valor-monetario">${formatarMoeda(item.valor_pago)}</td>
-            <td style="white-space:nowrap">${formatarCNPJ(item.cnpj_credor)}</td>
+            <td>${item.modalidade||'-'}</td>
+            <td>${item.elemento_despesa||'-'}</td>
+            <td>${truncar(item.item_despesa,30)}</td>
+            <td>${item.fonte||'-'}</td>
             <td>${truncar(item.razao_social_credor,35)}</td>
+            <td style="white-space:nowrap">${formatarCNPJ(item.cnpj_credor)}</td>
+            <td class="valor-monetario">${formatarMoeda(item.valor_liquidado)}</td>
+            <td class="valor-monetario">${formatarMoeda(item.valor_pago)}</td>
             <td style="text-align:center;">
                 <button class="btn-action" onclick='mostrarDetalhesExec(${JSON.stringify(item).replace(/'/g,"\\'")})'  title="Ver Detalhes">
                     <i class="material-icons">visibility</i>
@@ -1838,7 +1978,24 @@ window.mostrarDetalhesExec = function(item) {
             </div>
         </div>
         <div class="info-grid">
+            <div class="info-card"><div class="info-label">Modalidade</div><div class="info-value">${item.modalidade||'-'}</div></div>
+            <div class="info-card"><div class="info-label">Elemento de Despesa</div><div class="info-value">${item.elemento_despesa||'-'}</div></div>
+            <div class="info-card"><div class="info-label">Item de Despesa</div><div class="info-value">${item.item_despesa||'-'}</div></div>
+        </div>
+        <div class="info-grid">
+            <div class="info-card"><div class="info-label">Ação</div><div class="info-value">${item.acao||'-'}</div></div>
+            <div class="info-card"><div class="info-label">Categoria</div><div class="info-value">${item.categoria||'-'}</div></div>
+            <div class="info-card"><div class="info-label">Grupo</div><div class="info-value">${item.grupo||'-'}</div></div>
+        </div>
+        <div class="info-grid">
+            <div class="info-card"><div class="info-label">Natureza DEA</div><div class="info-value">${item.natureza_dea||'-'}</div></div>
+            <div class="info-card"><div class="info-label">ED/EDA</div><div class="info-value">${item.ed_eda||'-'}</div></div>
+            <div class="info-card"><div class="info-label">Fonte</div><div class="info-value">${item.fonte||'-'}</div></div>
+            <div class="info-card"><div class="info-label">Procedência</div><div class="info-value">${item.procedencia||'-'}</div></div>
+        </div>
+        <div class="info-grid">
             <div class="info-card"><div class="info-label">Valor Empenhado</div><div class="info-value">${formatarMoeda(item.valor_empenhado)}</div></div>
+            <div class="info-card"><div class="info-label">Valor Liquidado</div><div class="info-value">${formatarMoeda(item.valor_liquidado)}</div></div>
             <div class="info-card"><div class="info-label">Valor Pago</div><div class="info-value">${formatarMoeda(item.valor_pago)}</div></div>
         </div>
         <div class="objeto-container">
@@ -1886,7 +2043,7 @@ function updateTabelaPlano() {
     const tbody = document.getElementById('tabelaPlanoBody');
     const countEl = document.getElementById('countPlano');
     if (!filteredPlano.length) {
-        if (tbody) tbody.innerHTML = '<tr><td colspan="12" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="14" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
         if (countEl) countEl.textContent = '0 registros';
         renderizarPaginacao('paginacaoPlano','plano',0,1,itemsPerPage.plano); return;
     }
@@ -1894,16 +2051,19 @@ function updateTabelaPlano() {
     const data  = filteredPlano.slice(start, start + itemsPerPage.plano);
     tbody.innerHTML = data.map(item => `
         <tr>
-            <td>${item.ano||'-'}</td>
-            <td style="white-space:nowrap">${formatarCNPJ(item.cnpj_executor)}</td>
-            <td>${truncar(item.nome_executor,35)}</td>
-            <td>${truncar(item.objeto,45)}</td>
-            <td style="white-space:nowrap">${formatarCNPJ(item.cnpj_beneficiario)}</td>
-            <td>${truncar(item.beneficiario,35)}</td>
-            <td style="white-space:nowrap">${item.ano_emenda||'-'}</td>
+            <td style="white-space:nowrap">${item.ano_emenda||item.ano||'-'}</td>
             <td style="white-space:nowrap">${item.numero_emenda_plano||'-'}</td>
-            <td>${truncar(item.parlamentar,30)}</td>
+            <td style="white-space:nowrap">${linkSiafi(item.codigo_siafi_rel)}</td>
+            <td>${truncar(item.objeto,45)}</td>
+            <td>${item.modalidade_plano||'-'}</td>
+            <td>${item.situacao_plano||'-'}</td>
+            <td>${truncar(item.nome_executor,35)}</td>
+            <td style="white-space:nowrap">${formatarCNPJ(item.cnpj_executor)}</td>
+            <td>${truncar(item.beneficiario,35)}</td>
+            <td style="white-space:nowrap">${formatarCNPJ(item.cnpj_beneficiario)}</td>
             <td class="valor-monetario">${formatarMoeda(item.valor_emenda)}</td>
+            <td class="valor-monetario">${formatarMoeda(item.valor_custeio)}</td>
+            <td class="valor-monetario">${formatarMoeda(item.valor_capital)}</td>
             <td style="text-align:center;">
                 <button class="btn-action" onclick='mostrarDetalhesPlano(${JSON.stringify(item).replace(/'/g,"\\'")})'  title="Ver Detalhes">
                     <i class="material-icons">visibility</i>
@@ -2018,14 +2178,33 @@ window.mostrarDetalhesPlano = function(item) {
         </div>
         <div class="info-grid">
             <div class="info-card">
+                <div class="info-label">Modalidade</div><div class="info-value">${item.modalidade_plano||'-'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Situação</div><div class="info-value">${item.situacao_plano||'-'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Classificação Orçamentária</div><div class="info-value">${item.classificacao_orcamentaria||'-'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">UF Beneficiário</div><div class="info-value">${item.uf_beneficiario||'-'}</div>
+            </div>
+        </div>
+        <div class="info-grid">
+            <div class="info-card">
                 <div class="info-label">Executor</div><div class="info-value">${item.nome_executor||'-'}</div>
                 <div class="info-label" style="margin-top:8px;">CNPJ Executor</div><div class="info-value">${formatarCNPJ(item.cnpj_executor)}</div>
+                <div class="info-label" style="margin-top:8px;">ID Executor</div><div class="info-value">${item.id_executor||'-'}</div>
             </div>
             <div class="info-card">
                 <div class="info-label">Beneficiário</div><div class="info-value">${item.beneficiario||'-'}</div>
                 <div class="info-label" style="margin-top:8px;">CNPJ Beneficiário</div><div class="info-value">${formatarCNPJ(item.cnpj_beneficiario)}</div>
             </div>
+        </div>
+        <div class="info-grid">
             <div class="info-card"><div class="info-label">Valor da Emenda</div><div class="info-value">${formatarMoeda(item.valor_emenda)}</div></div>
+            <div class="info-card"><div class="info-label">Valor Custeio</div><div class="info-value">${formatarMoeda(item.valor_custeio)}</div></div>
+            <div class="info-card"><div class="info-label">Valor Capital</div><div class="info-value">${formatarMoeda(item.valor_capital)}</div></div>
         </div>
         <div class="objeto-container">
             <div class="objeto-title"><i class="material-icons">subject</i>OBJETO</div>
@@ -2045,11 +2224,11 @@ function exportarCSV(dash) {
         cabecalhos = ['Ano','Nº Emenda','CÓD. SIAFI','Esfera','Autoria','Valor Indicado','Valor Repassado','Objeto','Modalidade'];
         linhas = filteredDG.map(i => [i.ano,i.numero_emenda,i.codigo_siafi,i.esfera,i.autoria,formatarMoeda(i.valor_indicado),formatarMoeda(i.valor_repassado),(i.objeto||'').replace(/\n/g,' '),i.modalidade].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
     } else if (dash === 'exec') {
-        cabecalhos = ['Ano','CÓD. SIAFI','Nº Emenda','Nº Empenho','Data Empenho','Descrição','Valor Empenhado','Valor Pago','CNPJ/CPF','Razão Social'];
-        linhas = filteredExec.map(i => [i.ano,i.numero_siafi,i.numero_emenda,i.numero_empenho,formatarData(i.data_empenho),i.descricao_item,formatarMoeda(i.valor_empenhado),formatarMoeda(i.valor_pago),formatarCNPJ(i.cnpj_credor),i.razao_social_credor].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
+        cabecalhos = ['Ano','CÓD. SIAFI','Nº Emenda','Nº Empenho','Data Empenho','Modalidade','Elemento Despesa','Item Despesa','Descrição Item','Ação','Categoria','Grupo','Natureza DEA','ED/EDA','Fonte','Procedência','Razão Social Credor','CNPJ/CPF Credor','Valor Empenhado','Valor Liquidado','Valor Pago'];
+        linhas = filteredExec.map(i => [i.ano,i.numero_siafi,i.numero_emenda,i.numero_empenho,formatarData(i.data_empenho),i.modalidade,i.elemento_despesa,i.item_despesa,i.descricao_item,i.acao,i.categoria,i.grupo,i.natureza_dea,i.ed_eda,i.fonte,i.procedencia,i.razao_social_credor,formatarCNPJ(i.cnpj_credor),formatarMoeda(i.valor_empenhado),formatarMoeda(i.valor_liquidado),formatarMoeda(i.valor_pago)].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
     } else {
-        cabecalhos = ['Ano','CNPJ Executor','Executor','Objeto','CNPJ Beneficiário','Beneficiário','Ano Emenda','Nº Emenda','Parlamentar','CÓD. SIAFI','Código Completo','Valor Emenda'];
-        linhas = filteredPlano.map(i => [i.ano,formatarCNPJ(i.cnpj_executor),i.nome_executor,i.objeto,formatarCNPJ(i.cnpj_beneficiario),i.beneficiario,i.ano_emenda,i.numero_emenda_plano,i.parlamentar,i.codigo_siafi_rel||'',i.codigo_emenda_parlamentar,formatarMoeda(i.valor_emenda)].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
+        cabecalhos = ['Ano Plano','Ano Emenda','Cód. Emenda','CÓD. SIAFI','CNPJ Executor','Executor','Objeto','Modalidade','Situação','CNPJ Beneficiário','Beneficiário','UF Beneficiário','Valor Emenda','Valor Custeio','Valor Capital','Parlamentar','Código Completo Emenda','Classificação Orçamentária'];
+        linhas = filteredPlano.map(i => [i.ano,i.ano_emenda,i.numero_emenda_plano,i.codigo_siafi_rel||'',formatarCNPJ(i.cnpj_executor),i.nome_executor,i.objeto,i.modalidade_plano,i.situacao_plano,formatarCNPJ(i.cnpj_beneficiario),i.beneficiario,i.uf_beneficiario,formatarMoeda(i.valor_emenda),formatarMoeda(i.valor_custeio),formatarMoeda(i.valor_capital),i.parlamentar,i.codigo_emenda_parlamentar,i.classificacao_orcamentaria].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
     }
     const csv  = [cabecalhos.join(';'), ...linhas].join('\n');
     const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
@@ -2068,16 +2247,16 @@ function exportarPDF(dash) {
     let head, body, titulo;
     if (dash === 'dg') {
         titulo = 'Emendas Federais — Visão Geral';
-        head = [['Ano','Nº Emenda','CÓD. SIAFI','Esfera','Autoria','Vl. Indicado','Vl. Repassado','Objeto']];
-        body = filteredDG.slice(0,500).map(i=>[i.ano,i.numero_emenda,i.codigo_siafi,i.esfera,truncar(i.autoria,25),formatarMoeda(i.valor_indicado),formatarMoeda(i.valor_repassado),truncar(i.objeto,40)]);
+        head = [['Ano','Nº Emenda','CÓD. SIAFI','Esfera','Autoria','Modalidade','Tipo Instrumento','Vl. Indicado','Vl. Repassado','Objeto']];
+        body = filteredDG.slice(0,500).map(i=>[i.ano,i.numero_emenda,i.codigo_siafi,i.esfera,truncar(i.autoria,20),i.modalidade,truncar(i.tipo_instrumento,15),formatarMoeda(i.valor_indicado),formatarMoeda(i.valor_repassado),truncar(i.objeto,30)]);
     } else if (dash === 'exec') {
         titulo = 'Emendas Federais — Execução Transferências PIX';
-        head = [['Ano','CÓD. SIAFI','Nº Emenda','Empenho','Data','Descrição','Vl. Empenhado','Vl. Pago','CNPJ','Credor']];
-        body = filteredExec.slice(0,500).map(i=>[i.ano,i.numero_siafi,i.numero_emenda,i.numero_empenho,formatarData(i.data_empenho),truncar(i.descricao_item,25),formatarMoeda(i.valor_empenhado),formatarMoeda(i.valor_pago),formatarCNPJ(i.cnpj_credor),truncar(i.razao_social_credor,25)]);
+        head = [['Ano','CÓD. SIAFI','Nº Emenda','Empenho','Data','Modalidade','Elem.Desp.','Fonte','Credor','CNPJ','Vl. Liquidado','Vl. Pago']];
+        body = filteredExec.slice(0,500).map(i=>[i.ano,i.numero_siafi,i.numero_emenda,i.numero_empenho,formatarData(i.data_empenho),i.modalidade,i.elemento_despesa,i.fonte,truncar(i.razao_social_credor,20),formatarCNPJ(i.cnpj_credor),formatarMoeda(i.valor_liquidado),formatarMoeda(i.valor_pago)]);
     } else {
         titulo = 'Emendas Federais — Plano de Execução PIX';
-        head = [['Ano','CNPJ Exec.','Executor','Objeto','CNPJ Benef.','Beneficiário','Ano Em.','Nº Emenda','Parlamentar','CÓD. SIAFI','Valor']];
-        body = filteredPlano.slice(0,500).map(i=>[i.ano,formatarCNPJ(i.cnpj_executor),truncar(i.nome_executor,20),truncar(i.objeto,25),formatarCNPJ(i.cnpj_beneficiario),truncar(i.beneficiario,20),i.ano_emenda,i.numero_emenda_plano,truncar(i.parlamentar,20),i.codigo_siafi_rel||'-',formatarMoeda(i.valor_emenda)]);
+        head = [['Ano Em.','Cód. Em.','CÓD. SIAFI','Objeto','Modalidade','Situação','Executor','CNPJ Exec.','Beneficiário','Vl. Emenda','Vl. Custeio','Vl. Capital']];
+        body = filteredPlano.slice(0,500).map(i=>[i.ano_emenda||i.ano,i.numero_emenda_plano,i.codigo_siafi_rel||'-',truncar(i.objeto,20),i.modalidade_plano,i.situacao_plano,truncar(i.nome_executor,15),formatarCNPJ(i.cnpj_executor),truncar(i.beneficiario,15),formatarMoeda(i.valor_emenda),formatarMoeda(i.valor_custeio),formatarMoeda(i.valor_capital)]);
     }
     doc.autoTable({
         head, body,
@@ -2143,6 +2322,31 @@ function iframeUpdateHeight() {
 }
 
 // ============================================================
+// GERENCIADOR DE COLUNAS
+// ============================================================
+function toggleColManager(dash) {
+    document.querySelectorAll('.col-manager-panel').forEach(p => {
+        if (p.id !== 'colManager' + dash.charAt(0).toUpperCase() + dash.slice(1)) p.classList.remove('show');
+    });
+    const panel = document.getElementById('colManager' + dash.charAt(0).toUpperCase() + dash.slice(1));
+    if (panel) panel.classList.toggle('show');
+}
+
+function toggleColByIndex(tableId, colIndex, show) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+    const rows = table.querySelectorAll('tr');
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('th, td');
+        if (cells[colIndex]) cells[colIndex].style.display = show ? '' : 'none';
+    });
+}
+
+window.toggleColDG = function(idx, show) { toggleColByIndex('tabelaDG', idx, show); };
+window.toggleColExec = function(idx, show) { toggleColByIndex('tabelaExec', idx, show); };
+window.toggleColPlano = function(idx, show) { toggleColByIndex('tabelaPlano', idx, show); };
+
+// ============================================================
 // EVENT LISTENERS
 // ============================================================
 function setupEventListeners() {
@@ -2172,6 +2376,9 @@ function setupEventListeners() {
     document.addEventListener('click', e => {
         if (!e.target.closest('.share-dropdown')) {
             document.querySelectorAll('.share-options').forEach(o => o.classList.remove('show'));
+        }
+        if (!e.target.closest('.col-manager-dropdown')) {
+            document.querySelectorAll('.col-manager-panel').forEach(o => o.classList.remove('show'));
         }
     });
     // Tab resize
