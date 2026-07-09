@@ -1168,6 +1168,15 @@ function linkSiafi(siafi) {
     return s;
 }
 
+function linkDocumento(url, label) {
+    if (!url) return '<span style="color:#94a3b8;">Não informado</span>';
+    const u = url.toString().trim();
+    if (!u || u === '-') return '<span style="color:#94a3b8;">Não informado</span>';
+    const href = u.startsWith('http') ? u : 'https://' + u;
+    const txt = label || 'Ver documento';
+    return '<a href="' + href + '" target="_blank" rel="noopener" title="Ver Inteiro Teor da Emenda / Documento de Repasse" style="color:#1a3a5c;font-weight:600;text-decoration:underline dotted;">' + txt + '&nbsp;<i class="material-icons" style="font-size:11px;vertical-align:middle;color:#b93c42;">open_in_new</i></a>';
+}
+
 // ============================================================
 // DATA DE ATUALIZAÇÃO VIA GITHUB API
 // ============================================================
@@ -1326,7 +1335,8 @@ function mapDG(row, i) {
         modalidade: row.modalide || row.modalidade || '',
         tipo_instrumento: row.tipo_de_instrumento_juridico || row.tipo_instrumento_juridico || row.tipo_instrumento || row.tipo_de_instrumento || '',
         funcao: row.funcao_de_governo || row.funcao_governo || row.funcao || row['função'] || '',
-        orgao_executor: row.orgao_executor || row['órgão_executor'] || row.orgao || ''
+        orgao_executor: row.orgao_executor || row['órgão_executor'] || row.orgao || '',
+        link: row.link || ''
     };
 }
 
@@ -1796,6 +1806,9 @@ window.mostrarDetalhesDG = function(item) {
                 <div class="info-label">Autoria</div><div class="info-value">${item.autoria||'-'}</div>
                 <div class="info-label" style="margin-top:8px;">CÓD. SIAFI</div><div class="info-value highlight">${linkSiafi(item.codigo_siafi)}</div>
             </div>
+            <div class="info-card">
+                <div class="info-label">Inteiro Teor da Emenda / Documento de Repasse</div><div class="info-value highlight">${linkDocumento(item.link)}</div>
+            </div>
         </div>
         <div class="info-grid">
             <div class="info-card"><div class="info-label">Valor Indicado</div><div class="info-value">${formatarMoeda(item.valor_indicado)}</div></div>
@@ -1907,6 +1920,7 @@ window.mostrarDetalhesExec = function(item) {
                         <th style="padding:8px 10px;text-align:right;">Vl. Indicado</th>
                         <th style="padding:8px 10px;text-align:right;">Vl. Repassado</th>
                         <th style="padding:8px 10px;">Objeto</th>
+                        <th style="padding:8px 10px;">Documento</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1919,6 +1933,7 @@ window.mostrarDetalhesExec = function(item) {
                         <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(d.valor_indicado)}</td>
                         <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(d.valor_repassado)}</td>
                         <td style="padding:7px 10px;border-bottom:1px solid #eee;">${truncar(d.objeto,50)||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${linkDocumento(d.link)}</td>
                     </tr>`).join('')}
                 </tbody>
             </table>
@@ -1975,6 +1990,9 @@ window.mostrarDetalhesExec = function(item) {
             <div class="info-card">
                 <div class="info-label">Credor</div><div class="info-value">${item.razao_social_credor||'-'}</div>
                 <div class="info-label" style="margin-top:8px;">CNPJ/CPF</div><div class="info-value">${formatarCNPJ(item.cnpj_credor)}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Inteiro Teor da Emenda / Documento de Repasse</div><div class="info-value highlight">${dgRel.length ? linkDocumento(dgRel[0].link) : '<span style="color:#94a3b8;">Vincule pela tabela abaixo</span>'}</div>
             </div>
         </div>
         <div class="info-grid">
@@ -2103,6 +2121,7 @@ window.mostrarDetalhesPlano = function(item) {
                         <th style="padding:8px 10px;">Autoria</th>
                         <th style="padding:8px 10px;text-align:right;">Vl. Indicado</th>
                         <th style="padding:8px 10px;text-align:right;">Vl. Repassado</th>
+                        <th style="padding:8px 10px;">Documento</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -2115,6 +2134,7 @@ window.mostrarDetalhesPlano = function(item) {
                         <td style="padding:7px 10px;border-bottom:1px solid #eee;">${truncar(d.autoria,30)||'-'}</td>
                         <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(d.valor_indicado)}</td>
                         <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(d.valor_repassado)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${linkDocumento(d.link)}</td>
                     </tr>`).join('')}
                 </tbody>
             </table>
@@ -2174,6 +2194,9 @@ window.mostrarDetalhesPlano = function(item) {
             </div>
             <div class="info-card">
                 <div class="info-label">CÓD. SIAFI</div><div class="info-value highlight">${linkSiafi(item.codigo_siafi_rel)}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Inteiro Teor da Emenda / Documento de Repasse</div><div class="info-value highlight">${dgRel.length ? linkDocumento(dgRel[0].link) : '<span style="color:#94a3b8;">Vincule pela tabela abaixo</span>'}</div>
             </div>
         </div>
         <div class="info-grid">
