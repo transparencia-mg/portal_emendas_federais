@@ -1315,8 +1315,8 @@ function carregarCSV(url, mapFn) {
 function mapDG(row, i) {
     return {
         id: i + 1,
-        ano: row.ano_emenda || '',
-        numero_emenda: row.numero_emenda || '',
+        ano: row.ano_da_emenda || row.ano_emenda || '',
+        numero_emenda: row.numero_da_emenda || row.numero_emenda || '',
         codigo_siafi: row.codigo_siafi || '',
         esfera: row.esfera || '',
         autoria: row.autorida || row.autoria || '',
@@ -1324,8 +1324,8 @@ function mapDG(row, i) {
         valor_repassado: parseValor(row.valor_repassado),
         objeto: row.objeto || '',
         modalidade: row.modalide || row.modalidade || '',
-        tipo_instrumento: row.tipo_instrumento_juridico || row.tipo_instrumento || row.tipo_de_instrumento || '',
-        funcao: row.funcao_governo || row.funcao || row['função'] || '',
+        tipo_instrumento: row.tipo_de_instrumento_juridico || row.tipo_instrumento_juridico || row.tipo_instrumento || row.tipo_de_instrumento || '',
+        funcao: row.funcao_de_governo || row.funcao_governo || row.funcao || row['função'] || '',
         orgao_executor: row.orgao_executor || row['órgão_executor'] || row.orgao || ''
     };
 }
@@ -1334,26 +1334,26 @@ function mapExec(row, i) {
     return {
         id: i + 1,
         ano: row.ano_empenho || '',
-        numero_siafi: row.numero_siafi || '',
+        numero_siafi: row.no_siafi || row.numero_siafi || '',
         numero_emenda: row.numero_emenda || '',
-        numero_empenho: row.numero_empenho || '',
+        numero_empenho: row.no_empenho || row.numero_empenho || '',
         data_empenho: row.data_empenho || '',
         acao: row.acao || '',
         categoria: row.categoria || '',
         grupo: row.grupo || '',
         modalidade: row.modalide || row.modalidade || '',
-        elemento_despesa: row.elemento_despes || row.elemento_despesa || '',
-        item_despesa: row.item_despesa || '',
+        elemento_despesa: row.elemento_de_despesa || row.elemento_despes || row.elemento_despesa || '',
+        item_despesa: row.item_de_despesa || row.item_despesa || '',
         descricao_item: row.descricao_item || '',
         natureza_dea: row.natureza_dea || '',
-        ed_eda: row.ed_eda || '',
+        ed_eda: row.ed_dea || row.ed_eda || '',
         fonte: row.fonte || '',
         procedencia: row.procedencia || row.procedência || '',
         cnpj_credor: row.cnpj_cpf_credor || '',
         razao_social_credor: row.razao_social_credor || '',
-        valor_empenhado: parseValor(row.valor_empenhado),
-        valor_liquidado: parseValor(row.valor_liquidado),
-        valor_pago: parseValor(row.valor_pago)
+        valor_empenhado: parseValor(row.valor_empenhado_r || row.valor_empenhado),
+        valor_liquidado: parseValor(row.valor_liquidado_r || row.valor_liquidado),
+        valor_pago: parseValor(row.valor_pago_r || row.valor_pago)
     };
 }
 
@@ -1375,7 +1375,7 @@ function parseCodEmenda(cod) {
 }
 
 function mapPlano(row, i) {
-    const cod = row.codigo_emenda_parlamentar || '';
+    const cod = row.codigo_emenda_e_parlamentar || row.codigo_emenda_parlamentar || '';
     const { ano_emenda, numero_emenda_plano, parlamentar } = parseCodEmenda(cod);
     return {
         id: i + 1,
@@ -1398,8 +1398,8 @@ function mapPlano(row, i) {
         numero_emenda_plano,
         parlamentar,
         codigo_siafi_rel: '',
-        valor_emenda: parseValor(row.valor_emenda),
-        classificacao_orcamentaria: row.classificacao_orcamentaria_plano_trabalho || ''
+        valor_emenda: parseValor(row.valor_da_emenda || row.valor_emenda),
+        classificacao_orcamentaria: row.classificacao_orcamentaria_plano_de_trabalho || row.classificacao_orcamentaria_plano_trabalho || ''
     };
 }
 
