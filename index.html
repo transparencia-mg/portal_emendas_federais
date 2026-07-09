@@ -1168,6 +1168,14 @@ function linkSiafi(siafi) {
     return s;
 }
 
+function siafiModalLink(numero, item, funcName) {
+    if (!numero) return '-';
+    const n = numero.toString().trim();
+    if (!n || n === '-') return '-';
+    const itemJson = JSON.stringify(item).replace(/'/g, "\\'");
+    return `<a href="javascript:void(0)" onclick='${funcName}(${itemJson})' title="Clique para ver os detalhes da emenda" style="color:#1a3a5c;font-weight:600;text-decoration:underline dotted;cursor:pointer;">${n}</a>`;
+}
+
 function linkDocumento(url, label) {
     if (!url) return '<span style="color:#94a3b8;">Não informado</span>';
     const u = url.toString().trim();
@@ -1690,7 +1698,7 @@ function updateTabelaDG() {
         <tr>
             <td>${item.ano||'-'}</td>
             <td>${item.numero_emenda||'-'}</td>
-            <td>${linkSiafi(item.codigo_siafi)}</td>
+            <td>${siafiModalLink(item.codigo_siafi, item, 'mostrarDetalhesDG')}</td>
             <td>${item.esfera||'-'}</td>
             <td>${truncar(item.autoria,40)}</td>
             <td class="valor-monetario">${formatarMoeda(item.valor_indicado)}</td>
@@ -1868,7 +1876,7 @@ function updateTabelaExec() {
     tbody.innerHTML = data.map(item => `
         <tr>
             <td>${item.ano||'-'}</td>
-            <td>${linkSiafi(item.numero_siafi)}</td>
+            <td>${siafiModalLink(item.numero_siafi, item, 'mostrarDetalhesExec')}</td>
             <td>${item.numero_emenda||'-'}</td>
             <td>${item.numero_empenho||'-'}</td>
             <td style="white-space:nowrap">${formatarData(item.data_empenho)}</td>
@@ -2071,7 +2079,7 @@ function updateTabelaPlano() {
         <tr>
             <td style="white-space:nowrap">${item.ano_emenda||item.ano||'-'}</td>
             <td style="white-space:nowrap">${item.numero_emenda_plano||'-'}</td>
-            <td style="white-space:nowrap">${linkSiafi(item.codigo_siafi_rel)}</td>
+            <td style="white-space:nowrap">${siafiModalLink(item.codigo_siafi_rel, item, 'mostrarDetalhesPlano')}</td>
             <td>${truncar(item.objeto,45)}</td>
             <td>${item.modalidade_plano||'-'}</td>
             <td>${item.situacao_plano||'-'}</td>
