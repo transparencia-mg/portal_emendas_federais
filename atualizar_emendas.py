@@ -76,4 +76,32 @@ if ATUALIZAR_PLANILHA:
 
     print(f"Planilha atualizada. {dados['Link'].notna().sum()} links encontrados.")
 
+# =====================================================
+# GITHUB
+# =====================================================
 
+if ATUALIZAR_GITHUB:
+
+    print("Enviando alterações para o GitHub...")
+
+    subprocess.run(["git", "add", "."], cwd=BASE)
+
+    subprocess.run(
+        [
+            "git",
+            "commit",
+            "-m",
+            "Atualização automática do Inteiro Teor"
+        ],
+        cwd=BASE
+    )
+
+    subprocess.run(
+        ["git", "push"],
+        cwd=BASE
+    )
+
+    print("GitHub atualizado.")
+
+
+print("Concluído.")
