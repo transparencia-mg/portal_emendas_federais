@@ -1,0 +1,186 @@
+name: portal_emendas_federais
+owner_org: ''
+profile: data-package
+resources:
+  - description: Insira a descrição/explicação detalhada deste recurso.
+    dialect:
+      delimiter: ;
+    encoding: utf-8-sig
+    format: csv
+    hashing: md5
+    name: dados_gerais_emendas
+    path: data/dados_gerais_emendas.csv
+    profile: tabular-data-resource
+    schema:
+      fields:
+        - name: esfera
+          type: string
+        - name: modalidade
+          type: string
+        - name: autoria
+          type: string
+        - name: tipo_de_instrumento_juridico
+          type: string
+        - name: numero_da_emenda
+          type: integer
+        - name: ano_da_emenda
+          type: integer
+        - name: codigo_siafi
+          type: integer
+        - name: codigo_sigcon_entrada
+          type: string
+        - name: valor_indicado
+          type: string
+        - name: valor_repassado
+          type: string
+        - name: formula
+          type: string
+        - name: objeto
+          type: string
+        - name: funcao_de_governo
+          type: string
+        - name: orgao_executor
+          type: string
+        - name: tipo
+          type: any
+        - name: data_inicio
+          type: datetime
+        - name: data_fim
+          type: datetime
+        - name: link
+          type: string
+    scheme: file
+    title: Insira um título humanamente legível para este recurso.
+  - description: Insira a descrição/explicação detalhada deste recurso.
+    dialect:
+      delimiter: ;
+    encoding: utf-8-sig
+    format: csv
+    hashing: md5
+    name: execucao_transferencias_especiais_pix
+    path: data/execucao_transferencias_especiais_pix.csv
+    profile: tabular-data-resource
+    schema:
+      fields:
+        - name: no_siafi
+          type: integer
+        - name: ano_empenho
+          type: integer
+        - name: no_empenho
+          type: integer
+        - name: data_empenho
+          type: date
+        - name: acao
+          type: integer
+        - name: categoria
+          type: integer
+        - name: grupo
+          type: integer
+        - name: modalidade
+          type: integer
+        - name: elemento_de_despesa
+          type: integer
+        - name: item_de_despesa
+          type: integer
+        - name: descricao_item
+          type: string
+        - name: natureza_dea
+          type: integer
+        - name: ed_dea
+          type: integer
+        - name: fonte
+          type: integer
+        - name: procedencia
+          type: integer
+        - name: valor_empenhado_r
+          type: string
+        - name: valor_liquidado_r
+          type: string
+        - name: valor_pago_r
+          type: string
+        - name: cnpj_cpf_credor
+          type: string
+        - name: razao_social_credor
+          type: string
+        - name: despesa_empenhada
+          type: string
+        - name: despesa_liquidada
+          type: string
+        - name: pago_orcamentario
+          type: string
+        - name: rpnp_inscrito
+          type: string
+        - name: rpnp_cancelado
+          type: string
+        - name: rpnp_restabelecido
+          type: geopoint
+        - name: rpnp_liquidado
+          type: string
+        - name: rpnp_pago
+          type: string
+        - name: rpnp_anulado_pago
+          type: integer
+        - name: rpp_inscrito
+          type: string
+        - name: rpp_cancelado
+          type: geopoint
+        - name: rpp_restabelecido
+          type: integer
+        - name: rpp_pago
+          type: string
+        - name: rpp_anulado_pago
+          type: integer
+        - name: retido_rpnp_e_rpp
+          type: string
+        - name: rpnp_anulado_retencao
+          type: string
+        - name: rpp_anulado_retencao
+          type: integer
+    scheme: file
+    title: Insira um título humanamente legível para este recurso.
+  - description: Insira a descrição/explicação detalhada deste recurso.
+    dialect:
+      delimiter: ;
+    encoding: utf-8-sig
+    format: csv
+    hashing: md5
+    name: plano_execucao_emendas_pix
+    path: data/plano_execucao_emendas_pix.csv
+    profile: tabular-data-resource
+    schema:
+      fields:
+        - name: id_plano_acao
+          type: integer
+        - name: id_executor
+          type: integer
+        - name: cnpj_executor
+          type: integer
+        - name: nome_executor
+          type: string
+        - name: objeto_executor
+          type: string
+        - name: valor_custeio
+          type: integer
+        - name: valor_capital
+          type: integer
+        - name: ano_plano_acao
+          type: integer
+        - name: modalidade_plano_acao
+          type: string
+        - name: situacao_plano_acao
+          type: string
+        - name: cnpj_beneficiario_plano_acao
+          type: integer
+        - name: nome_beneficiario_plano_acao
+          type: string
+        - name: uf_beneficiario_plano_acao
+          type: string
+        - name: codigo_emenda_e_parlamentar
+          type: string
+        - name: valor_da_emenda
+          type: integer
+        - name: classificacao_orcamentaria_plano_de_trabalho
+          type: string
+    scheme: file
+    title: Insira um título humanamente legível para este recurso.
+title: Portal_emendas_federais
