@@ -1,0 +1,1075 @@
+{
+  "version": "4.16.6",
+  "time": 0.35,
+  "errors": [],
+  "tasks": [
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "dados_gerais_emendas",
+        "path": "data/dados_gerais_emendas.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "esfera",
+              "type": "string"
+            },
+            {
+              "name": "modalidade",
+              "type": "string"
+            },
+            {
+              "name": "autoria",
+              "type": "string"
+            },
+            {
+              "name": "tipo_de_instrumento_juridico",
+              "type": "string"
+            },
+            {
+              "name": "numero_da_emenda",
+              "type": "integer"
+            },
+            {
+              "name": "ano_da_emenda",
+              "type": "integer"
+            },
+            {
+              "name": "codigo_siafi",
+              "type": "integer"
+            },
+            {
+              "name": "codigo_sigcon_entrada",
+              "type": "string"
+            },
+            {
+              "name": "valor_indicado",
+              "type": "string"
+            },
+            {
+              "name": "valor_repassado",
+              "type": "string"
+            },
+            {
+              "name": "formula",
+              "type": "string"
+            },
+            {
+              "name": "objeto",
+              "type": "string"
+            },
+            {
+              "name": "funcao_de_governo",
+              "type": "string"
+            },
+            {
+              "name": "orgao_executor",
+              "type": "string"
+            },
+            {
+              "name": "tipo",
+              "type": "any"
+            },
+            {
+              "name": "data_inicio",
+              "type": "datetime"
+            },
+            {
+              "name": "data_fim",
+              "type": "datetime"
+            },
+            {
+              "name": "link",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "7013247b11fc41f78318b08f7de9e31d",
+          "bytes": 211190,
+          "fields": 18,
+          "rows": 489
+        }
+      },
+      "time": 0.052,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "execucao_transferencias_especiais_pix",
+        "path": "data/execucao_transferencias_especiais_pix.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "no_siafi",
+              "type": "integer"
+            },
+            {
+              "name": "ano_empenho",
+              "type": "integer"
+            },
+            {
+              "name": "no_empenho",
+              "type": "integer"
+            },
+            {
+              "name": "data_empenho",
+              "type": "date"
+            },
+            {
+              "name": "acao",
+              "type": "integer"
+            },
+            {
+              "name": "categoria",
+              "type": "integer"
+            },
+            {
+              "name": "grupo",
+              "type": "integer"
+            },
+            {
+              "name": "modalidade",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_de_despesa",
+              "type": "integer"
+            },
+            {
+              "name": "item_de_despesa",
+              "type": "integer"
+            },
+            {
+              "name": "descricao_item",
+              "type": "string"
+            },
+            {
+              "name": "natureza_dea",
+              "type": "integer"
+            },
+            {
+              "name": "ed_dea",
+              "type": "integer"
+            },
+            {
+              "name": "fonte",
+              "type": "integer"
+            },
+            {
+              "name": "procedencia",
+              "type": "integer"
+            },
+            {
+              "name": "valor_empenhado_r",
+              "type": "string"
+            },
+            {
+              "name": "valor_liquidado_r",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_r",
+              "type": "string"
+            },
+            {
+              "name": "cnpj_cpf_credor",
+              "type": "string"
+            },
+            {
+              "name": "razao_social_credor",
+              "type": "string"
+            },
+            {
+              "name": "despesa_empenhada",
+              "type": "string"
+            },
+            {
+              "name": "despesa_liquidada",
+              "type": "string"
+            },
+            {
+              "name": "pago_orcamentario",
+              "type": "string"
+            },
+            {
+              "name": "rpnp_inscrito",
+              "type": "string"
+            },
+            {
+              "name": "rpnp_cancelado",
+              "type": "string"
+            },
+            {
+              "name": "rpnp_restabelecido",
+              "type": "geopoint"
+            },
+            {
+              "name": "rpnp_liquidado",
+              "type": "string"
+            },
+            {
+              "name": "rpnp_pago",
+              "type": "string"
+            },
+            {
+              "name": "rpnp_anulado_pago",
+              "type": "integer"
+            },
+            {
+              "name": "rpp_inscrito",
+              "type": "string"
+            },
+            {
+              "name": "rpp_cancelado",
+              "type": "geopoint"
+            },
+            {
+              "name": "rpp_restabelecido",
+              "type": "integer"
+            },
+            {
+              "name": "rpp_pago",
+              "type": "string"
+            },
+            {
+              "name": "rpp_anulado_pago",
+              "type": "integer"
+            },
+            {
+              "name": "retido_rpnp_e_rpp",
+              "type": "string"
+            },
+            {
+              "name": "rpnp_anulado_retencao",
+              "type": "string"
+            },
+            {
+              "name": "rpp_anulado_retencao",
+              "type": "integer"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "f49701cd26e19c3e66f2a7cf9fc23fe0",
+          "bytes": 331506,
+          "fields": 37,
+          "rows": 1383
+        }
+      },
+      "time": 0.135,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [
+        {
+          "cell": "21377,93",
+          "fieldName": "rpp_cancelado",
+          "fieldNumber": 31,
+          "fieldPosition": 31,
+          "cells": [
+            "9390036",
+            "2024",
+            "830",
+            "2024-06-24",
+            "4365",
+            "4",
+            "4",
+            "90",
+            "52",
+            "3",
+            "ARMAMENTO E EQUIPAMENTO DE USO POLICIAL",
+            "0",
+            "0",
+            "97",
+            "1",
+            "240476,63",
+            "240476,63",
+            "240476,63",
+            "99.999.990/1151-66",
+            "THEON SENSORS SINGEL S.A.",
+            "261854,56",
+            "0,0",
+            "0,0",
+            "261854,56",
+            "0,0",
+            "0,0",
+            "261854,56",
+            "240476,63",
+            "0",
+            "21377,93",
+            "21377,93",
+            "0",
+            "0,0",
+            "0",
+            "0,0",
+            "0,0",
+            "0"
+          ],
+          "rowNumber": 206,
+          "rowPosition": 207,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"geopoint/default\"",
+          "message": "Type error in the cell \"21377,93\" in row \"207\" and field \"rpp_cancelado\" at position \"31\": type is \"geopoint/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "133817,29",
+          "fieldName": "rpnp_restabelecido",
+          "fieldNumber": 26,
+          "fieldPosition": 26,
+          "cells": [
+            "9369087",
+            "2023",
+            "857",
+            "2023-12-11",
+            "4048",
+            "4",
+            "4",
+            "90",
+            "52",
+            "3",
+            "ARMAMENTO E EQUIPAMENTO DE USO POLICIAL",
+            "0",
+            "0",
+            "97",
+            "1",
+            "394909,04000000004",
+            "394909,04",
+            "394909,04",
+            "07.204.578/0001-09",
+            "FLIR SYSTEMS BRASIL COMERCIO DE CAMERAS INFRAVERMELHAS LTDA.",
+            "493636,64",
+            "0,0",
+            "0,0",
+            "493636,64",
+            "232544,89",
+            "133817,29",
+            "394909,04",
+            "375953,41",
+            "0",
+            "0,0",
+            "0,0",
+            "0",
+            "0,0",
+            "0",
+            "18955,63",
+            "0,0",
+            "0"
+          ],
+          "rowNumber": 498,
+          "rowPosition": 499,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"geopoint/default\"",
+          "message": "Type error in the cell \"133817,29\" in row \"499\" and field \"rpnp_restabelecido\" at position \"26\": type is \"geopoint/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        }
+      ],
+      "stats": {
+        "errors": 2
+      },
+      "valid": false
+    },
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "plano_execucao_emendas_pix",
+        "path": "data/plano_execucao_emendas_pix.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "id_plano_acao",
+              "type": "integer"
+            },
+            {
+              "name": "id_executor",
+              "type": "integer"
+            },
+            {
+              "name": "cnpj_executor",
+              "type": "integer"
+            },
+            {
+              "name": "nome_executor",
+              "type": "string"
+            },
+            {
+              "name": "objeto_executor",
+              "type": "string"
+            },
+            {
+              "name": "valor_custeio",
+              "type": "integer"
+            },
+            {
+              "name": "valor_capital",
+              "type": "integer"
+            },
+            {
+              "name": "ano_plano_acao",
+              "type": "integer"
+            },
+            {
+              "name": "modalidade_plano_acao",
+              "type": "string"
+            },
+            {
+              "name": "situacao_plano_acao",
+              "type": "string"
+            },
+            {
+              "name": "cnpj_beneficiario_plano_acao",
+              "type": "integer"
+            },
+            {
+              "name": "nome_beneficiario_plano_acao",
+              "type": "string"
+            },
+            {
+              "name": "uf_beneficiario_plano_acao",
+              "type": "string"
+            },
+            {
+              "name": "codigo_emenda_e_parlamentar",
+              "type": "string"
+            },
+            {
+              "name": "valor_da_emenda",
+              "type": "integer"
+            },
+            {
+              "name": "classificacao_orcamentaria_plano_de_trabalho",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "b4228b22a374460014878b5638a69127",
+          "bytes": 379027,
+          "fields": 16,
+          "rows": 273
+        }
+      },
+      "time": 0.084,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [
+        {
+          "cell": "R$ 712.800",
+          "fieldName": "valor_capital",
+          "fieldNumber": 7,
+          "fieldPosition": 7,
+          "cells": [
+            "87163",
+            "49814",
+            "16695025000197",
+            "POLICIA MILITAR DO ESTADO DE MINAS GERAIS",
+            "Aquisição de armamento para o Centro de Material Bélico da Polícia Militar do Estado de Minas Gerais, localizado no município de Belo Horizonte/MG",
+            "0",
+            "R$ 712.800",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202539240002-Junio Amaral",
+            "R$ 712.800",
+            ""
+          ],
+          "rowNumber": 207,
+          "rowPosition": 208,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 712.800\" in row \"208\" and field \"valor_capital\" at position \"7\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "R$ 712.800",
+          "fieldName": "valor_da_emenda",
+          "fieldNumber": 15,
+          "fieldPosition": 15,
+          "cells": [
+            "87163",
+            "49814",
+            "16695025000197",
+            "POLICIA MILITAR DO ESTADO DE MINAS GERAIS",
+            "Aquisição de armamento para o Centro de Material Bélico da Polícia Militar do Estado de Minas Gerais, localizado no município de Belo Horizonte/MG",
+            "0",
+            "R$ 712.800",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202539240002-Junio Amaral",
+            "R$ 712.800",
+            ""
+          ],
+          "rowNumber": 207,
+          "rowPosition": 208,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 712.800\" in row \"208\" and field \"valor_da_emenda\" at position \"15\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "R$ 198.000",
+          "fieldName": "valor_capital",
+          "fieldNumber": 7,
+          "fieldPosition": 7,
+          "cells": [
+            "87164",
+            "49812",
+            "16695025000197",
+            "POLICIA MILITAR DO ESTADO DE MINAS GERAIS",
+            "Aquisição de equipamentos de informática destinados à Diretoria de Tecnologia e Sistemas (DTS) da Polícia Militar do Estado de Minas Gerais, sediada em Belo Horizonte, com a finalidade de fortalecer a infraestrutura tecnológica e os sistemas corporativos que dão suporte às atividades operacionais e finalísticas da Corporação.",
+            "0",
+            "R$ 198.000",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202539240002-Junio Amaral",
+            "R$ 198.000",
+            ""
+          ],
+          "rowNumber": 208,
+          "rowPosition": 209,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 198.000\" in row \"209\" and field \"valor_capital\" at position \"7\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "R$ 198.000",
+          "fieldName": "valor_da_emenda",
+          "fieldNumber": 15,
+          "fieldPosition": 15,
+          "cells": [
+            "87164",
+            "49812",
+            "16695025000197",
+            "POLICIA MILITAR DO ESTADO DE MINAS GERAIS",
+            "Aquisição de equipamentos de informática destinados à Diretoria de Tecnologia e Sistemas (DTS) da Polícia Militar do Estado de Minas Gerais, sediada em Belo Horizonte, com a finalidade de fortalecer a infraestrutura tecnológica e os sistemas corporativos que dão suporte às atividades operacionais e finalísticas da Corporação.",
+            "0",
+            "R$ 198.000",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202539240002-Junio Amaral",
+            "R$ 198.000",
+            ""
+          ],
+          "rowNumber": 208,
+          "rowPosition": 209,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 198.000\" in row \"209\" and field \"valor_da_emenda\" at position \"15\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "R$ 792.000",
+          "fieldName": "valor_capital",
+          "fieldNumber": 7,
+          "fieldPosition": 7,
+          "cells": [
+            "88505",
+            "49565",
+            "3389126000198",
+            "CORPO DE BOMBEIROS MILITAR DE MINAS GERAIS",
+            "Aquisição de viaturas para o Corpo de Bombeiros Militar de Minas Gerais",
+            "0",
+            "R$ 792.000",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202544460005-Pedro Aihara",
+            "R$ 792.000",
+            ""
+          ],
+          "rowNumber": 209,
+          "rowPosition": 210,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 792.000\" in row \"210\" and field \"valor_capital\" at position \"7\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "R$ 792.000",
+          "fieldName": "valor_da_emenda",
+          "fieldNumber": 15,
+          "fieldPosition": 15,
+          "cells": [
+            "88505",
+            "49565",
+            "3389126000198",
+            "CORPO DE BOMBEIROS MILITAR DE MINAS GERAIS",
+            "Aquisição de viaturas para o Corpo de Bombeiros Militar de Minas Gerais",
+            "0",
+            "R$ 792.000",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202544460005-Pedro Aihara",
+            "R$ 792.000",
+            ""
+          ],
+          "rowNumber": 209,
+          "rowPosition": 210,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 792.000\" in row \"210\" and field \"valor_da_emenda\" at position \"15\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "R$ 1.386.000",
+          "fieldName": "valor_capital",
+          "fieldNumber": 7,
+          "fieldPosition": 7,
+          "cells": [
+            "88504",
+            "49569",
+            "16695025000197",
+            "POLICIA MILITAR DO ESTADO DE MINAS GERAIS",
+            "Aquisição de viaturas para o 22º Batalhão de Polícia Militar (22º BPM) e para o Centro de Motomecanização e Intendência (CMI), localizados no município de Belo Horizonte",
+            "0",
+            "R$ 1.386.000",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202544460005-Pedro Aihara",
+            "R$ 1.386.000",
+            ""
+          ],
+          "rowNumber": 210,
+          "rowPosition": 211,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 1.386.000\" in row \"211\" and field \"valor_capital\" at position \"7\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "R$ 1.386.000",
+          "fieldName": "valor_da_emenda",
+          "fieldNumber": 15,
+          "fieldPosition": 15,
+          "cells": [
+            "88504",
+            "49569",
+            "16695025000197",
+            "POLICIA MILITAR DO ESTADO DE MINAS GERAIS",
+            "Aquisição de viaturas para o 22º Batalhão de Polícia Militar (22º BPM) e para o Centro de Motomecanização e Intendência (CMI), localizados no município de Belo Horizonte",
+            "0",
+            "R$ 1.386.000",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202544460005-Pedro Aihara",
+            "R$ 1.386.000",
+            ""
+          ],
+          "rowNumber": 210,
+          "rowPosition": 211,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 1.386.000\" in row \"211\" and field \"valor_da_emenda\" at position \"15\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "R$ 792.000",
+          "fieldName": "valor_capital",
+          "fieldNumber": 7,
+          "fieldPosition": 7,
+          "cells": [
+            "88503",
+            "49817",
+            "18715532000170",
+            "POLICIA CIVIL DO ESTADO DE MINAS GERAIS",
+            "Aquisição de viatura para a Polícia Civil do Estado de Minas Gerais",
+            "0",
+            "R$ 792.000",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202544460005-Pedro Aihara",
+            "R$ 792.000",
+            ""
+          ],
+          "rowNumber": 211,
+          "rowPosition": 212,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 792.000\" in row \"212\" and field \"valor_capital\" at position \"7\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "R$ 792.000",
+          "fieldName": "valor_da_emenda",
+          "fieldNumber": 15,
+          "fieldPosition": 15,
+          "cells": [
+            "88503",
+            "49817",
+            "18715532000170",
+            "POLICIA CIVIL DO ESTADO DE MINAS GERAIS",
+            "Aquisição de viatura para a Polícia Civil do Estado de Minas Gerais",
+            "0",
+            "R$ 792.000",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202544460005-Pedro Aihara",
+            "R$ 792.000",
+            ""
+          ],
+          "rowNumber": 211,
+          "rowPosition": 212,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 792.000\" in row \"212\" and field \"valor_da_emenda\" at position \"15\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "R$ 198.000",
+          "fieldName": "valor_capital",
+          "fieldNumber": 7,
+          "fieldPosition": 7,
+          "cells": [
+            "87282",
+            "49486",
+            "5487631000109",
+            "SECRETARIA DE ESTADO DE JUSTICA E SEGURANCA PUBLICA -SEJUSP",
+            "Aquisição de armamento para a Polícia Penal do Estado de Minas Gerais",
+            "0",
+            "R$ 198.000",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202544390015-Nikolas Ferreira",
+            "R$ 198.000",
+            ""
+          ],
+          "rowNumber": 212,
+          "rowPosition": 213,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 198.000\" in row \"213\" and field \"valor_capital\" at position \"7\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "R$ 198.000",
+          "fieldName": "valor_da_emenda",
+          "fieldNumber": 15,
+          "fieldPosition": 15,
+          "cells": [
+            "87282",
+            "49486",
+            "5487631000109",
+            "SECRETARIA DE ESTADO DE JUSTICA E SEGURANCA PUBLICA -SEJUSP",
+            "Aquisição de armamento para a Polícia Penal do Estado de Minas Gerais",
+            "0",
+            "R$ 198.000",
+            "2025",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202544390015-Nikolas Ferreira",
+            "R$ 198.000",
+            ""
+          ],
+          "rowNumber": 212,
+          "rowPosition": 213,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"R$ 198.000\" in row \"213\" and field \"valor_da_emenda\" at position \"15\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "241287.5",
+          "fieldName": "valor_capital",
+          "fieldNumber": 7,
+          "fieldPosition": 7,
+          "cells": [
+            "90262",
+            "55773",
+            "16695025000197",
+            "POLICIA MILITAR DO ESTADO DE MINAS GERAIS",
+            "Fortalecer as ações de segurança pública no Estado de Minas Gerais, por meio da aquisição de armamento para Polícia Militar do Estado de Minas Gerais",
+            "0",
+            "241287.5",
+            "2026",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202644460005-Pedro Aihara",
+            "241287.5",
+            ""
+          ],
+          "rowNumber": 214,
+          "rowPosition": 215,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"241287.5\" in row \"215\" and field \"valor_capital\" at position \"7\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        },
+        {
+          "cell": "241287.5",
+          "fieldName": "valor_da_emenda",
+          "fieldNumber": 15,
+          "fieldPosition": 15,
+          "cells": [
+            "90262",
+            "55773",
+            "16695025000197",
+            "POLICIA MILITAR DO ESTADO DE MINAS GERAIS",
+            "Fortalecer as ações de segurança pública no Estado de Minas Gerais, por meio da aquisição de armamento para Polícia Militar do Estado de Minas Gerais",
+            "0",
+            "241287.5",
+            "2026",
+            "Especial",
+            "CIENTE",
+            "18715615000160",
+            "ESTADO DE MINAS GERAIS",
+            "MG",
+            "202644460005-Pedro Aihara",
+            "241287.5",
+            ""
+          ],
+          "rowNumber": 214,
+          "rowPosition": 215,
+          "code": "type-error",
+          "name": "Type Error",
+          "tags": [
+            "#table",
+            "#row",
+            "#cell"
+          ],
+          "note": "type is \"integer/default\"",
+          "message": "Type error in the cell \"241287.5\" in row \"215\" and field \"valor_da_emenda\" at position \"15\": type is \"integer/default\"",
+          "description": "The value does not match the schema type and format for this field."
+        }
+      ],
+      "stats": {
+        "errors": 14
+      },
+      "valid": false
+    }
+  ],
+  "stats": {
+    "errors": 16,
+    "tasks": 3
+  },
+  "valid": false
+}
