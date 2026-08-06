@@ -1,0 +1,2646 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Emendas Federais - Governo de Minas Gerais</title>
+
+    <!-- ==================== BIBLIOTECAS ==================== -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+
+    <style>
+        /* ============================================================
+           1. VARIÁVEIS DE CORES
+        ============================================================ */
+        :root {
+            --primary-dark:     #1a3a5c;
+            --primary-darker:   #0f2a44;
+            --accent-red:       #b93c42;
+            --accent-bright:    #db233f;
+            --background-light: #f5f7fa;
+            --success-green:    #28a745;
+            --warning-yellow:   #ffc107;
+            --info-blue:        #17a2b8;
+        }
+
+        /* ============================================================
+           2. RESET E GLOBAIS
+        ============================================================ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; overflow-x: hidden; margin: 0; padding: 0; height: auto; min-height: auto; }
+        body {
+            font-family: 'Montserrat', Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-light);
+            padding-bottom: 15px;
+            overflow-x: hidden;
+        }
+        body, button, input, select, textarea, span, div { font-family: 'Montserrat', sans-serif !important; }
+        .material-icons { font-family: 'Material Icons' !important; font-size: 14px; vertical-align: middle; }
+
+        /* ============================================================
+           3. LAYOUT PRINCIPAL
+        ============================================================ */
+        .main-container { height: auto; min-height: auto; overflow: visible; position: relative; }
+        .container-fluid { width: 100%; max-width: 88% !important; padding: 0 40px; margin: 0 auto; }
+        .container { max-width: 85% !important; }
+        .dashboard-container { width: 100%; max-width: 100%; padding: 0 40px; margin: 0 auto; }
+        .tab-content, .tab-pane { width: 100%; height: auto; min-height: auto; overflow: visible; }
+        .table-container { height: auto; min-height: auto; overflow: visible; position: relative; }
+
+        /* ============================================================
+           4. DATA DE ATUALIZAÇÃO
+        ============================================================ */
+        .data-atualizacao-container { display: flex; justify-content: left; align-items: center; margin: 15px 0; }
+        .data-atualizacao-box {
+            background: transparent !important;
+            border-radius: 8px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--primary-dark);
+            font-weight: 600;
+            box-shadow: none;
+        }
+        .data-atualizacao-box i { font-size: 14px; color: var(--accent-red); }
+
+        /* ============================================================
+           5. FILTROS
+        ============================================================ */
+        .filter-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .filter-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a3a5c;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+        .filter-label i { font-size: 14px; color: var(--accent-red); }
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            height: auto;
+            width: 100%;
+        }
+        .form-control:focus, .form-select:focus { border-color: var(--accent-red); box-shadow: 0 0 0 2px rgba(185,60,66,0.15); }
+        .filters-row { display: flex; gap: 15px; width: 100%; flex-wrap: wrap; }
+        .filter-group { flex: 1; min-width: 150px; }
+        .botoes-abaixo { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+        /* ============================================================
+           6. CARDS DE MÉTRICAS
+        ============================================================ */
+        .metric-card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e9ef;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+            overflow: hidden;
+            height: 100%;
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+        }
+        .metric-card:hover { box-shadow: 0 8px 24px rgba(26,58,92,0.13); transform: translateY(-2px); }
+        .metric-header {
+            background: #20445d;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .metric-body { padding: 12px 15px; }
+        .metric-value { font-size: 20px; font-weight: 700; color: #171c21; }
+        .metric-sublabel { font-size: 10px; color: #94a3b8; font-weight: 500; margin-top: 2px; }
+
+        /* ============================================================
+           7. TABELAS
+        ============================================================ */
+        .table-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .table-title { font-size: 13px; font-weight: 600; margin: 0; }
+        .table-badge {
+            background: #1a3a5c;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .table-fixed-header-container { position: relative; overflow: auto; width: 100%; max-height: 600px; }
+        .table-fixed-header-container table thead th {
+            background-color: #54697b !important;
+            color: white !important;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-weight: 600;
+            padding: 12px 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .table { width: 100%; font-size: 13px; border-collapse: collapse; table-layout: auto; margin-bottom: 0; }
+        .table th, .table td { border: 1px solid #d6dee6; }
+        .table thead th {
+            background-color: #54697b !important;
+            color: white !important;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 12px 10px;
+            text-transform: uppercase;
+            border: 1px solid #d6dee6;
+            cursor: pointer;
+            user-select: none;
+        }
+        .table thead th:hover { background-color: #3d5566 !important; }
+        .table tbody tr { background-color: #ffffff; }
+        .table tbody td { padding: 10px 10px; vertical-align: middle; border-bottom: 1px solid #f1f1f1; font-size: 12px; }
+        .table tbody tr:hover { background-color: rgba(41,67,90,0.04); }
+        .table-bordered { border: 1px solid #dee2e6; width: 100%; }
+        .table-bordered th, .table-bordered td { border: 1px solid #dee2e6; padding: 12px; vertical-align: top; }
+        .table-responsive { display: block; width: 100%; overflow-x: auto; }
+        .valor-monetario { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+        /* ============================================================
+           8. SORTABLE HEADERS
+        ============================================================ */
+        .sortable-header { cursor: pointer; position: relative; padding-right: 22px !important; }
+        .sortable-header:hover { background-color: #3d5566 !important; }
+        .sortable-header i { font-size: 13px; position: absolute; right: 5px; top: 50%; transform: translateY(-50%); opacity: 0.8; }
+
+        /* ============================================================
+           9. BOTÕES
+        ============================================================ */
+        .btn-primary-custom, .btn-pesquisa {
+            background: linear-gradient(to right, #20445d, #20445d);
+            border: none;
+            padding: 0 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            height: 36px;
+            white-space: nowrap;
+        }
+        .btn-primary-custom:hover, .btn-pesquisa:hover {
+            background: linear-gradient(to right, var(--accent-red), #a32c32);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(185,60,66,0.2);
+            color: white;
+        }
+        .btn-secondary-custom {
+            background: white;
+            border: 2px solid var(--primary-darker);
+            color: var(--primary-darker);
+            padding: 0 16px;
+            font-weight: 600;
+            font-size: 13px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            height: 36px;
+            white-space: nowrap;
+            text-decoration: none !important;
+        }
+        .btn-secondary-custom:hover { background-color: #132837 !important; color: white !important; border-color: #132837 !important; }
+        .btn-export {
+            appearance: none;
+            -webkit-appearance: none;
+            background: transparent !important;
+            border: 1px solid #d6dee6;
+            color: #1a3a5c;
+            padding: 0 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            height: 32px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-export i { font-size: 14px !important; }
+        button.btn-export:hover, a.btn-export:hover { background-color: #1a3a5c !important; border-color: #1a3a5c !important; color: #ffffff !important; }
+        .btn-action {
+            padding: 4px;
+            border-radius: 7px;
+            border: 1.5px solid #1a3a5c;
+            background-color: #ffffff;
+            color: #1a3a5c;
+            width: 32px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .btn-action:hover { background-color: #1a3a5c; color: #ffffff; }
+        #btnTopo, .btn-topo {
+            background: #eeeff5;
+            color: #1a3a5c;
+            border: 1px solid #d6dee6;
+            border-radius: 12px;
+            padding: 0 16px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 32px;
+        }
+        #btnTopo:hover, .btn-topo:hover { background-color: #1a3a5c; color: #ffffff; border-color: #1a3a5c; }
+
+        /* ============================================================
+           10. COMPARTILHAR
+        ============================================================ */
+        .share-dropdown { position: relative; display: inline-block; }
+        .share-options {
+            display: none; position: absolute; right: 0; top: 100%;
+            background-color: white; min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15); border-radius: 8px;
+            padding: 8px; z-index: 1000; border: 1px solid #dee2e6; margin-top: 5px;
+        }
+        .share-options.show { display: block; }
+        .share-options a {
+            display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+            border-radius: 6px; font-size: 13px; color: var(--primary-dark);
+            transition: background 0.2s; cursor: pointer; text-decoration: none;
+        }
+        .share-options a:hover { background-color: var(--background-light); color: var(--accent-red); }
+        .share-options a i { font-size: 14px; width: 20px; text-align: center; }
+
+        /* ============================================================
+           11. BUSCA NA TABELA
+        ============================================================ */
+        .table-search-container {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            background: #ffffff;
+            border: 1px solid #d6dee6;
+            border-radius: 8px;
+            padding: 5px 10px;
+            height: 34px;
+        }
+        .table-search-container:hover { border-color: #1a3a5c; }
+        .table-search-input { border: none !important; outline: none; background: transparent; font-size: 12px; width: 180px; color: #1a3a5c; }
+        .table-search-input::placeholder { color: #94a3b8; }
+
+        /* ============================================================
+           12. NAVEGAÇÃO (abas)
+        ============================================================ */
+        .nav-tabs-container { background: transparent; padding: 10px 0; margin-top: 15px; margin-bottom: 15px; width: 100%; }
+        .nav-tabs { border: none !important; gap: 10px; width: 100%; flex-wrap: wrap; }
+        .nav-tabs .nav-link {
+            border: none !important;
+            background: #ffffff !important;
+            border-radius: 10px !important;
+            padding: 8px 18px !important;
+            font-weight: 500;
+            font-size: 14px;
+            color: #1a3a5c !important;
+            display: inline-flex !important;
+            align-items: center;
+            gap: 6px;
+            transition: all .25s ease;
+        }
+        .nav-tabs .nav-link:hover { background: #e6e9ed !important; }
+        .nav-tabs .nav-link.active { background: #234c63 !important; color: #fff !important; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .nav-tabs .material-icons { font-size: 14px !important; }
+
+        /* ============================================================
+           13. MODAL
+        ============================================================ */
+        .modal-creative .modal-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-darker) 100%);
+            color: white !important;
+            padding: 15px 20px;
+            border-bottom: none;
+        }
+        .modal-creative .modal-header .modal-title { color: white !important; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .modal-creative .modal-header .modal-title i { color: white !important; }
+        .modal-creative .modal-header .btn-close { filter: brightness(0) invert(1); opacity: 1; }
+        .modal-creative .modal-header .btn-close:hover { opacity: 0.8; }
+        .info-card { background: #f8fafd; border-radius: 10px; padding: 16px; margin-bottom: 12px; border: 1px solid #e2e8f0; }
+        .info-label { font-size: 11px; text-transform: uppercase; color: #6c757d; font-weight: 600; margin-bottom: 4px; }
+        .info-value { font-size: 13px; font-weight: 600; color: var(--primary-dark); word-break: break-word; }
+        .info-value.highlight { font-size: 16px; color: var(--accent-red); }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 12px; }
+        .objeto-container { background: #f8fafd; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; margin-top: 4px; }
+        .objeto-title { font-size: 13px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .objeto-text { font-size: 13px; line-height: 1.6; color: #495057; }
+
+        /* ============================================================
+           7.1 NOTAS INFORMATIVAS
+        ============================================================ */
+        .compliance-note {
+            font-size: 11.5px; color: #55606e; background: #fff8e6;
+            border: 1px solid #ffe9b0; border-radius: 8px; padding: 10px 13px; line-height: 1.55;
+            display: flex; gap: 8px; align-items: flex-start;
+        }
+        .compliance-note i.material-icons { color: var(--warning-yellow); font-size: 17px; margin-top: 1px; flex-shrink:0; }
+
+        /* ============================================================
+           7.15 PAINEL DE ANÁLISE — EXECUÇÃO PIX
+        ============================================================ */
+        .analysis-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 20px; }
+        @media (max-width: 900px) { .analysis-row { grid-template-columns: 1fr; } }
+        .analysis-card {
+            background: #fff; border: 1px solid #e5e9ef; border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06); padding: 16px 18px; height: 100%;
+        }
+        .analysis-card-title {
+            font-size: 12.5px; font-weight: 700; color: var(--primary-dark); text-transform: uppercase;
+            letter-spacing: .3px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+        }
+        .analysis-card-title i.material-icons { font-size: 16px; color: var(--accent-red); }
+        .chart-wrap { position: relative; height: 260px; }
+        .ranking-list { display: flex; flex-direction: column; gap: 9px; max-height: 260px; overflow-y: auto; }
+        .ranking-item { display: flex; align-items: center; gap: 10px; }
+        .ranking-pos {
+            width: 20px; height: 20px; border-radius: 50%; background: #eef1f5; color: #4b5768;
+            font-size: 10.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .ranking-item:nth-child(1) .ranking-pos { background: #fff3cd; color: #8a6d1a; }
+        .ranking-item:nth-child(2) .ranking-pos { background: #e6e9ed; color: #495057; }
+        .ranking-item:nth-child(3) .ranking-pos { background: #f3e0d0; color: #8a4a1a; }
+        .ranking-info { flex: 1; min-width: 0; }
+        .ranking-name { font-size: 11.5px; font-weight: 600; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ranking-bar-track { background: #eef1f5; border-radius: 3px; height: 5px; margin-top: 3px; overflow: hidden; }
+        .ranking-bar-fill { background: linear-gradient(90deg, var(--primary-dark), var(--accent-red)); height: 100%; border-radius: 3px; }
+        .ranking-value { font-size: 11px; font-weight: 700; color: #1a3a5c; white-space: nowrap; flex-shrink: 0; }
+        .mini-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+        .mini-table th { text-align: left; color: #6c757d; font-weight: 600; text-transform: uppercase; font-size: 10px; padding: 4px 6px; border-bottom: 2px solid #eef1f5; }
+        .mini-table td { padding: 6px 6px; border-bottom: 1px solid #f1f4f8; color: #334155; }
+        .mini-table tr:last-child td { border-bottom: none; }
+
+        /* ============================================================
+           7.2 STATUS / CRONOGRAMA DE EXECUÇÃO
+        ============================================================ */
+        .status-text { font-size: 12.5px; font-weight: 600; }
+        .status-text.st-ciente     { color:#1e7e42; }
+        .status-text.st-execucao   { color:#1a5fb4; }
+        .status-text.st-concluido  { color:#1a7d3b; }
+        .status-text.st-pendente   { color:#a9660b; }
+        .status-text.st-default    { color:#4b5768; }
+
+        .timeline-stepper { display: flex; align-items: center; width: 100%; margin: 6px 0 2px; }
+        .timeline-step { flex: 1; text-align: center; position: relative; }
+        .timeline-step .dot {
+            width: 22px; height: 22px; border-radius: 50%; background: #e2e8f0; color: #94a3b8;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;
+            font-size: 12px; font-weight: 700; border: 2px solid #e2e8f0;
+        }
+        .timeline-step.done .dot { background: var(--success-green); color: #fff; border-color: var(--success-green); }
+        .timeline-step.current .dot { background: var(--info-blue); color: #fff; border-color: var(--info-blue); }
+        .timeline-step .line { position: absolute; top: 11px; left: -50%; width: 100%; height: 2px; background: #e2e8f0; z-index: -1; }
+        .timeline-step.done .line, .timeline-step.current .line { background: var(--success-green); }
+        .timeline-step:first-child .line { display: none; }
+        .timeline-step .label { font-size: 9.5px; color: #64748b; font-weight: 600; text-transform: uppercase; line-height: 1.3; }
+        .timeline-step.current .label { color: var(--info-blue); }
+
+        .schedule-box {
+            background: #f8fafd; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px; margin-top: 12px;
+        }
+        .schedule-box .objeto-title { margin-bottom: 10px; }
+        .schedule-empty-note {
+            font-size: 12px; color: #7a6106; background: #fff8e6; border: 1px dashed #ffe0a3;
+            border-radius: 6px; padding: 8px 11px; margin-top: 10px; display:flex; gap:7px; align-items:flex-start;
+        }
+        .schedule-empty-note i.material-icons { font-size: 15px; color: var(--warning-yellow); margin-top:1px; flex-shrink:0; }
+        .schedule-obs-text {
+            font-size: 12px; line-height: 1.6; color: #495057; background: #fff; border: 1px solid #eef1f5;
+            border-radius: 6px; padding: 10px 12px; margin-top: 8px; max-height: 220px; overflow-y: auto; white-space: pre-line;
+        }
+
+        /* ============================================================
+           14. PAGINAÇÃO
+        ============================================================ */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 20px;
+            background: white;
+            border-top: 1px solid #dee2e6;
+            width: 100%;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .pagination-info { font-size: 12px; color: #6c757d; }
+        .pagination .page-link { color: var(--primary-dark); border-color: #dee2e6; font-size: 13px; padding: 4px 10px; }
+        .pagination .page-link:hover { color: var(--accent-red); background-color: #f8f9fa; }
+        .pagination .page-item.active .page-link { background-color: var(--primary-dark); border-color: var(--primary-dark); color: white; }
+        .items-per-page {
+            height: 34px;
+            min-width: 80px;
+            border-radius: 8px;
+            border: 1px solid #d6dee6;
+            padding: 4px 28px 4px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a3a5c;
+            background-color: #ffffff;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%231a3a5c' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 6px center;
+        }
+
+        /* ============================================================
+           15. TOOLBAR
+        ============================================================ */
+        .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .toolbar-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .toolbar-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+        /* ============================================================
+           16. CARDS DE DOWNLOAD
+        ============================================================ */
+        .card-stats {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+            height: 100%;
+            border: 1px solid #e5e9ef;
+        }
+        .card-stats h4 { font-size: 15px; font-weight: 600; color: var(--primary-dark); }
+
+        /* ============================================================
+           17. DICIONÁRIO
+        ============================================================ */
+        .dicionario-tabela { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .dicionario-tabela th { background-color: #54697b; color: white; padding: 12px 10px; font-size: 12px; font-weight: 600; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.2); }
+        .dicionario-tabela td { padding: 10px; font-size: 12px; border: 1px solid #dee2e6; vertical-align: top; }
+        .dicionario-tabela tr:nth-child(even) { background-color: #f8f9fa; }
+        .dicionario-tabela tr:hover { background-color: rgba(41,67,90,0.05); }
+        .dicionario-secao td { background-color: var(--primary-darker) !important; color: white; font-weight: 700; border: 1px solid rgba(255,255,255,0.2); text-align: center; }
+
+        /* ============================================================
+           18. TOAST
+        ============================================================ */
+        .toast-sucesso {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e6f4ea;
+            color: #1e4620;
+            border-radius: 12px;
+            padding: 14px 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            z-index: 9999;
+            min-width: 280px;
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
+
+        /* ============================================================
+           19. RESPONSIVIDADE
+        ============================================================ */
+        @media (max-width: 992px) {
+            .container-fluid, .dashboard-container { padding: 0 15px; }
+        }
+        @media (max-width: 768px) {
+            .filters-row { flex-direction: column; align-items: stretch; }
+            .filter-group { min-width: 100%; }
+            .nav-tabs { flex-direction: column; align-items: stretch; }
+            .nav-tabs .nav-link { justify-content: flex-start; }
+            .container-fluid, .dashboard-container { padding: 0 12px; }
+            .container { max-width: 100% !important; }
+            .table-search-input { width: 100% !important; }
+            .pagination-container { flex-direction: column; gap: 8px; }
+            .toolbar { flex-direction: column; align-items: flex-start; }
+        }
+
+        /* ============================================================
+           20. GERENCIADOR DE COLUNAS
+        ============================================================ */
+        .col-manager-dropdown { position: relative; display: inline-block; }
+        .col-manager-panel {
+            display: none; position: absolute; left: 0; top: 100%;
+            background: white; min-width: 260px; max-height: 360px; overflow-y: auto;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15); border-radius: 10px;
+            padding: 10px; z-index: 1050; border: 1px solid #dee2e6; margin-top: 5px;
+        }
+        .col-manager-panel.show { display: block; }
+        .col-manager-panel .col-item {
+            display: flex; align-items: center; gap: 8px; padding: 6px 8px;
+            border-radius: 6px; cursor: pointer; font-size: 12px; color: #1a3a5c;
+        }
+        .col-manager-panel .col-item:hover { background: #f0f4f8; }
+        .col-manager-panel .col-item input[type=checkbox] { accent-color: #1a3a5c; width: 14px; height: 14px; }
+        .col-manager-title { font-size: 11px; font-weight: 700; color: #6c757d; text-transform: uppercase; padding: 4px 8px 8px; border-bottom: 1px solid #eee; margin-bottom: 6px; } background-color: #2f3b45 !important; color: #fff; font-size: 12px; padding: 6px 10px; border-radius: 6px; max-width: 250px; }
+        .fw-bold { font-weight: 700; }
+        h5 { font-size: 14px; color: var(--primary-dark); padding-bottom: 8px; font-weight: 700; }
+        code { font-size: 11px; background: #f0f4f8; padding: 2px 5px; border-radius: 3px; color: #1a3a5c; }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="container-fluid dashboard-container">
+
+        <!-- ==================== MENU DE NAVEGAÇÃO ==================== -->
+        <div class="nav-tabs-container">
+            <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="dashboard1-tab" data-bs-toggle="tab" data-bs-target="#dashboard1">
+                        <i class="material-icons">bar_chart</i>Visão Geral
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="dashboard2-tab" data-bs-toggle="tab" data-bs-target="#dashboard2">
+                        <i class="material-icons">receipt</i>Execução Transferências PIX
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="dashboard3-tab" data-bs-toggle="tab" data-bs-target="#dashboard3">
+                        <i class="material-icons">menu_book</i>Dicionário de Dados
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="dashboard4-tab" data-bs-toggle="tab" data-bs-target="#dashboard4">
+                        <i class="material-icons">download</i>Downloads
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- ==================== DATA DE ATUALIZAÇÃO ==================== -->
+        <div class="data-atualizacao-container">
+            <div class="data-atualizacao-box">
+                <i class="material-icons">event</i>
+                Data de atualização: <span id="data-atualizacao-header" style="margin-left:4px;">carregando...</span>
+            </div>
+        </div>
+
+        <!-- ==================== CONTEÚDO DAS ABAS ==================== -->
+        <div class="tab-content" id="dashboardTabsContent">
+
+            <!-- ==================== DASHBOARD 1: VISÃO GERAL ==================== -->
+            <div class="tab-pane fade show active" id="dashboard1" role="tabpanel">
+
+                <!-- Filtros -->
+                <div class="filter-container">
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label class="filter-label">Ano</label>
+                            <select class="form-select" id="anoDG"><option value="">Todos</option></select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Autoria</label>
+                            <input type="text" class="form-control" id="autoriaDG" placeholder="Nome do autor...">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Origem</label>
+                            <input type="text" class="form-control" id="esferaDG" placeholder="Ex: Estadual">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Tipo de Emenda</label>
+                            <select class="form-select" id="modalidadeDG"><option value="">Todas</option></select>
+                        </div>
+                    </div>
+                    <div class="botoes-abaixo">
+                        <button class="btn-pesquisa" id="aplicarFiltrosDG"><i class="material-icons me-2">tune</i>Atualizar Filtros</button>
+                        <button class="btn-secondary-custom" id="limparFiltrosDG"><i class="material-icons me-2">clear</i>Limpar Filtros</button>
+                    </div>
+                </div>
+
+                <!-- Métricas -->
+                <div class="row mb-4" id="summaryCardsDG">
+                    <div class="col-12 text-center text-muted" style="font-size:13px;">Carregando dados...</div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <button class="btn-export" id="exportCSVDG"><i class="material-icons">description</i>CSV</button>
+                        <button class="btn-export" id="printDG"><i class="material-icons">print</i>PDF</button>
+                        <div class="share-dropdown">
+                            <button class="btn-export" onclick="toggleShare(1)"><i class="material-icons">share</i>Compartilhar</button>
+                            <div class="share-options" id="shareOptions1">
+                                <a href="#" onclick="copiarLink(event,1)"><i class="material-icons">link</i>Copiar Link</a>
+                                <a href="#" onclick="compartilharFacebook(event,1)"><i class="fa-brands fa-facebook"></i>Facebook</a>
+                                <a href="#" onclick="compartilharTwitter(event,1)"><i class="fa-brands fa-x-twitter"></i>Twitter/X</a>
+                                <a href="#" onclick="compartilharLinkedIn(event,1)"><i class="fa-brands fa-linkedin"></i>LinkedIn</a>
+                                <a href="#" onclick="compartilharWhatsApp(event,1)"><i class="fa-brands fa-whatsapp"></i>WhatsApp</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="toolbar-right">
+                        <span class="table-badge" id="countDG">0 registros</span>
+                        <div class="table-search-container">
+                            <i class="material-icons" style="font-size:16px;color:#94a3b8;">search</i>
+                            <input type="text" id="searchDG" class="table-search-input" placeholder="Buscar registros...">
+                        </div>
+                        <select id="itemsPerPageDG" class="items-per-page">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50" selected>50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tabela — Resumo por Autoria -->
+                <div class="table-container">
+                    <div class="table-fixed-header-container">
+                        <table class="table" id="tabelaDG">
+                            <thead>
+                                <tr>
+                                    <th class="sortable-header" onclick="ordenarResumoAutoria('autoria')">Autoria <i class="material-icons">unfold_more</i></th>
+                                    <th>Origem</th>
+                                    <th>Tipo de Emenda</th>
+                                    <th class="sortable-header" onclick="ordenarResumoAutoria('n')" style="text-align:right;">Nº Emendas <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarResumoAutoria('valInd')" style="text-align:right;">Valor Indicado <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarResumoAutoria('valRep')" style="text-align:right;">Valor Repassado <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarResumoAutoria('pct')" style="text-align:right;">Execução <i class="material-icons">unfold_more</i></th>
+                                    <th style="text-align:center;width:60px;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaDGBody">
+                                <tr><td colspan="8" class="text-center text-muted">Carregando dados...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-container" id="paginacaoDG"></div>
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;margin-top:10px;">
+                    <div id="btnTopo" onclick="voltarAoTopo()"><i class="material-icons">arrow_upward</i>Voltar ao topo</div>
+                </div>
+
+            </div><!-- /dashboard1 -->
+
+            <!-- ==================== DASHBOARD 2: EXECUÇÃO TRANSFERÊNCIAS PIX ==================== -->
+            <div class="tab-pane fade" id="dashboard2" role="tabpanel">
+
+                <div class="filter-container">
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label class="filter-label">Ano</label>
+                            <select class="form-select" id="anoExec"><option value="">Todos</option></select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Nº Emenda</label>
+                            <input type="text" class="form-control" id="numeroEmendaExec" placeholder="Ex: 81000792">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Autoria</label>
+                            <input type="text" class="form-control" id="autoriaExec" placeholder="Nome do autor...">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">CÓD. SIAFI</label>
+                            <input type="text" class="form-control" id="siafiExec" placeholder="Ex: 9287341">
+                        </div>
+                    </div>
+                    <div class="filters-row" style="margin-top:12px;">
+                        <div class="filter-group">
+                            <label class="filter-label">Tipo de Emenda</label>
+                            <select class="form-select" id="modalidadeExec"><option value="">Todas</option></select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Forma de Repasse</label>
+                            <select class="form-select" id="formaRepasseExec"><option value="">Todas</option></select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Função de Governo</label>
+                            <select class="form-select" id="funcaoExec"><option value="">Todas</option></select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Órgão</label>
+                            <input type="text" class="form-control" id="orgaoExec" placeholder="Órgão Executor...">
+                        </div>
+                    </div>
+                    <div class="filters-row" style="margin-top:12px;">
+                        <div class="filter-group">
+                            <label class="filter-label">Objeto</label>
+                            <input type="text" class="form-control" id="objetoExec" placeholder="Palavras-chave...">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Descrição Despesa</label>
+                            <input type="text" class="form-control" id="descricaoItem" placeholder="Palavras-chave...">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Situação</label>
+                            <select class="form-select" id="situacaoExec"><option value="">Todas</option></select>
+                        </div>
+                        <div class="filter-group"></div>
+                    </div>
+                    <div class="filters-row" style="margin-top:12px;">
+                        <div class="filter-group">
+                            <label class="filter-label">Credor</label>
+                            <input type="text" class="form-control" id="credorExec" placeholder="Razão Social">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">CNPJ/CPF</label>
+                            <input type="text" class="form-control" id="cnpjExec" placeholder="00.000.000/0001-00">
+                        </div>
+                        <div class="filter-group" style="flex:2;"></div>
+                    </div>
+                    <div class="botoes-abaixo">
+                        <button class="btn-pesquisa" id="aplicarFiltrosExec"><i class="material-icons me-2">tune</i>Atualizar Filtros</button>
+                        <button class="btn-secondary-custom" id="limparFiltrosExec"><i class="material-icons me-2">clear</i>Limpar Filtros</button>
+                    </div>
+                </div>
+
+ 
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <button class="btn-export" id="exportCSVExec"><i class="material-icons">description</i>CSV</button>
+                        <button class="btn-export" id="printExec"><i class="material-icons">print</i>PDF</button>
+                        <div class="col-manager-dropdown">
+                            <button class="btn-export" onclick="toggleColManager('exec')"><i class="material-icons">view_column</i>Colunas</button>
+                            <div class="col-manager-panel" id="colManagerExec">
+                                <div class="col-manager-title">Adicionar / Remover Colunas</div>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(0,this.checked)"> Ano</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(1,this.checked)"> Nº Emenda</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(2,this.checked)"> Autoria</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(3,this.checked)"> Código SIAFI</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(4,this.checked)"> Tipo de Emenda</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(5,this.checked)"> Forma de Repasse</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(6,this.checked)"> Função de Governo</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(7,this.checked)"> Órgão</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(8,this.checked)"> Objeto</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(9,this.checked)"> Descrição da Despesa</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(10,this.checked)"> Data Início</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(11,this.checked)"> Data Fim</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(12,this.checked)"> Valor Indicado</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(13,this.checked)"> Valor Empenhado (Repassado)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(14,this.checked)"> Valor Liquidado</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(15,this.checked)"> Valor Pago</label>
+                                <div class="col-manager-title" style="margin-top:10px;border-top:1px solid #eee;padding-top:8px;">Colunas adicionais</div>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColExecExtra('credor',this.checked)"> Credor</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColExecExtra('cnpj',this.checked)"> CNPJ/CPF Credor</label>
+                                <label class="col-item"><input type="checkbox" onchange="toggleColExecExtra('situacao',this.checked)"> Situação</label>
+                            </div>
+                        </div>
+                        <div class="share-dropdown">
+                            <button class="btn-export" onclick="toggleShare(2)"><i class="material-icons">share</i>Compartilhar</button>
+                            <div class="share-options" id="shareOptions2">
+                                <a href="#" onclick="copiarLink(event,2)"><i class="material-icons">link</i>Copiar Link</a>
+                                <a href="#" onclick="compartilharFacebook(event,2)"><i class="fa-brands fa-facebook"></i>Facebook</a>
+                                <a href="#" onclick="compartilharTwitter(event,2)"><i class="fa-brands fa-x-twitter"></i>Twitter/X</a>
+                                <a href="#" onclick="compartilharLinkedIn(event,2)"><i class="fa-brands fa-linkedin"></i>LinkedIn</a>
+                                <a href="#" onclick="compartilharWhatsApp(event,2)"><i class="fa-brands fa-whatsapp"></i>WhatsApp</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="toolbar-right">
+                        <span class="table-badge" id="countExec">0 registros</span>
+                        <div class="table-search-container">
+                            <i class="material-icons" style="font-size:16px;color:#94a3b8;">search</i>
+                            <input type="text" id="searchExec" class="table-search-input" placeholder="Buscar registros...">
+                        </div>
+                        <select id="itemsPerPageExec" class="items-per-page">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50" selected>50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-fixed-header-container">
+                        <table class="table" id="tabelaExec">
+                            <thead>
+                                <tr>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('ano')">Ano <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('numero_emenda')">Nº Emenda <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('autoria')" title="Obtido via correspondência do Nº SIAFI com dados_gerais_emendas">Autoria <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('siafi')" title="Código de controle no SIAFI — clique no número para acessar o Inteiro Teor do instrumento">Código SIAFI <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('modalidade')" title="Obtido via correspondência do Nº SIAFI com dados_gerais_emendas">Tipo de Emenda <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('tipo_instrumento')" title="Obtido via correspondência do Nº SIAFI com dados_gerais_emendas">Forma de Repasse <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('funcao')" title="Obtido via correspondência do Nº SIAFI com dados_gerais_emendas">Função de Governo <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('orgao_executor')" title="Órgão Executor, obtido via correspondência do Nº SIAFI com dados_gerais_emendas">Órgão <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('objeto')" title="Objeto da emenda, obtido via correspondência do Nº SIAFI com dados_gerais_emendas">Objeto <i class="material-icons">unfold_more</i></th>
+                                    <th title="Descrição da despesa, identificando o objeto do gasto (item 17.3)">Descrição da Despesa</th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('data_inicio')" title="Data de início da vigência, obtida via correspondência do Nº SIAFI com dados_gerais_emendas">Data Início <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('data_fim')" title="Data de fim da vigência, obtida via correspondência do Nº SIAFI com dados_gerais_emendas">Data Fim <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('valor_indicado')" style="text-align:right;" title="Valor indicado da emenda, obtido via correspondência do Nº SIAFI com dados_gerais_emendas">Valor Indicado <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('empenhado')" style="text-align:right;" title="Valor empenhado (repassado), somando todos os empenhos deste Nº SIAFI">Valor Empenhado <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('liquidado')" style="text-align:right;" title="Valor liquidado da despesa (item 17.3), somando todos os empenhos deste Nº SIAFI">Valor Liquidado <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('pago')" style="text-align:right;" title="Valor pago, somando todos os empenhos deste Nº SIAFI">Valor Pago <i class="material-icons">unfold_more</i></th>
+                                    <th id="thExecCredor" class="sortable-header" onclick="ordenarAgregadoExec('credorDisplay')" style="display:none;">Credor <i class="material-icons">unfold_more</i></th>
+                                    <th id="thExecCnpj" style="display:none;">CNPJ/CPF Credor</th>
+                                    <th id="thExecSituacao" class="sortable-header" onclick="ordenarAgregadoExec('situacao')" style="display:none;">Situação <i class="material-icons">unfold_more</i></th>
+                                    <th style="text-align:center;width:60px;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaExecBody">
+                                <tr><td colspan="20" class="text-center text-muted">Carregando dados...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-container" id="paginacaoExec"></div>
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;margin-top:10px;">
+                    <div class="btn-topo" onclick="voltarAoTopo()"><i class="material-icons">arrow_upward</i>Voltar ao topo</div>
+                </div>
+
+            </div><!-- /dashboard2 -->
+
+            <!-- ==================== DASHBOARD 3: DICIONÁRIO DE DADOS ==================== -->
+            <div class="tab-pane fade" id="dashboard3" role="tabpanel">
+
+                <div class="mt-2">
+                    <h5 class="mb-3">METADADOS — Estrutura de Dados</h5>
+                    <div class="table-responsive">
+                        <table class="dicionario-tabela">
+                            <thead><tr><th>Tabela</th><th>Campo</th><th>Descrição</th></tr></thead>
+                            <tbody>
+                                <tr class="dicionario-secao"><td colspan="3">EMENDAS GERAL</td></tr>
+                                <tr><td>Emendas Geral</td><td>Esfera</td><td>Descrição da Esfera que irá repassar os recursos.</td></tr>
+                                <tr><td>Emendas Geral</td><td>Modalidade</td><td>Classificação da emenda (individual, bancada, comissão, relator).</td></tr>
+                                <tr><td>Emendas Geral</td><td>Autoria</td><td>Informações sobre o parlamentar ou comissão que apresentou a emenda.</td></tr>
+                                <tr><td>Emendas Geral</td><td>Tipo de instrumento jurídico</td><td>Tipo de instrumento jurídico financiado pela emenda (convênio, portaria ou transferência especial).</td></tr>
+                                <tr><td>Emendas Geral</td><td>Número da Emenda</td><td>Número identificador da emenda parlamentar.</td></tr>
+                                <tr><td>Emendas Geral</td><td>Ano da Emenda</td><td>Ano em que a emenda foi proposta.</td></tr>
+                                <tr><td>Emendas Geral</td><td>CÓD. SIAFI</td><td>Código do instrumento jurídico no Sistema de Administração Financeira do Governo Federal.</td></tr>
+                                <tr><td>Emendas Geral</td><td>Valor Indicado</td><td>Valor financeiro indicado associado à emenda.</td></tr>
+                                <tr><td>Emendas Geral</td><td>Valor Repassado</td><td>Valor financeiro repassado associado à emenda.</td></tr>
+                                <tr><td>Emendas Geral</td><td>Objeto</td><td>Objeto da emenda.</td></tr>
+                                <tr><td>Emendas Geral</td><td>Data Início / Data Fim</td><td>Datas estimadas de início e término da vigência do instrumento, quando disponibilizadas pela fonte federal.</td></tr>
+                                <tr class="dicionario-secao"><td colspan="3">EXECUÇÃO TRANSFERÊNCIAS PIX</td></tr>
+                                <tr><td>Execução</td><td>Ano</td><td>Ano da emenda, obtido via correspondência do Nº SIAFI com Emendas Geral. Cada linha da tabela agrega todos os empenhos daquele Nº SIAFI/emenda.</td></tr>
+                                <tr><td>Execução</td><td>CÓD. SIAFI</td><td>Número de controle do SIAFI MG. Clique para acessar o Inteiro Teor do instrumento.</td></tr>
+                                <tr><td>Execução</td><td>Autoria</td><td>Parlamentar autor da emenda, obtido via correspondência do Nº SIAFI com Emendas Geral. Clique para ver todas as execuções daquele autor, naquele ano.</td></tr>
+                                <tr><td>Execução</td><td>Tipo de Emenda / Forma de Repasse / Função de Governo / Órgão</td><td>Obtidos via correspondência do Nº SIAFI com Emendas Geral.</td></tr>
+                                <tr><td>Execução</td><td>Nº Empenho / Data do Empenho</td><td>Disponíveis no detalhamento por empenho, ao clicar em Ações.</td></tr>
+                                <tr><td>Execução</td><td>Data Início / Data Fim</td><td>Datas estimadas de início e término da vigência da emenda vinculada, obtidas via correspondência do Nº SIAFI com Emendas Geral.</td></tr>
+                                <tr><td>Execução</td><td>Valor Empenhado (R$)</td><td>Despesa Empenhada ajustada, somada por Nº SIAFI.</td></tr>
+                                <tr><td>Execução</td><td>Valor Pago (R$)</td><td>Pago Orçamentário ajustado, somado por Nº SIAFI.</td></tr>
+                                <tr><td>Execução</td><td>Valor RPP Pago</td><td>Restos a Pagar Processados pagos, disponível no detalhamento por empenho.</td></tr>
+                                <tr><td>Execução</td><td>CNPJ/CPF Credor / Razão Social Credor</td><td>Identificação do credor — beneficiário final, disponível no detalhamento (Ações).</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;margin-top:10px;">
+                    <div class="btn-topo" onclick="voltarAoTopo()"><i class="material-icons">arrow_upward</i>Voltar ao topo</div>
+                </div>
+
+            </div><!-- /dashboard3 -->
+
+            <!-- ==================== DASHBOARD 4: DOWNLOADS ==================== -->
+            <div class="tab-pane fade" id="dashboard4" role="tabpanel">
+
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <div class="card-stats">
+                            <h4 class="fw-bold mb-3">Portal de Dados Abertos</h4>
+                            <p style="font-size:13px;color:#6c757d;text-align:justify;">
+                                Acesse o conjunto completo de dados sobre emendas federais no Portal de Dados Abertos, documentado conforme especificações Frictionless Data para validação automática e reuso.
+                            </p>
+                            <div class="mt-4 text-end">
+                                <a href="https://dados.mg.gov.br/dataset/emendas_federais" target="_blank" class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2">
+                                    <i class="material-icons me-1">launch</i>Acessar Portal de Dados MG
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card-stats">
+                            <h4 class="fw-bold mb-3">TransfereGov Especiais</h4>
+                            <p style="font-size:13px;color:#6c757d;text-align:justify;">
+                                Consulte os planos de ação das transferências especiais no TransfereGov, plataforma oficial do governo federal para acompanhamento de convênios e transferências.
+                            </p>
+                            <div class="mt-4 text-end">
+                                <a href="https://especiais.transferegov.sistema.gov.br/transferencia-especial/plano-acao/consulta" target="_blank" class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2">
+                                    <i class="material-icons me-1">launch</i>Acessar TransfereGov
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card-stats">
+                            <h4 class="fw-bold mb-3">Transparência Convênios</h4>
+                            <p style="font-size:13px;color:#6c757d;text-align:justify;">
+                                Acesse o repositório com dados de execução de convênios federais, incluindo informações detalhadas sobre transferências, prestações de contas e documentação completa.
+                            </p>
+                            <div class="mt-4 text-end">
+                                <a href="https://drive.google.com/drive/folders/1FzCWIXr9A-1wrBNf1RwFCLdtusXJjKwd" target="_blank" class="btn-export text-decoration-none fw-bold d-inline-block px-4 py-2">
+                                    <i class="material-icons me-1">launch</i>Acessar Drive
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;margin-top:10px;">
+                    <div class="btn-topo" onclick="voltarAoTopo()"><i class="material-icons">arrow_upward</i>Voltar ao topo</div>
+                </div>
+
+            </div><!-- /dashboard4 -->
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL DE DETALHES ==================== -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content modal-creative">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel">
+                    <i class="material-icons me-2">description</i>Detalhes do Registro
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="detalhesConteudo"></div>
+            <div class="modal-footer" style="gap:8px;">
+                <button type="button" class="btn-secondary-custom" data-bs-dismiss="modal"><i class="material-icons">close</i>Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== TOAST LINK COPIADO ==================== -->
+<div id="toastSucesso" class="toast-sucesso">
+    <div style="display:flex;align-items:center;gap:10px;">
+        <i class="material-icons" style="color:#28a745;font-size:18px;">check_circle</i>
+        <span style="font-size:13px;">Link copiado para a área de transferência!</span>
+    </div>
+    <span style="cursor:pointer;margin-left:12px;font-size:13px;" onclick="document.getElementById('toastSucesso').style.display='none'">✖</span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// ============================================================
+// CONFIGURAÇÕES
+// ============================================================
+const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/transparencia-mg/portal_emendas_federais/main/dataset/data/';
+const GITHUB_API_COMMITS = 'https://api.github.com/repos/transparencia-mg/portal_emendas_federais/commits?path=dataset/data&per_page=1';
+const CONVENIOS_CSV_URL = 'https://raw.githubusercontent.com/transparencia-mg/portal_convenios_entrada/main/dataset/data/convenios.csv';
+
+const ARQUIVOS = {
+    dadosGerais:   GITHUB_RAW_BASE + 'dados_gerais_emendas.csv',
+    execucao:      GITHUB_RAW_BASE + 'execucao_transferencias_especiais_pix.csv',
+    planoExecucao: GITHUB_RAW_BASE + 'plano_execucao_emendas_pix.csv'
+};
+
+// ============================================================
+// VARIÁVEIS GLOBAIS
+// ============================================================
+let dadosGerais = [], execucaoData = [], planoExecucaoData = [], conveniosData = {}, siafiToDG = {}, siafiToPlanos = {};
+let filteredDG = [], filteredExec = [], filteredPlano = [], filteredExecBase = [];
+
+let currentPage    = { dg: 1, exec: 1, plano: 1 };
+let itemsPerPage   = { dg: 50, exec: 50, plano: 50 };
+let currentSearch  = { dg: '', exec: '', plano: '' };
+let sortConfig = {
+    dg:    { column: 0, direction: 'asc' },
+    exec:  { column: 0, direction: 'asc' },
+    plano: { column: 0, direction: 'asc' }
+};
+
+// ============================================================
+// UTILITÁRIOS
+// ============================================================
+function formatarData(d) {
+    if (!d) return '-';
+    try {
+        const soData = d.toString().trim().split(' ')[0]; // remove hora, se houver
+        return soData.includes('-') ? soData.split('-').reverse().join('/') : soData;
+    } catch { return d; }
+}
+
+function formatarMoeda(v) {
+    if (!v && v !== 0) return '-';
+    if (typeof v === 'string') v = parseFloat(v.replace(/\./g, '').replace(',', '.'));
+    if (isNaN(v)) return '-';
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
+}
+
+function formatarCNPJ(c) {
+    if (!c) return '-';
+    const s = c.toString().replace(/\D/g, '');
+    // Pad with leading zeros if numeric string is shorter than expected
+    if (s.length > 0 && s.length <= 14 && s.length >= 12) {
+        const padded = s.padStart(14, '0');
+        return padded.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+    }
+    if (s.length === 11 || (s.length >= 9 && s.length < 12)) {
+        const padded = s.padStart(11, '0');
+        return padded.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+    }
+    if (s.length === 14) return s.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+    return c;
+}
+
+function parseValor(v) {
+    if (!v) return 0;
+    if (typeof v === 'number') return v;
+    return parseFloat(v.toString().replace(/\./g, '').replace(',', '.')) || 0;
+}
+
+function truncar(str, n) {
+    if (!str) return '-';
+    return str.length > n ? str.substring(0, n) + '...' : str;
+}
+
+function linkSiafi(siafi) {
+    if (!siafi) return '-';
+    const s = siafi.toString().trim();
+    if (!s || s === '-') return s || '-';
+    // Tenta correspondencia direta
+    let conv = conveniosData[s];
+    // Tenta como numero sem zeros a esquerda
+    if (!conv) { const n = parseInt(s, 10); if (!isNaN(n)) conv = conveniosData[n.toString()]; }
+    // Tenta com zero-padding ate 7 digitos
+    if (!conv && s.length < 7) conv = conveniosData[s.padStart(7, '0')];
+    if (conv) {
+        const url = conv.startsWith('http') ? conv : 'https://' + conv;
+        return '<a href="' + url + '" target="_blank" title="Ver Inteiro Teor do Instrumento" style="color:#1a3a5c;font-weight:600;text-decoration:underline dotted;">' + s + '&nbsp;<i class="material-icons" style="font-size:11px;vertical-align:middle;color:#b93c42;">open_in_new</i></a>';
+    }
+    return s;
+}
+
+function siafiModalLink(numero, item, funcName) {
+    if (!numero) return '-';
+    const n = numero.toString().trim();
+    if (!n || n === '-') return '-';
+    const itemJson = JSON.stringify(item).replace(/'/g, "\\'");
+    return `<a href="javascript:void(0)" onclick='${funcName}(${itemJson})' title="Clique para ver os detalhes da emenda" style="color:#1a3a5c;font-weight:600;text-decoration:underline dotted;cursor:pointer;">${n}</a>`;
+}
+
+function emendaExecLink(item) {
+    if (!item.numero_emenda) return '-';
+    const ref = { siafi: item.codigo_siafi || '', numero_emenda: item.numero_emenda };
+    const refJson = JSON.stringify(ref).replace(/'/g, "\\'");
+    return `<a href="javascript:void(0)" onclick='irParaExecucao(${refJson})' title="Ver empenhos e pagamentos desta emenda na aba Execução" style="color:#1a3a5c;font-weight:600;text-decoration:underline dotted;cursor:pointer;">${item.numero_emenda}</a>`;
+}
+
+function irParaExecucao(ref) {
+    const tabBtn = document.getElementById('dashboard2-tab');
+    if (tabBtn && window.bootstrap) new bootstrap.Tab(tabBtn).show();
+    const anoSel = document.getElementById('anoExec');
+    if (anoSel) anoSel.value = '';
+    const siafiInput = document.getElementById('siafiExec');
+    const emendaInput = document.getElementById('numeroEmendaExec');
+    if (siafiInput)  siafiInput.value  = ref.siafi || '';
+    if (emendaInput) emendaInput.value = ref.siafi ? '' : (ref.numero_emenda || '');
+    aplicarFiltros('exec');
+    setTimeout(() => {
+        document.querySelector('.nav-tabs-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+}
+
+function irParaExecucaoPorAutoria(autoria, ano) {
+    const tabBtn = document.getElementById('dashboard2-tab');
+    if (tabBtn && window.bootstrap) new bootstrap.Tab(tabBtn).show();
+    // Ano correspondente: usa o parâmetro explícito ou, na ausência dele, o Ano atualmente
+    // selecionado no filtro da Visão Geral — garante que a Execução mostrada seja exatamente
+    // a do autor E do ano correspondente clicados.
+    const anoAlvo = (ano !== undefined && ano !== null && ano !== '') ? ano : (document.getElementById('anoDG')?.value || '');
+    ['anoExec','siafiExec','numeroEmendaExec','numEmpenho','credorExec','cnpjExec','descricaoItem'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+    });
+    const anoSel = document.getElementById('anoExec');
+    if (anoSel) anoSel.value = anoAlvo;
+    const autInput = document.getElementById('autoriaExec');
+    if (autInput) autInput.value = autoria || '';
+    aplicarFiltros('exec');
+    setTimeout(() => {
+        document.querySelector('.nav-tabs-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+}
+
+// ============================================================
+// STATUS / CRONOGRAMA DE EXECUÇÃO (proxy visual para plano de trabalho)
+// ============================================================
+function statusBadge(situacao) {
+    if (!situacao) return '<span class="status-text st-default">Não informado</span>';
+    const s = situacao.toString().trim().toUpperCase();
+    if (s.includes('NÃO INICIADA') || s.includes('NAO INICIADA')) return `<span class="status-text st-default">${situacao}</span>`;
+    if (s.includes('CONCLU')) return `<span class="status-text st-concluido">${situacao}</span>`;
+    if (s.includes('EXECU'))  return `<span class="status-text st-execucao">${situacao}</span>`;
+    if (s.includes('CIENTE') || s.includes('CADASTR')) return `<span class="status-text st-ciente">${situacao}</span>`;
+    if (s.includes('PEND') || s.includes('ANDAMENTO')) return `<span class="status-text st-pendente">${situacao}</span>`;
+    return `<span class="status-text st-default">${situacao}</span>`;
+}
+
+function tabelaSimples(headers, rows) {
+    if (!rows.length) return '<div class="objeto-text" style="color:#94a3b8;">Nenhum registro.</div>';
+    return `
+        <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;">
+            <thead>
+                <tr style="background:#54697b;color:white;">
+                    ${headers.map(h=>`<th style="padding:7px 10px;text-align:left;">${h}</th>`).join('')}
+                </tr>
+            </thead>
+            <tbody>
+                ${rows.map((r,idx)=>`
+                <tr style="background:${idx%2===0?'#fff':'#f8f9fa'}">
+                    ${r.map(c=>`<td style="padding:6px 10px;border-bottom:1px solid #eee;">${c!=null && c!=='' ? c : '-'}</td>`).join('')}
+                </tr>`).join('')}
+            </tbody>
+        </table>
+        </div>`;
+}
+
+function linkDocumento(url, label) {
+    if (!url) return '<span style="color:#94a3b8;">Não informado</span>';
+    const u = url.toString().trim();
+    if (!u || u === '-') return '<span style="color:#94a3b8;">Não informado</span>';
+    const href = u.startsWith('http') ? u : 'https://' + u;
+    const txt = label || 'Ver documento';
+    return '<a href="' + href + '" target="_blank" rel="noopener" title="Ver Inteiro Teor da Emenda / Documento de Repasse" style="color:#1a3a5c;font-weight:600;text-decoration:underline dotted;">' + txt + '&nbsp;<i class="material-icons" style="font-size:11px;vertical-align:middle;color:#b93c42;">open_in_new</i></a>';
+}
+
+// ============================================================
+// DATA DE ATUALIZAÇÃO VIA GITHUB API
+// ============================================================
+async function setupAtualizacaoData() {
+    const el = document.getElementById('data-atualizacao-header');
+    if (!el) return;
+    try {
+        const resp = await fetch(GITHUB_API_COMMITS);
+        if (!resp.ok) throw new Error();
+        const commits = await resp.json();
+        if (commits && commits.length > 0) {
+            const dt = new Date(commits[0].commit.committer.date);
+            el.textContent = dt.toLocaleDateString('pt-BR');
+            return;
+        }
+    } catch(e) {}
+    el.textContent = new Date().toLocaleDateString('pt-BR');
+}
+
+// ============================================================
+// CARREGAR DADOS
+// ============================================================
+function carregarTodosDados() {
+    Promise.all([
+        carregarCSV(ARQUIVOS.dadosGerais, mapDG),
+        carregarCSV(ARQUIVOS.execucao, mapExec),
+        carregarCSV(ARQUIVOS.planoExecucao, mapPlano),
+        carregarConvenios()
+    ]).then(([dg, exec, plano]) => {
+        dadosGerais      = dg;
+        execucaoData     = exec;
+        planoExecucaoData = plano;
+        // Enriquecer execucaoData com numero_emenda e ano_emenda a partir dos Dados Gerais (siafi match)
+        const siafiToEmenda = {};
+        const emendaToSiafi = {};
+        siafiToDG = {};
+        dadosGerais.forEach(d => {
+            if (d.codigo_siafi && d.numero_emenda) {
+                const k = d.codigo_siafi.toString().trim();
+                siafiToEmenda[k] = {ne: d.numero_emenda, ano: d.ano};
+                emendaToSiafi[d.numero_emenda.toString().trim() + '_' + d.ano.toString().trim()] = k;
+                siafiToDG[k] = d;
+            }
+        });
+        execucaoData.forEach(e => {
+            const k = (e.numero_siafi||'').toString().trim();
+            if (siafiToEmenda[k]) { e.numero_emenda = siafiToEmenda[k].ne; e.ano_emenda_rel = siafiToEmenda[k].ano; }
+            e.link_siafi = siafiToDG[k] ? siafiToDG[k].link : '';
+        });
+        // Enriquecer planoExecucaoData com codigo_siafi
+        planoExecucaoData.forEach(p => {
+            const k = (p.numero_emenda_plano||'').toString().trim() + '_' + (p.ano_emenda||'').toString().trim();
+            if (emendaToSiafi[k]) p.codigo_siafi_rel = emendaToSiafi[k];
+            p.link_siafi = (p.codigo_siafi_rel && siafiToDG[p.codigo_siafi_rel]) ? siafiToDG[p.codigo_siafi_rel].link : '';
+            const dgRel = p.codigo_siafi_rel ? siafiToDG[p.codigo_siafi_rel] : null;
+            p.data_inicio = dgRel ? dgRel.data_inicio : '';
+            p.data_fim    = dgRel ? dgRel.data_fim    : '';
+        });
+        // Mapa Nº SIAFI -> registros do Plano de Execução (usado quando ainda não há execução financeira/empenhos)
+        siafiToPlanos = {};
+        planoExecucaoData.forEach(p => {
+            if (!p.codigo_siafi_rel) return;
+            if (!siafiToPlanos[p.codigo_siafi_rel]) siafiToPlanos[p.codigo_siafi_rel] = [];
+            siafiToPlanos[p.codigo_siafi_rel].push(p);
+        });
+        // Mapa Nº SIAFI -> executor(es) do Plano de Trabalho (para enriquecer a Execução)
+        const siafiToExecutor = {};
+        planoExecucaoData.forEach(p => {
+            if (!p.codigo_siafi_rel || !p.nome_executor) return;
+            if (!siafiToExecutor[p.codigo_siafi_rel]) siafiToExecutor[p.codigo_siafi_rel] = [];
+            const jaExiste = siafiToExecutor[p.codigo_siafi_rel].some(x => x.cnpj === p.cnpj_executor);
+            if (!jaExiste) siafiToExecutor[p.codigo_siafi_rel].push({ nome: p.nome_executor, cnpj: p.cnpj_executor });
+        });
+        // Enriquecer execucaoData com Órgão Executor, Objeto (via Dados Gerais) e CNPJ Executor (via Plano)
+        execucaoData.forEach(e => {
+            const k = (e.numero_siafi||'').toString().trim();
+            const dg = siafiToDG[k];
+            e.orgao_executor_dg = dg ? dg.orgao_executor : '';
+            e.objeto_dg = dg ? dg.objeto : '';
+            e.autoria_dg = dg ? dg.autoria : '';
+            e.data_inicio_dg = dg ? dg.data_inicio : '';
+            e.data_fim_dg = dg ? dg.data_fim : '';
+            e.modalidade_dg = dg ? dg.modalidade : '';
+            e.tipo_instrumento_dg = dg ? dg.tipo_instrumento : '';
+            e.funcao_dg = dg ? dg.funcao : '';
+            e.valor_indicado_dg = dg ? (dg.valor_indicado || 0) : 0;
+            const execs = siafiToExecutor[k] || [];
+            e.cnpj_executor_plano = execs.map(x => x.cnpj).filter(Boolean).join('; ');
+            e.nome_executor_plano = execs.map(x => x.nome).filter(Boolean).join('; ');
+        });
+        filteredDG       = [...dg];
+        filteredExec     = [...exec];
+        filteredPlano    = [...plano];
+        populaFiltros();
+        updateDashboard1();
+        updateDashboard2();
+    }).catch(err => {
+        console.error('Erro ao carregar dados:', err);
+    });
+}
+
+function processarLinhasConvenios(rows) {
+    const isValidUrl = s => s && s !== '' &&
+        s.toLowerCase() !== 'nan' && s.toLowerCase() !== 'none' &&
+        s.toLowerCase() !== 'null' && s.length > 10 &&
+        (s.startsWith('http') || s.startsWith('www'));
+
+    rows.forEach(row => {
+        // Coluna de cruzamento: codigo_siafi na planilha de convenios
+        const cod = (
+            row.codigo_siafi || row['codigo_siafi'] ||
+            row['Codigo_Siafi'] || row['CODIGO_SIAFI'] ||
+            row['nr_siafi'] || row['numero_siafi'] || ''
+        ).toString().trim();
+        if (!cod) return;
+
+        // Link: prefere TransfereGov, usa SIGCON se nao houver
+        const lt = (row.inteiro_teor_do_instrumento_transferegov || '').toString().trim();
+        const ls = (row.inteiro_teor_do_instrumento_sigcon || '').toString().trim();
+        const link = isValidUrl(lt) ? lt : isValidUrl(ls) ? ls : '';
+        if (!link) return;
+
+        const url = link.startsWith('http') ? link : 'https://' + link;
+        // Armazena com o codigo como veio
+        conveniosData[cod] = url;
+        // Armazena tambem sem zeros a esquerda (ex: "09123456" -> "9123456")
+        const semZero = parseInt(cod, 10);
+        if (!isNaN(semZero)) conveniosData[semZero.toString()] = url;
+    });
+}
+
+function carregarConvenios() {
+    return new Promise((resolve) => {
+        // Tenta fetch manual para ter controle total do conteudo bruto
+        fetch(CONVENIOS_CSV_URL)
+            .then(r => r.text())
+            .then(txt => {
+                // Detecta separador pela primeira linha
+                const primeiraLinha = txt.split('\n')[0] || '';
+                const delimitador = primeiraLinha.includes(';') ? ';' : ',';
+
+                const resultado = Papa.parse(txt, {
+                    header: true,
+                    delimiter: delimitador,
+                    skipEmptyLines: true
+                });
+
+                if (resultado.data && resultado.data.length > 0) {
+                    console.log('[Convenios] Separador detectado:', JSON.stringify(delimitador));
+                    console.log('[Convenios] Colunas:', Object.keys(resultado.data[0]));
+                    console.log('[Convenios] Linhas:', resultado.data.length);
+                    processarLinhasConvenios(resultado.data);
+                }
+                console.log('[Convenios] Links mapeados:', Object.keys(conveniosData).length);
+                resolve();
+            })
+            .catch(err => {
+                console.warn('[Convenios] Erro no fetch, tentando Papa.parse direto:', err.message);
+                // Fallback: Papa.parse com download (auto-detecta separador)
+                Papa.parse(CONVENIOS_CSV_URL, {
+                    download: true, header: true, skipEmptyLines: true,
+                    complete: r => {
+                        if (r.data && r.data.length > 0) processarLinhasConvenios(r.data);
+                        console.log('[Convenios] Fallback - Links mapeados:', Object.keys(conveniosData).length);
+                        resolve();
+                    },
+                    error: () => resolve()
+                });
+            });
+    });
+}
+
+function carregarCSV(url, mapFn) {
+    return new Promise((resolve) => {
+        Papa.parse(url, {
+            download: true, header: true, delimiter: ';', skipEmptyLines: true,
+            complete: r => resolve(r.data.filter(row => Object.values(row).some(v => v)).map((row, i) => mapFn(row, i))),
+            error: () => resolve([])
+        });
+    });
+}
+
+function mapDG(row, i) {
+    return {
+        id: i + 1,
+        ano: row.ano_da_emenda || row.ano_emenda || '',
+        numero_emenda: row.numero_da_emenda || row.numero_emenda || '',
+        codigo_siafi: row.codigo_siafi || '',
+        esfera: row.esfera || '',
+        autoria: row.autorida || row.autoria || '',
+        valor_indicado: parseValor(row.valor_indicado),
+        valor_repassado: parseValor(row.valor_repassado),
+        objeto: row.objeto || '',
+        modalidade: row.modalide || row.modalidade || '',
+        tipo_instrumento: row.tipo_de_instrumento_juridico || row.tipo_instrumento_juridico || row.tipo_instrumento || row.tipo_de_instrumento || '',
+        funcao: row.funcao_de_governo || row.funcao_governo || row.funcao || row['função'] || '',
+        orgao_executor: row.orgao_executor || row['órgão_executor'] || row.orgao || '',
+        link: row.link || '',
+        data_inicio: row.data_inicio || '',
+        data_fim: row.data_fim || ''
+    };
+}
+
+function mapExec(row, i) {
+    return {
+        id: i + 1,
+        ano: row.ano_empenho || '',
+        numero_siafi: row.no_siafi || row.numero_siafi || '',
+        numero_emenda: row.numero_emenda || '',
+        numero_empenho: row.no_empenho || row.numero_empenho || '',
+        data_empenho: row.data_empenho || '',
+        acao: row.acao || '',
+        categoria: row.categoria || '',
+        grupo: row.grupo || '',
+        modalidade: row.modalide || row.modalidade || '',
+        elemento_despesa: row.elemento_de_despesa || row.elemento_despes || row.elemento_despesa || '',
+        item_despesa: row.item_de_despesa || row.item_despesa || '',
+        descricao_item: row.descricao_item || '',
+        natureza_dea: row.natureza_dea || '',
+        ed_eda: row.ed_dea || row.ed_eda || '',
+        fonte: row.fonte || '',
+        procedencia: row.procedencia || row.procedência || '',
+        cnpj_credor: row.cnpj_cpf_credor || '',
+        razao_social_credor: row.razao_social_credor || '',
+        valor_empenhado: parseValor(row.valor_empenhado_r || row.valor_empenhado),
+        valor_liquidado: parseValor(row.valor_liquidado_r || row.valor_liquidado),
+        valor_pago: parseValor(row.valor_pago_r || row.valor_pago),
+        valor_pago_orcamentario: parseValor(row.pago_orcamentario),
+        valor_rpp_pago: parseValor(row.rpp_pago)
+    };
+}
+
+function parseCodEmenda(cod) {
+    if (!cod) return { ano_emenda: '', numero_emenda_plano: '', parlamentar: '' };
+    // Format: YYYY + 8 digits + '-' + name  e.g. "202481000792-NOME DO PARLAMENTAR"
+    const m = cod.match(/^(\d{4})(\d{8})-(.+)$/);
+    if (m) return { ano_emenda: m[1], numero_emenda_plano: m[2], parlamentar: m[3].trim() };
+    // Fallback: try split by '-'
+    const dashIdx = cod.indexOf('-');
+    if (dashIdx > 0) {
+        const prefix = cod.substring(0, dashIdx);
+        const name   = cod.substring(dashIdx + 1).trim();
+        const ano_emenda = prefix.substring(0, 4);
+        const numero_emenda_plano = prefix.substring(4);
+        return { ano_emenda, numero_emenda_plano, parlamentar: name };
+    }
+    return { ano_emenda: '', numero_emenda_plano: '', parlamentar: '' };
+}
+
+function mapPlano(row, i) {
+    const cod = row.codigo_emenda_e_parlamentar || row.codigo_emenda_parlamentar || '';
+    const { ano_emenda, numero_emenda_plano, parlamentar } = parseCodEmenda(cod);
+    return {
+        id: i + 1,
+        ano: row.ano_plano_acao || '',
+        id_plano_acao: row.id_plano_acao || '',
+        id_executor: row.id_executor || '',
+        cnpj_executor: row.cnpj_executor || '',
+        nome_executor: row.nome_executor || '',
+        objeto: row.objeto_executor || '',
+        valor_custeio: parseValor(row.valor_custeio),
+        valor_capital: parseValor(row.valor_capital),
+        ano_plano_acao: row.ano_plano_acao || '',
+        modalidade_plano: row.modalidade_plano_acao || row.modalidade || '',
+        situacao_plano: row.situacao_plano_acao || row.situacao || '',
+        cnpj_beneficiario: row.cnpj_beneficiario_plano_acao || '',
+        beneficiario: row.nome_beneficiario_plano_acao || '',
+        uf_beneficiario: row.uf_beneficiario_plano_acao || '',
+        codigo_emenda_parlamentar: cod,
+        ano_emenda,
+        numero_emenda_plano,
+        parlamentar,
+        codigo_siafi_rel: '',
+        valor_emenda: parseValor(row.valor_da_emenda || row.valor_emenda),
+        classificacao_orcamentaria: row.classificacao_orcamentaria_plano_de_trabalho || row.classificacao_orcamentaria_plano_trabalho || ''
+    };
+}
+
+// ============================================================
+// FILTROS — OPÇÕES
+// ============================================================
+function populaFiltros() {
+    // DG
+    const anosDG = [...new Set(dadosGerais.map(d => d.ano).filter(Boolean))].sort((a,b)=>b-a);
+    document.getElementById('anoDG').innerHTML = '<option value="">Todos</option>' + anosDG.map(a=>`<option value="${a}">${a}</option>`).join('');
+    const modalidades = [...new Set(dadosGerais.map(d => d.modalidade).filter(Boolean))].sort();
+    document.getElementById('modalidadeDG').innerHTML = '<option value="">Todas</option>' + modalidades.map(m=>`<option value="${m}">${m}</option>`).join('');
+    // Exec — usa o mesmo universo de anos da Emenda (Dados Gerais), já que a tabela de
+    // Execução agora é organizada por Ano da Emenda / Nº Emenda / Autoria / Código SIAFI.
+    document.getElementById('anoExec').innerHTML = '<option value="">Todos</option>' + anosDG.map(a=>`<option value="${a}">${a}</option>`).join('');
+    document.getElementById('modalidadeExec').innerHTML = '<option value="">Todas</option>' + modalidades.map(m=>`<option value="${m}">${m}</option>`).join('');
+    const formasRepasse = [...new Set(dadosGerais.map(d => d.tipo_instrumento).filter(Boolean))].sort();
+    document.getElementById('formaRepasseExec').innerHTML = '<option value="">Todas</option>' + formasRepasse.map(m=>`<option value="${m}">${m}</option>`).join('');
+    const funcoes = [...new Set(dadosGerais.map(d => d.funcao).filter(Boolean))].sort();
+    document.getElementById('funcaoExec').innerHTML = '<option value="">Todas</option>' + funcoes.map(m=>`<option value="${m}">${m}</option>`).join('');
+    const situacoesPlano = [...new Set(planoExecucaoData.map(p => p.situacao_plano).filter(Boolean))].sort();
+    const situacoesOpts = ['EM EXECUÇÃO FINANCEIRA', ...situacoesPlano, 'EXECUÇÃO NÃO INICIADA'];
+    document.getElementById('situacaoExec').innerHTML = '<option value="">Todas</option>' + situacoesOpts.map(m=>`<option value="${m}">${m}</option>`).join('');
+
+    // Pre-select most recent year for each dashboard
+    if (anosDG.length) {
+        document.getElementById('anoDG').value = anosDG[0];
+        filteredDG = dadosGerais.filter(d => d.ano == anosDG[0]);
+        document.getElementById('anoExec').value = anosDG[0];
+        filteredExecBase = dadosGerais.filter(d => d.codigo_siafi && d.ano == anosDG[0]);
+        filteredExec = [...execucaoData];
+    }
+    // filteredPlano permanece com o conjunto completo (usado apenas pela Consulta Unificada dentro da aba Execução)
+    filteredPlano = [...planoExecucaoData];
+}
+
+// ============================================================
+// APLICAR / LIMPAR FILTROS
+// ============================================================
+function aplicarFiltros(dash) {
+    if (dash === 'dg') {
+        const ano = document.getElementById('anoDG')?.value;
+        const mod = document.getElementById('modalidadeDG')?.value;
+        const aut = (document.getElementById('autoriaDG')?.value || '').toLowerCase();
+        const esf = (document.getElementById('esferaDG')?.value || '').toLowerCase();
+        filteredDG = dadosGerais.filter(i => {
+            if (ano && i.ano != ano) return false;
+            if (mod && i.modalidade !== mod) return false;
+            if (aut && !(i.autoria||'').toLowerCase().includes(aut)) return false;
+            if (esf && !(i.esfera||'').toLowerCase().includes(esf)) return false;
+            return true;
+        });
+        currentPage.dg = 1;
+        ordenarDados('dg'); updateDashboard1();
+    } else if (dash === 'exec') {
+        const ano  = document.getElementById('anoExec')?.value;
+        const sif  = (document.getElementById('siafiExec')?.value || '').toLowerCase();
+        const neEx = (document.getElementById('numeroEmendaExec')?.value || '').toLowerCase();
+        const aut  = (document.getElementById('autoriaExec')?.value || '').toLowerCase();
+        const mod  = document.getElementById('modalidadeExec')?.value;
+        const forma= document.getElementById('formaRepasseExec')?.value;
+        const func = document.getElementById('funcaoExec')?.value;
+        const org  = (document.getElementById('orgaoExec')?.value || '').toLowerCase();
+        const obj  = (document.getElementById('objetoExec')?.value || '').toLowerCase();
+        const cre  = (document.getElementById('credorExec')?.value || '').toLowerCase();
+        const cnpj = (document.getElementById('cnpjExec')?.value || '').toLowerCase();
+        const des  = (document.getElementById('descricaoItem')?.value || '').toLowerCase();
+
+        // Base: emendas/instrumentos com Código SIAFI (Dados Gerais) — garante que a emenda apareça
+        // na tabela mesmo quando a execução financeira (empenhos) ainda não foi iniciada.
+        filteredExecBase = dadosGerais.filter(d => {
+            if (!d.codigo_siafi) return false;
+            if (ano && d.ano != ano) return false;
+            if (sif && !(d.codigo_siafi||'').toLowerCase().includes(sif)) return false;
+            if (neEx && !(d.numero_emenda||'').toLowerCase().includes(neEx)) return false;
+            if (aut && !(d.autoria||'').toLowerCase().includes(aut)) return false;
+            if (mod && d.modalidade !== mod) return false;
+            if (forma && d.tipo_instrumento !== forma) return false;
+            if (func && d.funcao !== func) return false;
+            if (org && !(d.orgao_executor||'').toLowerCase().includes(org)) return false;
+            if (obj && !(d.objeto||'').toLowerCase().includes(obj)) return false;
+            return true;
+        });
+
+        // Empenhos (execução financeira), filtrados pelos critérios próprios de empenho/credor
+        filteredExec = execucaoData.filter(i => {
+            if (cre  && !(i.razao_social_credor||'').toLowerCase().includes(cre)) return false;
+            if (cnpj && !(i.cnpj_credor||'').toString().toLowerCase().includes(cnpj)) return false;
+            if (des  && !(i.descricao_item||'').toLowerCase().includes(des)) return false;
+            return true;
+        });
+
+        // Se houver filtro específico de empenho (Credor, CNPJ, Descrição da Despesa),
+        // restringe a base às emendas que de fato possuem empenho correspondente.
+        if (cre || cnpj || des) {
+            const siafisComEmpenho = new Set(filteredExec.map(e => (e.numero_siafi||'').toString().trim()));
+            filteredExecBase = filteredExecBase.filter(d => siafisComEmpenho.has((d.codigo_siafi||'').toString().trim()));
+        }
+
+        currentPage.exec = 1;
+        updateDashboard2();
+    }
+    iframeUpdateHeight();
+}
+
+function limparFiltros(dash) {
+    const ids = {
+        dg:    ['anoDG','modalidadeDG','autoriaDG','esferaDG','searchDG'],
+        exec:  ['anoExec','siafiExec','numeroEmendaExec','autoriaExec','modalidadeExec','formaRepasseExec','funcaoExec','orgaoExec','objetoExec','descricaoItem','situacaoExec','credorExec','cnpjExec','searchExec']
+    };
+    ids[dash].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    currentSearch[dash] = '';
+    if (dash === 'dg')    { filteredDG = [...dadosGerais]; currentPage.dg = 1; ordenarDados('dg'); updateDashboard1(); }
+    if (dash === 'exec')  { filteredExecBase = dadosGerais.filter(d => d.codigo_siafi); filteredExec = [...execucaoData]; currentPage.exec = 1; updateDashboard2(); }
+    iframeUpdateHeight();
+}
+
+// ============================================================
+// BUSCA NA TABELA
+// ============================================================
+function filtrarTabela(dash) {
+    const term = currentSearch[dash];
+    if (dash === 'dg') {
+        filteredDG = term
+            ? dadosGerais.filter(item => Object.values(item).some(v => v && v.toString().toLowerCase().includes(term)))
+            : [...dadosGerais];
+        currentPage.dg = 1;
+        ordenarDados('dg');
+        updateDashboard1();
+    } else if (dash === 'exec') {
+        const baseDG = dadosGerais.filter(d => d.codigo_siafi);
+        if (term) {
+            filteredExecBase = baseDG.filter(d => {
+                if (Object.values(d).some(v => v && v.toString().toLowerCase().includes(term))) return true;
+                const siafi = (d.codigo_siafi||'').toString().trim();
+                return execucaoData.some(e => (e.numero_siafi||'').toString().trim() === siafi &&
+                    Object.values(e).some(v => v && v.toString().toLowerCase().includes(term)));
+            });
+        } else {
+            filteredExecBase = baseDG;
+        }
+        filteredExec = [...execucaoData];
+        currentPage.exec = 1;
+        updateDashboard2();
+    }
+    iframeUpdateHeight();
+}
+
+// ============================================================
+// ORDENAÇÃO
+// ============================================================
+function ordenarTabela(dash, colIndex) {
+    const c = sortConfig[dash];
+    c.direction = (c.column === colIndex && c.direction === 'asc') ? 'desc' : 'asc';
+    c.column = colIndex;
+    ordenarDados(dash);
+    if (dash === 'dg')    updateTabelaDG();
+    if (dash === 'exec')  updateTabelaExec();
+    iframeUpdateHeight();
+}
+
+function ordenarDados(dash) {
+    const cols = {
+        dg:    ['ano','numero_emenda','codigo_siafi','esfera','autoria','valor_indicado','valor_repassado','objeto','modalidade','tipo_instrumento','funcao','orgao_executor'],
+        exec:  ['ano','numero_emenda','autoria_dg','numero_siafi','orgao_executor_dg','numero_empenho','data_empenho','data_inicio_dg','data_fim_dg','objeto_dg','descricao_item','fonte','razao_social_credor','cnpj_credor','valor_empenhado','valor_liquidado','valor_pago']
+    };
+    const c = sortConfig[dash];
+    const prop = cols[dash][c.column];
+    const data = dash === 'dg' ? filteredDG : filteredExec;
+    data.sort((a, b) => {
+        let vA = a[prop], vB = b[prop];
+        if (typeof vA === 'number') return c.direction === 'asc' ? vA - vB : vB - vA;
+        vA = (vA||'').toString().toLowerCase();
+        vB = (vB||'').toString().toLowerCase();
+        return c.direction === 'asc' ? vA.localeCompare(vB) : vB.localeCompare(vA);
+    });
+}
+
+// ============================================================
+// PAGINAÇÃO — GENÉRICA
+// ============================================================
+function renderizarPaginacao(containerId, dash, totalItems, currentPg, perPage) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const totalPages = Math.ceil(totalItems / perPage);
+    if (totalItems === 0) { container.innerHTML = ''; return; }
+    const inicio = (currentPg - 1) * perPage + 1;
+    const fim    = Math.min(currentPg * perPage, totalItems);
+    let ini = Math.max(1, currentPg - 2);
+    let fim2 = Math.min(totalPages, ini + 4);
+    let pages = '';
+    for (let i = ini; i <= fim2; i++) {
+        pages += `<li class="page-item ${i===currentPg?'active':''}">
+            <a class="page-link" href="#" onclick="mudarPagina('${dash}',${i});return false;">${i}</a></li>`;
+    }
+    container.innerHTML = `
+        <div class="d-flex align-items-center justify-content-center gap-3 w-100 flex-wrap">
+            <div class="pagination-info">${inicio}–${fim} de ${totalItems.toLocaleString()} registros</div>
+            <nav><ul class="pagination mb-0">
+                <li class="page-item ${currentPg===1?'disabled':''}">
+                    <a class="page-link" href="#" onclick="mudarPagina('${dash}',${currentPg-1});return false;">«</a></li>
+                ${pages}
+                <li class="page-item ${currentPg===totalPages?'disabled':''}">
+                    <a class="page-link" href="#" onclick="mudarPagina('${dash}',${currentPg+1});return false;">»</a></li>
+            </ul></nav>
+            <select class="items-per-page" onchange="alterarItensPorPagina('${dash}',this.value)">
+                <option value="10" ${perPage==10?'selected':''}>10</option>
+                <option value="25" ${perPage==25?'selected':''}>25</option>
+                <option value="50" ${perPage==50?'selected':''}>50</option>
+                <option value="100" ${perPage==100?'selected':''}>100</option>
+            </select>
+        </div>`;
+}
+
+window.mudarPagina = function(dash, pg) {
+    const data = dash==='dg' ? resumoAutoriaFull : execAgregadoFull;
+    const total = Math.ceil(data.length / itemsPerPage[dash]);
+    if (pg < 1 || pg > total) return;
+    currentPage[dash] = pg;
+    if (dash==='dg')    updateTabelaDG();
+    if (dash==='exec')  updateTabelaExec();
+    iframeUpdateHeight();
+};
+
+window.alterarItensPorPagina = function(dash, v) {
+    itemsPerPage[dash] = parseInt(v);
+    currentPage[dash] = 1;
+    if (dash==='dg')    updateTabelaDG();
+    if (dash==='exec')  updateTabelaExec();
+    iframeUpdateHeight();
+};
+
+// ============================================================
+// DASHBOARD 1 — VISÃO GERAL
+// ============================================================
+function updateDashboard1() { updateCardsDG(); updateTabelaDG(); }
+
+// ============================================================
+// RESUMO POR AUTORIA — TABELA PRINCIPAL DA VISÃO GERAL
+// ============================================================
+function agregarDimensao(lista, campo, maxItens) {
+    const vals = [...new Set(lista.map(x => x[campo]).filter(Boolean))];
+    if (vals.length === 0) return '-';
+    if (vals.length === 1) return vals[0];
+    const preview = vals.slice(0, maxItens || 2).join(', ');
+    return `<span title="${vals.join(' | ').replace(/"/g,'&quot;')}">Diversos (${vals.length}): ${truncar(preview,40)}</span>`;
+}
+
+let resumoAutoriaSort = { field: 'valInd', dir: 'desc' };
+
+function calcularResumoAutoria() {
+    const grupos = {};
+    filteredDG.forEach(d => {
+        const k = d.autoria || 'Não informado';
+        if (!grupos[k]) grupos[k] = [];
+        grupos[k].push(d);
+    });
+    const linhas = Object.entries(grupos).map(([autoria, itens]) => {
+        const valInd = itens.reduce((s,i)=>s+(i.valor_indicado||0),0);
+        const valRep = itens.reduce((s,i)=>s+(i.valor_repassado||0),0);
+        const pct = valInd ? parseFloat(((valRep/valInd)*100).toFixed(1)) : 0;
+        return { autoria, itens, n: itens.length, valInd, valRep, pct };
+    });
+    const { field, dir } = resumoAutoriaSort;
+    linhas.sort((a,b) => {
+        let va = a[field], vb = b[field];
+        if (typeof va === 'string') { va = va.toLowerCase(); vb = vb.toLowerCase(); return dir === 'asc' ? va.localeCompare(vb) : vb.localeCompare(va); }
+        return dir === 'asc' ? va - vb : vb - va;
+    });
+    return linhas;
+}
+
+function ordenarResumoAutoria(field) {
+    if (resumoAutoriaSort.field === field) {
+        resumoAutoriaSort.dir = resumoAutoriaSort.dir === 'asc' ? 'desc' : 'asc';
+    } else {
+        resumoAutoriaSort = { field, dir: field === 'autoria' ? 'asc' : 'desc' };
+    }
+    currentPage.dg = 1;
+    updateTabelaDG();
+}
+
+function updateCardsDG() {
+    const c = document.getElementById('summaryCardsDG');
+    if (!c) return;
+    if (!filteredDG.length) { c.innerHTML = '<div class="col-12 text-center text-muted">Nenhum dado encontrado.</div>'; return; }
+    const totalInd  = filteredDG.reduce((s,i) => s+(i.valor_indicado||0), 0);
+    const totalRep  = filteredDG.reduce((s,i) => s+(i.valor_repassado||0), 0);
+    const mods      = new Set(filteredDG.map(d=>d.modalidade)).size;
+    c.innerHTML = `
+        <div class="col-md-3 col-6"><div class="metric-card">
+            <div class="metric-header">Total de Emendas <i class="material-icons" data-bs-toggle="tooltip" title="Quantidade total de emendas">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${filteredDG.length.toLocaleString('pt-BR')}</div></div>
+        </div></div>
+        <div class="col-md-3 col-6"><div class="metric-card">
+            <div class="metric-header">Valor Indicado <i class="material-icons" data-bs-toggle="tooltip" title="Valor total indicado">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${formatarMoeda(totalInd)}</div></div>
+        </div></div>
+        <div class="col-md-3 col-6"><div class="metric-card">
+            <div class="metric-header">Valor Repassado <i class="material-icons" data-bs-toggle="tooltip" title="Valor total repassado">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${formatarMoeda(totalRep)}</div></div>
+        </div></div>
+        <div class="col-md-3 col-6"><div class="metric-card">
+            <div class="metric-header">Modalidades <i class="material-icons" data-bs-toggle="tooltip" title="Modalidades distintas">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${mods}</div></div>
+        </div></div>`;
+    setTimeout(() => document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el)), 100);
+}
+
+let resumoAutoriaFull = [];
+function updateTabelaDG() {
+    const tbody = document.getElementById('tabelaDGBody');
+    const countEl = document.getElementById('countDG');
+    resumoAutoriaFull = calcularResumoAutoria();
+    if (!resumoAutoriaFull.length) {
+        if (tbody) tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
+        if (countEl) countEl.textContent = '0 registros';
+        renderizarPaginacao('paginacaoDG','dg',0,1,itemsPerPage.dg); return;
+    }
+    const start = (currentPage.dg - 1) * itemsPerPage.dg;
+    const data  = resumoAutoriaFull.slice(start, start + itemsPerPage.dg);
+    tbody.innerHTML = data.map(l => {
+        const autoriaSafe = l.autoria.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        return `
+        <tr>
+            <td><a href="javascript:void(0)" onclick="irParaExecucaoPorAutoria('${autoriaSafe}')" title="Ver todas as execuções deste autor" style="color:#1a3a5c;font-weight:600;text-decoration:underline dotted;cursor:pointer;">${truncar(l.autoria,35)}</a></td>
+            <td>${agregarDimensao(l.itens,'esfera')}</td>
+            <td>${agregarDimensao(l.itens,'modalidade')}</td>
+            <td style="text-align:right;">${l.n}</td>
+            <td class="valor-monetario">${formatarMoeda(l.valInd)}</td>
+            <td class="valor-monetario">${formatarMoeda(l.valRep)}</td>
+            <td style="text-align:right;">${l.pct}%</td>
+            <td style="text-align:center;">
+                <button class="btn-action" onclick="irParaExecucaoPorAutoria('${autoriaSafe}')" title="Ver execuções deste autor">
+                    <i class="material-icons">receipt</i>
+                </button>
+            </td>
+        </tr>`;
+    }).join('');
+    if (countEl) countEl.textContent = `${resumoAutoriaFull.length.toLocaleString()} autor(es)`;
+    renderizarPaginacao('paginacaoDG','dg',resumoAutoriaFull.length,currentPage.dg,itemsPerPage.dg);
+}
+
+// (Removido: modal de emendas por autor — clicar na autoria agora navega direto para a aba Execução, filtrada por aquele autor.)
+window.mostrarDetalhesDG = function(item) {
+    // Execução vinculada: codigo_siafi (DG) == numero_siafi (Exec)
+    const execRel = execucaoData.filter(e =>
+        e.numero_siafi && item.codigo_siafi &&
+        e.numero_siafi.toString().trim() === item.codigo_siafi.toString().trim()
+    );
+
+    // --- Seção Execução ---
+    const execHtml = execRel.length ? `
+        <div class="objeto-container" style="margin-top:12px;">
+            <div class="objeto-title"><i class="material-icons">receipt</i>EXECUÇÃO TRANSFERÊNCIAS PIX VINCULADA (${execRel.length} registro${execRel.length>1?'s':''})</div>
+            <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">
+                <thead>
+                    <tr style="background:#54697b;color:white;">
+                        <th style="padding:8px 10px;">CÓD. SIAFI</th>
+                        <th style="padding:8px 10px;">Nº Empenho</th>
+                        <th style="padding:8px 10px;">Data Empenho</th>
+                        <th style="padding:8px 10px;">CNPJ/CPF Credor</th>
+                        <th style="padding:8px 10px;">Credor</th>
+                        <th style="padding:8px 10px;text-align:right;">Vl. Empenhado</th>
+                        <th style="padding:8px 10px;text-align:right;">Vl. Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${execRel.map((e,idx)=>`
+                    <tr style="background:${idx%2===0?'#fff':'#f8f9fa'}">
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${linkSiafi(e.numero_siafi)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${e.numero_empenho||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${formatarData(e.data_empenho)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${formatarCNPJ(e.cnpj_credor)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;">${e.razao_social_credor||'-'}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(e.valor_empenhado)}</td>
+                        <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(e.valor_pago)}</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+            </div>
+        </div>` : `<div class="objeto-container" style="margin-top:12px;"><div class="objeto-title"><i class="material-icons">receipt</i>EXECUÇÃO TRANSFERÊNCIAS PIX VINCULADA</div><div class="objeto-text" style="color:#94a3b8;">Nenhuma execução encontrada para o CÓD. SIAFI <strong>${item.codigo_siafi||'N/D'}</strong>.</div></div>`;
+
+    document.getElementById('detailModalLabel').innerHTML = `<i class="material-icons me-2">description</i>Detalhes da Emenda — ${item.numero_emenda||'N/D'}`;
+    document.getElementById('detalhesConteudo').innerHTML = `
+        <div style="background:#e8f0fe;border-left:4px solid #1a3a5c;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#1a3a5c;">
+            <i class="material-icons" style="font-size:14px;vertical-align:middle;">info</i>
+            <strong>Dados Gerais</strong> — vincula à Execução pelo <strong>CÓD. SIAFI</strong>.
+        </div>
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-label">Nº Emenda</div><div class="info-value highlight">${item.numero_emenda||'-'}</div>
+                <div class="info-label" style="margin-top:8px;">Ano</div><div class="info-value">${item.ano||'-'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Esfera</div><div class="info-value">${item.esfera||'-'}</div>
+                <div class="info-label" style="margin-top:8px;">Modalidade</div><div class="info-value">${item.modalidade||'-'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Autoria</div><div class="info-value">${item.autoria ? `<a href="javascript:void(0)" onclick="irParaExecucaoPorAutoria('${(item.autoria||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')}')" style="color:#1a3a5c;font-weight:600;text-decoration:underline dotted;cursor:pointer;" title="Ver execuções deste autor">${item.autoria}</a>` : '-'}</div>
+                <div class="info-label" style="margin-top:8px;">CÓD. SIAFI</div><div class="info-value highlight">${linkSiafi(item.codigo_siafi)}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Data Início</div><div class="info-value">${formatarData(item.data_inicio)}</div>
+                <div class="info-label" style="margin-top:8px;">Data Fim</div><div class="info-value">${formatarData(item.data_fim)}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Inteiro Teor da Emenda / Documento de Repasse</div><div class="info-value highlight">${linkDocumento(item.link)}</div>
+            </div>
+        </div>
+        <div class="info-grid">
+            <div class="info-card"><div class="info-label">Valor Indicado</div><div class="info-value">${formatarMoeda(item.valor_indicado)}</div></div>
+            <div class="info-card"><div class="info-label">Valor Repassado</div><div class="info-value">${formatarMoeda(item.valor_repassado)}</div></div>
+        </div>
+        <div class="objeto-container">
+            <div class="objeto-title"><i class="material-icons">subject</i>OBJETO</div>
+            <div class="objeto-text">${item.objeto||'Objeto não informado.'}</div>
+        </div>
+        ${execHtml}`;
+    new bootstrap.Modal(document.getElementById('detailModal')).show();
+};
+
+// ============================================================
+// DASHBOARD 2 — EXECUÇÃO
+// ============================================================
+function updateDashboard2() { updateCardsExec(); updateAnalysisExec(); updateUnificadoSiafi(); updateTabelaExec(); }
+
+// ============================================================
+// CONSULTA UNIFICADA — PLANO DE EXECUÇÃO × EXECUÇÃO FINANCEIRA (chave: Nº SIAFI)
+// ============================================================
+let unificadoDataFull = [];
+function updateUnificadoSiafi() {
+    const grupos = {};
+    filteredExec.forEach(e => {
+        const k = (e.numero_siafi||'').toString().trim();
+        if (!k) return;
+        if (!grupos[k]) grupos[k] = { siafi:k, empenhado:0, liquidado:0, pago:0, n:0 };
+        grupos[k].empenhado += (e.valor_empenhado||0);
+        grupos[k].liquidado += (e.valor_liquidado||0);
+        grupos[k].pago += (e.valor_pago||0);
+        grupos[k].n++;
+    });
+    const rows = Object.values(grupos).map(g => {
+        const dg = siafiToDG[g.siafi];
+        const planos = planoExecucaoData.filter(p => p.codigo_siafi_rel === g.siafi);
+        const situacoes = [...new Set(planos.map(p=>p.situacao_plano).filter(Boolean))];
+        const executores = [...new Set(planos.map(p=>p.nome_executor).filter(Boolean))];
+        const beneficiarios = [...new Set(planos.map(p=>p.beneficiario).filter(Boolean))];
+        return {
+            siafi: g.siafi,
+            numero_emenda: dg ? dg.numero_emenda : '-',
+            autoria: dg ? dg.autoria : '-',
+            situacao: situacoes.join(', ') || null,
+            executor: executores.join('; '),
+            beneficiario: beneficiarios.join('; '),
+            valor_emenda: dg ? (dg.valor_indicado||0) : (planos[0] ? (planos[0].valor_emenda||0) : 0),
+            empenhado: g.empenhado, liquidado: g.liquidado, pago: g.pago,
+            link: dg ? dg.link : ''
+        };
+    });
+    rows.sort((a,b) => b.pago - a.pago);
+    unificadoDataFull = rows;
+    renderUnificado(rows);
+}
+
+function renderUnificado(rows) {
+    const tbody = document.getElementById('tabelaUnificadoBody');
+    const countEl = document.getElementById('countUnificado');
+    if (!tbody) return;
+    if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="11" class="text-center text-muted">Nenhum registro encontrado.</td></tr>';
+        if (countEl) countEl.textContent = '';
+        return;
+    }
+    tbody.innerHTML = rows.map(r => `
+        <tr>
+            <td style="white-space:nowrap">${linkSiafi(r.siafi)}</td>
+            <td style="white-space:nowrap">${r.numero_emenda||'-'}</td>
+            <td>${truncar(r.autoria,25)}</td>
+            <td>${r.situacao ? statusBadge(r.situacao) : '<span style="color:#94a3b8;">Sem plano vinculado</span>'}</td>
+            <td>${truncar(r.executor,30)||'-'}</td>
+            <td>${truncar(r.beneficiario,30)||'-'}</td>
+            <td style="text-align:right;">${formatarMoeda(r.valor_emenda)}</td>
+            <td style="text-align:right;">${formatarMoeda(r.empenhado)}</td>
+            <td style="text-align:right;">${formatarMoeda(r.liquidado)}</td>
+            <td style="text-align:right;">${formatarMoeda(r.pago)}</td>
+            <td style="white-space:nowrap">${linkDocumento(r.link)}</td>
+        </tr>`).join('');
+    if (countEl) countEl.textContent = `${rows.length.toLocaleString('pt-BR')} Nº SIAFI distintos — agregando ${filteredExec.length.toLocaleString('pt-BR')} registros de execução filtrados`;
+}
+
+function updateCardsExec() {
+    const c = document.getElementById('summaryCardsExec');
+    if (!c) return;
+    if (!filteredExec.length) { c.innerHTML = '<div class="col-12 text-center text-muted">Nenhum dado encontrado.</div>'; return; }
+    const totalEmp = filteredExec.reduce((s,i)=>s+(i.valor_empenhado||0),0);
+    const totalLiq = filteredExec.reduce((s,i)=>s+(i.valor_liquidado||0),0);
+    const totalPago = filteredExec.reduce((s,i)=>s+(i.valor_pago||0),0);
+    const taxaLiq = totalEmp ? ((totalLiq/totalEmp)*100).toFixed(1) : 0;
+    const taxaPago = totalLiq ? ((totalPago/totalLiq)*100).toFixed(1) : 0;
+    const credores = new Set(filteredExec.map(d=>d.cnpj_credor)).size;
+    const empenhos = new Set(filteredExec.map(d=>d.numero_empenho)).size;
+    c.innerHTML = `
+        <div class="col-md-3 col-6"><div class="metric-card">
+            <div class="metric-header">Total de Registros <i class="material-icons" data-bs-toggle="tooltip" title="Quantidade total de registros">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${filteredExec.length.toLocaleString('pt-BR')}</div></div>
+        </div></div>
+        <div class="col-md-3 col-6"><div class="metric-card">
+            <div class="metric-header">Total Empenhado <i class="material-icons" data-bs-toggle="tooltip" title="Valor total empenhado">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${formatarMoeda(totalEmp)}</div></div>
+        </div></div>
+        <div class="col-md-3 col-6"><div class="metric-card">
+            <div class="metric-header">Total Liquidado <i class="material-icons" data-bs-toggle="tooltip" title="Valor total liquidado — item 17.3">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${formatarMoeda(totalLiq)}</div></div>
+        </div></div>
+        <div class="col-md-3 col-6"><div class="metric-card">
+            <div class="metric-header">Total Pago <i class="material-icons" data-bs-toggle="tooltip" title="Valor total pago">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${formatarMoeda(totalPago)}</div></div>
+        </div></div>
+        <div class="col-md-4 col-6" style="margin-top:14px;"><div class="metric-card">
+            <div class="metric-header">Taxa de Liquidação <i class="material-icons" data-bs-toggle="tooltip" title="Percentual liquidado sobre o empenhado">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${taxaLiq}%</div></div>
+        </div></div>
+        <div class="col-md-4 col-6" style="margin-top:14px;"><div class="metric-card">
+            <div class="metric-header">Taxa de Pagamento <i class="material-icons" data-bs-toggle="tooltip" title="Percentual pago sobre o liquidado">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${taxaPago}%</div></div>
+        </div></div>
+        <div class="col-md-4 col-12" style="margin-top:14px;"><div class="metric-card">
+            <div class="metric-header">Credores / Empenhos <i class="material-icons" data-bs-toggle="tooltip" title="Credores distintos e número de empenhos distintos">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${credores.toLocaleString('pt-BR')} <span style="font-size:13px;color:#94a3b8;font-weight:600;">/ ${empenhos.toLocaleString('pt-BR')} empenhos</span></div></div>
+        </div></div>`;
+    setTimeout(() => document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el)), 100);
+}
+
+// ============================================================
+// PAINEL DE ANÁLISE — EXECUÇÃO PIX (gráfico + rankings)
+// ============================================================
+let chartExecAnoInstance = null;
+function updateAnalysisExec() {
+    if (!filteredExec.length) {
+        const rk = document.getElementById('rankingCredoresExec');
+        if (rk) rk.innerHTML = '<div class="text-muted" style="font-size:12px;">Nenhum dado encontrado.</div>';
+        ['tabelaFonteExec','tabelaModalidadeExec'].forEach(id=>{ const t=document.getElementById(id); if(t) t.querySelector('tbody').innerHTML=''; });
+        if (chartExecAnoInstance) { chartExecAnoInstance.destroy(); chartExecAnoInstance = null; }
+        return;
+    }
+    // --- Gráfico: Empenhado x Liquidado x Pago por Ano ---
+    const porAno = {};
+    filteredExec.forEach(i => {
+        const a = i.ano || 'N/D';
+        if (!porAno[a]) porAno[a] = { empenhado:0, liquidado:0, pago:0 };
+        porAno[a].empenhado += (i.valor_empenhado||0);
+        porAno[a].liquidado += (i.valor_liquidado||0);
+        porAno[a].pago += (i.valor_pago||0);
+    });
+    const anos = Object.keys(porAno).sort();
+    const canvas = document.getElementById('chartExecAno');
+    if (canvas && window.Chart) {
+        if (chartExecAnoInstance) chartExecAnoInstance.destroy();
+        chartExecAnoInstance = new Chart(canvas.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: anos,
+                datasets: [
+                    { label: 'Empenhado', data: anos.map(a=>porAno[a].empenhado), backgroundColor: '#94a3b8' },
+                    { label: 'Liquidado', data: anos.map(a=>porAno[a].liquidado), backgroundColor: '#1a3a5c' },
+                    { label: 'Pago',      data: anos.map(a=>porAno[a].pago),      backgroundColor: '#db233f' }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } },
+                    tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${formatarMoeda(ctx.raw)}` } } },
+                scales: { y: { ticks: { callback: v => new Intl.NumberFormat('pt-BR',{notation:'compact',compactDisplay:'short'}).format(v), font:{size:10} } },
+                          x: { ticks: { font:{size:11} } } }
+            }
+        });
+    }
+
+    // --- Ranking Top Credores por Valor Pago ---
+    const porCredor = {};
+    filteredExec.forEach(i => {
+        const k = i.razao_social_credor || 'Não informado';
+        porCredor[k] = (porCredor[k]||0) + (i.valor_pago||0);
+    });
+    const topCredores = Object.entries(porCredor).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    const maxCredor = topCredores.length ? topCredores[0][1] : 1;
+    const rk = document.getElementById('rankingCredoresExec');
+    if (rk) {
+        rk.innerHTML = topCredores.map(([nome,val],idx) => `
+            <div class="ranking-item">
+                <div class="ranking-pos">${idx+1}</div>
+                <div class="ranking-info">
+                    <div class="ranking-name" title="${nome}">${nome}</div>
+                    <div class="ranking-bar-track"><div class="ranking-bar-fill" style="width:${maxCredor?(val/maxCredor*100):0}%"></div></div>
+                </div>
+                <div class="ranking-value">${formatarMoeda(val)}</div>
+            </div>`).join('') || '<div class="text-muted" style="font-size:12px;">Sem dados de credores.</div>';
+    }
+
+    // --- Distribuição por Fonte ---
+    const porFonte = {};
+    filteredExec.forEach(i => {
+        const k = i.fonte || 'Não informado';
+        if (!porFonte[k]) porFonte[k] = { n:0, liq:0 };
+        porFonte[k].n++; porFonte[k].liq += (i.valor_liquidado||0);
+    });
+    const fonteRows = Object.entries(porFonte).sort((a,b)=>b[1].liq-a[1].liq).slice(0,8);
+    const tFonte = document.querySelector('#tabelaFonteExec tbody');
+    if (tFonte) tFonte.innerHTML = fonteRows.map(([f,v])=>`<tr><td>${f}</td><td style="text-align:right;">${v.n}</td><td style="text-align:right;">${formatarMoeda(v.liq)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-muted">Sem dados.</td></tr>';
+
+    // --- Distribuição por Modalidade ---
+    const porModalidade = {};
+    filteredExec.forEach(i => {
+        const k = i.modalidade || 'Não informado';
+        if (!porModalidade[k]) porModalidade[k] = { n:0, liq:0 };
+        porModalidade[k].n++; porModalidade[k].liq += (i.valor_liquidado||0);
+    });
+    const modRows = Object.entries(porModalidade).sort((a,b)=>b[1].liq-a[1].liq).slice(0,8);
+    const tMod = document.querySelector('#tabelaModalidadeExec tbody');
+    if (tMod) tMod.innerHTML = modRows.map(([m,v])=>`<tr><td>${m}</td><td style="text-align:right;">${v.n}</td><td style="text-align:right;">${formatarMoeda(v.liq)}</td></tr>`).join('') || '<tr><td colspan="3" class="text-muted">Sem dados.</td></tr>';
+}
+
+// ============================================================
+// EXECUÇÃO TRANSFERÊNCIAS PIX — AGREGAÇÃO POR Nº SIAFI / EMENDA
+// (cada linha da tabela = uma emenda/instrumento; os empenhos individuais
+//  ficam disponíveis no detalhe, ao clicar em Ações)
+// ============================================================
+let execAgregadoSort = { field: 'pago', dir: 'desc' };
+let execAgregadoFull  = [];
+let execAgregadoMap   = {};
+let execColVisible    = { credor: false, cnpj: false, situacao: false };
+
+function toggleColExecExtra(key, show) {
+    execColVisible[key] = show;
+    const thMap = { credor: 'thExecCredor', cnpj: 'thExecCnpj', situacao: 'thExecSituacao' };
+    const th = document.getElementById(thMap[key]);
+    if (th) th.style.display = show ? '' : 'none';
+    updateTabelaExec();
+}
+
+// Resolve credor/beneficiário de forma consistente entre a tabela e o modal:
+// usa o credor real do empenho quando a execução já começou; senão, usa o
+// beneficiário previsto no Plano de Execução (deixando claro que é uma previsão).
+function resolverCredorInfo(itens, planos) {
+    if (itens.length) {
+        const map = {};
+        itens.forEach(i => {
+            const nome = i.razao_social_credor || 'Não informado';
+            const key = nome + '|' + (i.cnpj_credor||'');
+            if (!map[key]) map[key] = { nome, cnpj: i.cnpj_credor };
+        });
+        return { origem: 'execucao', lista: Object.values(map) };
+    }
+    if (planos.length) {
+        const map = {};
+        planos.forEach(p => {
+            const nome = p.beneficiario || 'Não informado';
+            const key = nome + '|' + (p.cnpj_beneficiario||'');
+            if (!map[key]) map[key] = { nome, cnpj: p.cnpj_beneficiario };
+        });
+        return { origem: 'plano', lista: Object.values(map) };
+    }
+    return { origem: 'nenhum', lista: [] };
+}
+
+function calcularAgregadoExec() {
+    const linhas = filteredExecBase.map(dg => {
+        const k = (dg.codigo_siafi||'').toString().trim();
+        const itens  = filteredExec.filter(e => (e.numero_siafi||'').toString().trim() === k);
+        const planos = siafiToPlanos[k] || [];
+        const empenhado = itens.reduce((s,i)=>s+(i.valor_empenhado||0),0);
+        const liquidado = itens.reduce((s,i)=>s+(i.valor_liquidado||0),0);
+        const pago      = itens.reduce((s,i)=>s+(i.valor_pago||0),0);
+        const iniciouExecucao = itens.length > 0;
+        const situacoesPlano = [...new Set(planos.map(p=>p.situacao_plano).filter(Boolean))];
+        let situacao;
+        if (iniciouExecucao) situacao = 'EM EXECUÇÃO FINANCEIRA';
+        else if (planos.length) situacao = situacoesPlano.join(', ') || 'CIENTE';
+        else situacao = 'EXECUÇÃO NÃO INICIADA';
+        const credorInfo = resolverCredorInfo(itens, planos);
+        const credorDisplay = credorInfo.lista.length
+            ? (credorInfo.lista.length === 1 ? credorInfo.lista[0].nome : `Diversos (${credorInfo.lista.length})`)
+            : '-';
+        const cnpjDisplay = credorInfo.lista.length
+            ? (credorInfo.lista.length === 1 ? formatarCNPJ(credorInfo.lista[0].cnpj) : credorInfo.lista.map(c=>formatarCNPJ(c.cnpj)).join(', '))
+            : '-';
+        return {
+            siafi: k,
+            itens, planos,
+            n: itens.length,
+            iniciouExecucao,
+            situacao,
+            credorInfo, credorDisplay, cnpjDisplay,
+            ano: dg.ano,
+            numero_emenda: dg.numero_emenda,
+            autoria: dg.autoria,
+            modalidade: dg.modalidade,
+            tipo_instrumento: dg.tipo_instrumento,
+            funcao: dg.funcao,
+            orgao_executor: dg.orgao_executor || [...new Set(planos.map(p=>p.nome_executor).filter(Boolean))].join('; '),
+            objeto: dg.objeto || [...new Set(planos.map(p=>p.objeto).filter(Boolean))].join(' | '),
+            descricao_item: itens.length ? agregarDimensao(itens,'descricao_item') : '',
+            data_inicio: dg.data_inicio,
+            data_fim: dg.data_fim,
+            valor_indicado: dg.valor_indicado||0,
+            empenhado, liquidado, pago,
+            link: dg.link
+        };
+    });
+    const situacaoFiltro = document.getElementById('situacaoExec')?.value || '';
+    const linhasFiltradas = situacaoFiltro ? linhas.filter(l => l.situacao === situacaoFiltro) : linhas;
+    const { field, dir } = execAgregadoSort;
+    linhasFiltradas.sort((a,b) => {
+        let va = a[field], vb = b[field];
+        if (typeof va === 'number' || typeof vb === 'number') {
+            va = va || 0; vb = vb || 0;
+            return dir === 'asc' ? va - vb : vb - va;
+        }
+        va = (va||'').toString().toLowerCase();
+        vb = (vb||'').toString().toLowerCase();
+        return dir === 'asc' ? va.localeCompare(vb) : vb.localeCompare(va);
+    });
+    execAgregadoMap = {};
+    linhasFiltradas.forEach(l => { execAgregadoMap[l.siafi] = l; });
+    return linhasFiltradas;
+}
+
+function ordenarAgregadoExec(field) {
+    if (execAgregadoSort.field === field) {
+        execAgregadoSort.dir = execAgregadoSort.dir === 'asc' ? 'desc' : 'asc';
+    } else {
+        execAgregadoSort = { field, dir: ['ano','numero_emenda','autoria','siafi'].includes(field) ? 'asc' : 'desc' };
+    }
+    currentPage.exec = 1;
+    updateTabelaExec();
+}
+
+function updateTabelaExec() {
+    const tbody = document.getElementById('tabelaExecBody');
+    const countEl = document.getElementById('countExec');
+    execAgregadoFull = calcularAgregadoExec();
+    if (!execAgregadoFull.length) {
+        if (tbody) tbody.innerHTML = '<tr><td colspan="20" class="text-center text-muted">Nenhuma emenda encontrada para os filtros selecionados.</td></tr>';
+        if (countEl) countEl.textContent = '0 registros';
+        renderizarPaginacao('paginacaoExec','exec',0,1,itemsPerPage.exec); return;
+    }
+    const start = (currentPage.exec - 1) * itemsPerPage.exec;
+    const data  = execAgregadoFull.slice(start, start + itemsPerPage.exec);
+    const dCredor   = execColVisible.credor   ? '' : 'display:none;';
+    const dCnpj     = execColVisible.cnpj     ? '' : 'display:none;';
+    const dSituacao = execColVisible.situacao ? '' : 'display:none;';
+    tbody.innerHTML = data.map(g => {
+        const siafiSafe   = (g.siafi||'').replace(/'/g,"\\'");
+        const descTxt = g.descricao_item || (g.iniciouExecucao ? '-' : '<span style="color:#94a3b8;">—</span>');
+        const empenhadoCel = g.iniciouExecucao ? formatarMoeda(g.empenhado) : '<span style="color:#94a3b8;">—</span>';
+        const liquidadoCel = g.iniciouExecucao ? formatarMoeda(g.liquidado) : '<span style="color:#94a3b8;">—</span>';
+        const pagoCel      = g.iniciouExecucao ? formatarMoeda(g.pago)      : '<span style="color:#94a3b8;">—</span>';
+        return `
+        <tr>
+            <td>${g.ano||'-'}</td>
+            <td>${g.numero_emenda||'-'}</td>
+            <td>${g.autoria ? `<a href="javascript:void(0)" onclick="mostrarDetalhesExecAgregado('${siafiSafe}')" style="color:#1a3a5c;font-weight:600;text-decoration:underline dotted;cursor:pointer;" title="Ver detalhes desta execução">${truncar(g.autoria,30)}</a>` : '-'}</td>
+            <td style="white-space:nowrap">${linkSiafi(g.siafi)}</td>
+            <td>${g.modalidade||'-'}</td>
+            <td>${g.tipo_instrumento||'-'}</td>
+            <td>${g.funcao||'-'}</td>
+            <td>${truncar(g.orgao_executor,25)}</td>
+            <td title="${(g.objeto||'').replace(/"/g,'&quot;')}">${truncar(g.objeto,40)}</td>
+            <td title="${(g.descricao_item||'').replace(/"/g,'&quot;')}">${descTxt}</td>
+            <td style="white-space:nowrap">${formatarData(g.data_inicio)}</td>
+            <td style="white-space:nowrap">${formatarData(g.data_fim)}</td>
+            <td class="valor-monetario">${formatarMoeda(g.valor_indicado)}</td>
+            <td class="valor-monetario" style="white-space:nowrap">${empenhadoCel}</td>
+            <td class="valor-monetario">${liquidadoCel}</td>
+            <td class="valor-monetario">${pagoCel}</td>
+            <td style="${dCredor}" title="${(g.credorDisplay||'').replace(/"/g,'&quot;')}">${truncar(g.credorDisplay,25)}</td>
+            <td style="${dCnpj}white-space:nowrap">${g.cnpjDisplay||'-'}</td>
+            <td style="${dSituacao}white-space:nowrap">${statusBadge(g.situacao)}</td>
+            <td style="text-align:center;">
+                <button class="btn-action" onclick="mostrarDetalhesExecAgregado('${siafiSafe}')" title="Ver Detalhes">
+                    <i class="material-icons">visibility</i>
+                </button>
+            </td>
+        </tr>`;
+    }).join('');
+    const nComExecucao = execAgregadoFull.filter(g=>g.iniciouExecucao).length;
+    if (countEl) countEl.textContent = `${execAgregadoFull.length.toLocaleString('pt-BR')} emendas/instrumentos (${nComExecucao.toLocaleString('pt-BR')} já em execução financeira)`;
+    renderizarPaginacao('paginacaoExec','exec',execAgregadoFull.length,currentPage.exec,itemsPerPage.exec);
+}
+
+window.mostrarDetalhesExecAgregado = function(siafi) {
+    const g = execAgregadoMap[(siafi||'').toString().trim()];
+    if (!g) return;
+    const itens  = g.itens  || [];
+    const planos = g.planos || [];
+    const autoriaSafe = (g.autoria||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+
+    // --- Banner de status ---
+    const bannerCfg = g.iniciouExecucao
+        ? { bg:'#e8f0fe', bd:'#1a3a5c', cor:'#1a3a5c', txt:`<strong>Execução financeira em andamento</strong> — dados consolidados desta emenda/instrumento (Nº SIAFI ${g.siafi||'N/D'}), somando ${g.n} empenho${g.n===1?'':'s'}.` }
+        : (planos.length
+            ? { bg:'#fff8e6', bd:'#a9660b', cor:'#7a4a06', txt:`<strong>Execução financeira ainda não iniciada</strong> — esta emenda já possui Plano de Execução cadastrado (situação: ${statusBadge(g.situacao)}), mas ainda não há empenhos registrados no SIAFI para o Nº SIAFI ${g.siafi||'N/D'}.` }
+            : { bg:'#f1f3f5', bd:'#6c757d', cor:'#495057', txt:`<strong>Execução não iniciada</strong> — Código SIAFI Nº ${g.siafi||'N/D'}.` });
+
+    // --- Credor / Beneficiário — execução real (razão social/CNPJ) ou, na ausência dela, o beneficiário previsto no Plano ---
+    const credorInfo = resolverCredorInfo(itens, planos);
+    let credorHtml;
+    if (credorInfo.origem === 'execucao') {
+        const lista = credorInfo.lista;
+        credorHtml = lista.length === 1
+            ? `<div class="info-card"><div class="info-label">Credor</div><div class="info-value">${lista[0].nome}</div>
+                 <div class="info-label" style="margin-top:8px;">CNPJ/CPF Credor</div><div class="info-value">${formatarCNPJ(lista[0].cnpj)}</div></div>`
+            : tabelaSimples(['Credor','CNPJ/CPF'], lista.map(c=>[c.nome, formatarCNPJ(c.cnpj)]));
+    } else if (credorInfo.origem === 'plano') {
+        const lista = credorInfo.lista;
+        const notaPlano = `<div class="objeto-text" style="color:#94a3b8;font-size:11px;margin-bottom:6px;">Beneficiário previsto no Plano de Execução — a execução financeira ainda não foi iniciada.</div>`;
+        credorHtml = notaPlano + (lista.length === 1
+            ? `<div class="info-card"><div class="info-label">Beneficiário (Plano)</div><div class="info-value">${lista[0].nome}</div>
+                 <div class="info-label" style="margin-top:8px;">CNPJ/CPF</div><div class="info-value">${formatarCNPJ(lista[0].cnpj)}</div></div>`
+            : tabelaSimples(['Beneficiário (Plano)','CNPJ/CPF'], lista.map(c=>[c.nome, formatarCNPJ(c.cnpj)])));
+    } else {
+        credorHtml = `<div class="info-card"><div class="info-label">Credor</div><div class="info-value" style="color:#94a3b8;">Não disponível ainda</div></div>`;
+    }
+
+    // --- QUADRO OBJETO: detalhamento Elemento/Item/Descrição da Despesa (só existe após início da execução) ---
+    let despesaDetalheHtml;
+    if (itens.length) {
+        const combosMap = {};
+        itens.forEach(i => {
+            const key = (i.elemento_despesa||'') + '|' + (i.item_despesa||'') + '|' + (i.descricao_item||'');
+            if (!combosMap[key]) combosMap[key] = { elemento: i.elemento_despesa||'-', item: i.item_despesa||'-', descricao: i.descricao_item||'-' };
+        });
+        const combos = Object.values(combosMap);
+        despesaDetalheHtml = combos.length === 1
+            ? `<div class="info-grid">
+                 <div class="info-card"><div class="info-label">Elemento de Despesa</div><div class="info-value">${combos[0].elemento}</div></div>
+                 <div class="info-card"><div class="info-label">Item de Despesa</div><div class="info-value">${combos[0].item}</div></div>
+               </div>`
+            : tabelaSimples(['Elemento','Item','Descrição'], combos.map(c=>[c.elemento, c.item, c.descricao]));
+    } else {
+        despesaDetalheHtml = `<div class="objeto-text" style="color:#94a3b8;">O detalhamento por Elemento/Item de Despesa fica disponível assim que a execução financeira (empenhos) é iniciada.</div>`;
+    }
+
+    // --- QUADRO EMPENHO: tabela de empenhos, ou dados do Plano de Execução quando ainda não houver empenho ---
+    let empenhoHtml;
+    if (itens.length) {
+        empenhoHtml = `
+        <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">
+            <thead>
+                <tr style="background:#54697b;color:white;">
+                    <th style="padding:8px 10px;">Ano</th>
+                    <th style="padding:8px 10px;">Nº Emenda</th>
+                    <th style="padding:8px 10px;">Código SIAFI</th>
+                    <th style="padding:8px 10px;">Nº Empenho</th>
+                    <th style="padding:8px 10px;">Data Empenho</th>
+                    <th style="padding:8px 10px;text-align:right;">Vl. Empenhado</th>
+                    <th style="padding:8px 10px;text-align:right;">Vl. Liquidado</th>
+                    <th style="padding:8px 10px;text-align:right;">Vl. Pago</th>
+                    <th style="padding:8px 10px;text-align:right;">Vl. RPP Pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${itens.map((it,idx)=>`
+                <tr style="background:${idx%2===0?'#fff':'#f8f9fa'}">
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;">${it.ano||'-'}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${g.numero_emenda||'-'}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${g.siafi||'-'}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${it.numero_empenho||'-'}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${formatarData(it.data_empenho)}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(it.valor_empenhado)}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(it.valor_liquidado)}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(it.valor_pago_orcamentario || it.valor_pago)}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(it.valor_rpp_pago)}</td>
+                </tr>`).join('')}
+            </tbody>
+        </table>
+        </div>`;
+    } else if (planos.length) {
+        empenhoHtml = `
+        <div class="objeto-text" style="color:#94a3b8;margin-bottom:8px;">Ainda não há empenhos publicados no SIAFI para esta emenda. Dados abaixo refletem o Plano de Execução cadastrado.</div>
+        <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+                <tr style="background:#54697b;color:white;">
+                    <th style="padding:8px 10px;">Situação</th>
+                    <th style="padding:8px 10px;">Executor</th>
+                    <th style="padding:8px 10px;">CNPJ Executor</th>
+                    <th style="padding:8px 10px;">Modalidade</th>
+                    <th style="padding:8px 10px;text-align:right;">Valor Custeio</th>
+                    <th style="padding:8px 10px;text-align:right;">Valor Capital</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${planos.map((p,idx)=>`
+                <tr style="background:${idx%2===0?'#fff':'#f8f9fa'}">
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;">${statusBadge(p.situacao_plano)}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;">${truncar(p.nome_executor,35)}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;white-space:nowrap">${formatarCNPJ(p.cnpj_executor)}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;">${p.modalidade_plano||'-'}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(p.valor_custeio)}</td>
+                    <td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right;">${formatarMoeda(p.valor_capital)}</td>
+                </tr>`).join('')}
+            </tbody>
+        </table>
+        </div>`;
+    } else {
+        empenhoHtml = `<div class="objeto-text" style="color:#94a3b8;">Nenhum empenho ou Plano de Execução encontrado para este Nº SIAFI até o momento.</div>`;
+    }
+
+    document.getElementById('detailModalLabel').innerHTML = `<i class="material-icons me-2">receipt</i>Detalhes da Execução — SIAFI ${g.siafi||'N/D'}`;
+    document.getElementById('detalhesConteudo').innerHTML = `
+        <div style="background:${bannerCfg.bg};border-left:4px solid ${bannerCfg.bd};border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:${bannerCfg.cor};">
+            <i class="material-icons" style="font-size:14px;vertical-align:middle;">info</i> ${bannerCfg.txt}
+        </div>
+
+        <div class="objeto-title" style="margin-bottom:8px;"><i class="material-icons">description</i>DADOS DA EMENDA</div>
+        <div class="info-grid">
+            <div class="info-card"><div class="info-label">Ano</div><div class="info-value highlight">${g.ano||'-'}</div></div>
+            <div class="info-card"><div class="info-label">Autoria</div><div class="info-value highlight">${g.autoria ? `<a href="javascript:void(0)" onclick="irParaExecucaoPorAutoria('${autoriaSafe}','${g.ano||''}')" style="color:#1a3a5c;font-weight:600;text-decoration:underline dotted;cursor:pointer;" title="Ver todas as execuções deste autor neste ano">${g.autoria}</a>` : '-'}</div></div>
+            <div class="info-card"><div class="info-label">Número Emenda</div><div class="info-value highlight">${g.numero_emenda||'-'}</div></div>
+            <div class="info-card"><div class="info-label">Código SIAFI</div><div class="info-value highlight">${linkSiafi(g.siafi)}</div></div>
+            <div class="info-card">
+                <div class="info-label">Tipo de Emenda</div><div class="info-value">${g.modalidade||'-'}</div>
+                <div class="info-label" style="margin-top:8px;">Forma de Repasse</div><div class="info-value">${g.tipo_instrumento||'-'}</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Função de Governo</div><div class="info-value">${g.funcao||'-'}</div>
+                <div class="info-label" style="margin-top:8px;">Valor da Emenda</div><div class="info-value">${formatarMoeda(g.valor_indicado)}</div>
+            </div>
+            <div class="info-card"><div class="info-label">Inteiro Teor</div><div class="info-value highlight">${linkDocumento(g.link,'Ver Inteiro Teor')}</div></div>
+        </div>
+
+        <div class="objeto-title" style="margin-bottom:8px;margin-top:16px;"><i class="material-icons">receipt</i>DADOS EXECUÇÃO</div>
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-label">Data Início</div><div class="info-value">${formatarData(g.data_inicio)}</div>
+                <div class="info-label" style="margin-top:8px;">Data Fim</div><div class="info-value">${formatarData(g.data_fim)}</div>
+            </div>
+            <div class="info-card"><div class="info-label">Órgão Executor</div><div class="info-value">${g.orgao_executor||'-'}</div></div>
+            <div class="info-card"><div class="info-label">Situação</div><div class="info-value">${statusBadge(g.situacao)}</div></div>
+        </div>
+        ${credorHtml}
+
+        <div class="objeto-title" style="margin-bottom:8px;margin-top:16px;"><i class="material-icons">subject</i>OBJETO</div>
+        <div class="objeto-container">
+            <div class="objeto-title"><i class="material-icons">subject</i>OBJETO</div>
+            <div class="objeto-text">${g.objeto || 'Objeto não informado.'}</div>
+        </div>
+        <div class="objeto-container">
+            <div class="objeto-title"><i class="material-icons">subject</i>DESCRIÇÃO DA DESPESA</div>
+            <div class="objeto-text">${g.descricao_item || (itens.length ? 'Descrição não informada.' : 'Disponível após o início da execução financeira.')}</div>
+        </div>
+        ${despesaDetalheHtml}
+
+        <div class="objeto-title" style="margin-bottom:8px;margin-top:16px;"><i class="material-icons">payments</i>VALORES</div>
+        <div class="info-grid">
+            <div class="info-card"><div class="info-label">Valor Empenhado (Repassado)</div><div class="info-value">${g.iniciouExecucao ? formatarMoeda(g.empenhado) : '<span style="color:#94a3b8;">—</span>'}</div></div>
+            <div class="info-card"><div class="info-label">Valor Liquidado</div><div class="info-value">${g.iniciouExecucao ? formatarMoeda(g.liquidado) : '<span style="color:#94a3b8;">—</span>'}</div></div>
+            <div class="info-card"><div class="info-label">Valor Pago</div><div class="info-value">${g.iniciouExecucao ? formatarMoeda(g.pago) : '<span style="color:#94a3b8;">—</span>'}</div></div>
+        </div>
+
+        <div class="objeto-title" style="margin-bottom:8px;margin-top:16px;"><i class="material-icons">receipt_long</i>EMPENHO ${itens.length ? `(${g.n})` : ''}</div>
+        ${empenhoHtml}`;
+    new bootstrap.Modal(document.getElementById('detailModal')).show();
+};
+
+function exportarCSV(dash) {
+    let cabecalhos, linhas;
+    if (dash === 'dg') {
+        const resumo = calcularResumoAutoria();
+        cabecalhos = ['Autoria','Origem','Tipo de Emenda','Nº Emendas','Valor Indicado','Valor Repassado','Execução'];
+        linhas = resumo.map(l => [
+            l.autoria,
+            [...new Set(l.itens.map(i=>i.esfera).filter(Boolean))].join(' | '),
+            [...new Set(l.itens.map(i=>i.modalidade).filter(Boolean))].join(' | '),
+            l.n, formatarMoeda(l.valInd), formatarMoeda(l.valRep), l.pct+'%'
+        ].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
+    } else {
+        const agregado = calcularAgregadoExec();
+        cabecalhos = ['Ano','Nº Emenda','Autoria','Código SIAFI','Tipo de Emenda','Forma de Repasse','Função de Governo','Órgão','Objeto','Descrição da Despesa','Data Início','Data Fim','Valor Indicado','Valor Empenhado','Valor Liquidado','Valor Pago'];
+        linhas = agregado.map(g => [g.ano,g.numero_emenda,g.autoria,g.siafi,g.modalidade,g.tipo_instrumento,g.funcao,g.orgao_executor,g.objeto,g.descricao_item,formatarData(g.data_inicio),formatarData(g.data_fim),formatarMoeda(g.valor_indicado),formatarMoeda(g.empenhado),formatarMoeda(g.liquidado),formatarMoeda(g.pago)].map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(';'));
+    }
+    const csv  = [cabecalhos.join(';'), ...linhas].join('\n');
+    const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `emendas_${dash}_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+}
+
+// ============================================================
+// EXPORTAR PDF
+// ============================================================
+function exportarPDF(dash) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape' });
+    let head, body, titulo;
+    if (dash === 'dg') {
+        const resumo = calcularResumoAutoria();
+        titulo = 'Emendas Federais — Resumo por Autoria';
+        head = [['Autoria','Origem','Tipo de Emenda','Nº Emendas','Vl. Indicado','Vl. Repassado','Execução']];
+        body = resumo.slice(0,500).map(l=>[
+            truncar(l.autoria,25),
+            truncar([...new Set(l.itens.map(i=>i.esfera).filter(Boolean))].join(', '),15),
+            truncar([...new Set(l.itens.map(i=>i.modalidade).filter(Boolean))].join(', '),15),
+            l.n, formatarMoeda(l.valInd), formatarMoeda(l.valRep), l.pct+'%'
+        ]);
+    } else {
+        const agregado = calcularAgregadoExec();
+        titulo = 'Emendas Federais — Execução Transferências PIX';
+        head = [['Ano','Nº Emenda','Autoria','SIAFI','Tipo Emenda','Forma Repasse','Função','Órgão','Objeto','Desc. Despesa','Início','Fim','Vl. Indicado','Vl. Empenhado','Vl. Liquidado','Vl. Pago']];
+        body = agregado.slice(0,500).map(g=>[g.ano,g.numero_emenda,truncar(g.autoria,18),g.siafi,truncar(g.modalidade,14),truncar(g.tipo_instrumento,14),truncar(g.funcao,14),truncar(g.orgao_executor,15),truncar(g.objeto,18),truncar(g.descricao_item,18),formatarData(g.data_inicio),formatarData(g.data_fim),formatarMoeda(g.valor_indicado),formatarMoeda(g.empenhado),formatarMoeda(g.liquidado),formatarMoeda(g.pago)]);
+    }
+    doc.autoTable({
+        head, body,
+        headStyles: { fillColor: [32,68,93] },
+        styles: { fontSize: 7 },
+        didDrawPage: () => {
+            doc.setFontSize(10);
+            doc.text(titulo, 14, 10);
+            doc.text(`Emitido em: ${new Date().toLocaleString('pt-BR')}`, 14, doc.internal.pageSize.height - 5);
+        }
+    });
+    doc.save(`emendas_${dash}.pdf`);
+}
+
+// ============================================================
+// COMPARTILHAMENTO
+// ============================================================
+function toggleShare(id) {
+    document.querySelectorAll('.share-options').forEach(o => o.classList.remove('show'));
+    document.getElementById(`shareOptions${id}`)?.classList.toggle('show');
+}
+function copiarLink(e, id) {
+    e.preventDefault();
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        const toast = document.getElementById('toastSucesso');
+        if (toast) {
+            toast.style.display = 'flex';
+            toast.style.animation = 'none';
+            toast.offsetHeight;
+            toast.style.animation = 'fadeInUp 0.3s ease';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+    });
+    document.getElementById(`shareOptions${id}`)?.classList.remove('show');
+}
+function compartilharFacebook(e,id) { e.preventDefault(); window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href)}`,'_blank'); document.getElementById(`shareOptions${id}`)?.classList.remove('show'); }
+function compartilharTwitter(e,id)  { e.preventDefault(); window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent('Emendas Federais - Governo de Minas Gerais')}`,'_blank'); document.getElementById(`shareOptions${id}`)?.classList.remove('show'); }
+function compartilharLinkedIn(e,id) { e.preventDefault(); window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(location.href)}`,'_blank'); document.getElementById(`shareOptions${id}`)?.classList.remove('show'); }
+function compartilharWhatsApp(e,id) { e.preventDefault(); window.open(`https://wa.me/?text=${encodeURIComponent('Emendas Federais - Governo de Minas Gerais '+location.href)}`,'_blank'); document.getElementById(`shareOptions${id}`)?.classList.remove('show'); }
+
+function voltarAoTopo() {
+    // Scroll this document to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+    document.body.scrollTo({ top: 0, behavior: 'smooth' });
+    // If inside an iframe, ask parent to scroll to top via postMessage
+    if (window.parent !== window) {
+        try {
+            window.parent.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch(e) {}
+        try {
+            window.parent.postMessage({ type: 'scrollToTop', scrollTop: true }, '*');
+        } catch(e) {}
+    }
+}
+
+// ============================================================
+// IFRAME RESIZE
+// ============================================================
+function iframeUpdateHeight() {
+    const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) + 10;
+    try { window.parent.postMessage({ iframeHeight: h, iframeResize: true, type: 'resize' }, '*'); } catch(e) {}
+}
+
+// ============================================================
+// GERENCIADOR DE COLUNAS
+// ============================================================
+function toggleColManager(dash) {
+    document.querySelectorAll('.col-manager-panel').forEach(p => {
+        if (p.id !== 'colManager' + dash.charAt(0).toUpperCase() + dash.slice(1)) p.classList.remove('show');
+    });
+    const panel = document.getElementById('colManager' + dash.charAt(0).toUpperCase() + dash.slice(1));
+    if (panel) panel.classList.toggle('show');
+}
+
+function toggleColByIndex(tableId, colIndex, show) {
+    const table = document.getElementById(tableId);
+    if (!table) return;
+    const rows = table.querySelectorAll('tr');
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('th, td');
+        if (cells[colIndex]) cells[colIndex].style.display = show ? '' : 'none';
+    });
+}
+
+window.toggleColDG = function(idx, show) { toggleColByIndex('tabelaDG', idx, show); };
+window.toggleColExec = function(idx, show) { toggleColByIndex('tabelaExec', idx, show); };
+
+// ============================================================
+// EVENT LISTENERS
+// ============================================================
+function setupEventListeners() {
+    // DG
+    document.getElementById('aplicarFiltrosDG')?.addEventListener('click', () => aplicarFiltros('dg'));
+    document.getElementById('limparFiltrosDG')?.addEventListener('click',   () => limparFiltros('dg'));
+    document.getElementById('searchDG')?.addEventListener('input', e => { currentSearch.dg = e.target.value.toLowerCase(); filtrarTabela('dg'); });
+    document.getElementById('itemsPerPageDG')?.addEventListener('change', function() { alterarItensPorPagina('dg', this.value); });
+    document.getElementById('exportCSVDG')?.addEventListener('click', () => exportarCSV('dg'));
+    document.getElementById('printDG')?.addEventListener('click',     () => exportarPDF('dg'));
+    // Exec
+    document.getElementById('aplicarFiltrosExec')?.addEventListener('click', () => aplicarFiltros('exec'));
+    document.getElementById('limparFiltrosExec')?.addEventListener('click',   () => limparFiltros('exec'));
+    document.getElementById('searchExec')?.addEventListener('input', e => { currentSearch.exec = e.target.value.toLowerCase(); filtrarTabela('exec'); });
+    document.getElementById('searchUnificado')?.addEventListener('input', e => {
+        const q = e.target.value.toLowerCase();
+        const filtrado = q ? unificadoDataFull.filter(r =>
+            (r.siafi||'').toLowerCase().includes(q) ||
+            (r.numero_emenda||'').toString().toLowerCase().includes(q) ||
+            (r.autoria||'').toLowerCase().includes(q) ||
+            (r.executor||'').toLowerCase().includes(q) ||
+            (r.beneficiario||'').toLowerCase().includes(q)
+        ) : unificadoDataFull;
+        renderUnificado(filtrado);
+    });
+    document.getElementById('itemsPerPageExec')?.addEventListener('change', function() { alterarItensPorPagina('exec', this.value); });
+    document.getElementById('exportCSVExec')?.addEventListener('click', () => exportarCSV('exec'));
+    document.getElementById('printExec')?.addEventListener('click',     () => exportarPDF('exec'));
+
+    // Fechar share dropdown ao clicar fora
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.share-dropdown')) {
+            document.querySelectorAll('.share-options').forEach(o => o.classList.remove('show'));
+        }
+        if (!e.target.closest('.col-manager-dropdown')) {
+            document.querySelectorAll('.col-manager-panel').forEach(o => o.classList.remove('show'));
+        }
+    });
+    // Tab resize
+    document.querySelectorAll('[data-bs-toggle="tab"]').forEach(btn => {
+        btn.addEventListener('shown.bs.tab', () => setTimeout(iframeUpdateHeight, 100));
+    });
+}
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    setupAtualizacaoData();
+    carregarTodosDados();
+    setupEventListeners();
+    setTimeout(iframeUpdateHeight, 1000);
+});
+
+if (window.ResizeObserver) new ResizeObserver(iframeUpdateHeight).observe(document.body);
+else { window.addEventListener('resize', iframeUpdateHeight); setInterval(iframeUpdateHeight, 3000); }
+setInterval(iframeUpdateHeight, 3000);
+</script>
+</body>
+</html>
