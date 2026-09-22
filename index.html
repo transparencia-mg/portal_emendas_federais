@@ -588,7 +588,7 @@
         code { font-size: 11px; background: #f0f4f8; padding: 2px 5px; border-radius: 3px; color: #1a3a5c; }
 
         /* ============================================================
-           CRUZAMENTO DAS BASES: selos, etapas, alertas e conciliação
+           CRUZAMENTO DAS BASES: selos, etapas do detalhe e alertas
         ============================================================ */
         .link-dados { color:#1a3a5c; font-weight:600; text-decoration:underline dotted; cursor:pointer; }
         .link-dados:focus-visible, .btn-action:focus-visible, .conc-secao summary:focus-visible { outline:2px solid #db233f; outline-offset:2px; }
@@ -596,16 +596,6 @@
         .selo { font-size:10px; font-weight:600; padding:1px 6px; border-radius:3px; background:#e8eef4; color:#1a3a5c; white-space:nowrap; }
         .selo-alerta { background:#fdecee; color:#b93c42; }
 
-        .funil-exec { background:#fff; border:1px solid #e3e8ee; border-radius:8px; padding:14px 16px; margin-bottom:18px; }
-        .funil-titulo { font-size:13px; font-weight:700; color:var(--primary-dark); margin-bottom:10px; }
-        .funil-etapas { display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:14px; }
-        .funil-num { font-size:20px; font-weight:700; color:var(--primary-dark); line-height:1.2; }
-        .funil-nome { font-size:12px; color:#4b5768; font-weight:600; }
-        .funil-pct { font-size:11px; color:#6c757d; }
-        .funil-barra { height:6px; background:#edf1f5; border-radius:3px; margin-top:6px; overflow:hidden; }
-        .funil-barra span { display:block; height:100%; background:var(--primary-dark); }
-        .funil-nota { font-size:11.5px; color:#6c757d; margin-top:10px; }
-        @media (max-width:768px) { .funil-etapas { grid-template-columns:repeat(2, minmax(0,1fr)); } }
 
         .etapas { display:flex; margin:4px 0 16px; overflow-x:auto; padding-bottom:4px; }
         .etapa { flex:1; min-width:110px; text-align:center; position:relative; padding:0 4px; }
@@ -623,23 +613,6 @@
         .alerta-dados .material-icons { font-size:16px; margin-top:1px; }
         .alerta-erro { background:#fdecee; border-left-color:#b93c42; color:#7a1f24; margin:10px 0; }
 
-        .conc-intro { font-size:13px; color:#4b5768; max-width:900px; margin-bottom:12px; }
-        .conc-metodo { font-size:12px; background:#e8f0fe; border-left:4px solid #1a3a5c; border-radius:6px; padding:9px 12px; margin-bottom:16px; color:#1a3a5c; max-width:1100px; }
-        .conc-tabela-wrap { max-height:440px; overflow:auto; border:1px solid #eef1f4; border-radius:6px; }
-        .conc-tabela { width:100%; border-collapse:collapse; font-size:12px; }
-        .conc-tabela th { background:#54697b; color:#fff; padding:7px 10px; text-align:left; font-weight:600; position:sticky; top:0; }
-        .conc-tabela td { padding:6px 10px; border-bottom:1px solid #eee; vertical-align:top; }
-        .conc-tabela tr:nth-child(even) td { background:#f8f9fa; }
-        .conc-secao { background:#fff; border:1px solid #e3e8ee; border-radius:8px; margin-bottom:10px; }
-        .conc-secao summary { cursor:pointer; padding:11px 14px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; color:#1a3a5c; list-style:none; }
-        .conc-secao summary::-webkit-details-marker { display:none; }
-        .conc-secao[open] summary { border-bottom:1px solid #eef1f4; }
-        .conc-qtd { min-width:40px; text-align:center; padding:2px 8px; border-radius:4px; background:#fdecee; color:#b93c42; font-weight:700; }
-        .conc-qtd.conc-zero { background:#e7f4ec; color:#1e7e42; }
-        .conc-corpo { padding:10px 14px 14px; }
-        .conc-desc { font-size:12px; color:#6c757d; margin-bottom:8px; }
-        .conc-acoes { margin-bottom:8px; }
-        .conc-ok { font-size:12px; color:#1e7e42; margin:0; }
     </style>
 </head>
 <body>
@@ -658,11 +631,6 @@
                 <li class="nav-item">
                     <button class="nav-link" id="dashboard2-tab" data-bs-toggle="tab" data-bs-target="#dashboard2">
                         <i class="material-icons">receipt</i>Consultas por Emendas - Transferências PIX
-                    </button>
-                </li>
-                <li class="nav-item" id="navConciliacao">
-                    <button class="nav-link" id="dashboard5-tab" data-bs-toggle="tab" data-bs-target="#dashboard5">
-                        <i class="material-icons">rule</i>Conciliação das Bases
                     </button>
                 </li>
                 <li class="nav-item">
@@ -859,12 +827,6 @@
                 </div>
 
  
-                <!-- Métricas (acompanham os mesmos filtros da tabela) -->
-                <div class="row mb-3" id="summaryCardsExec">
-                    <div class="col-12 text-center text-muted" style="font-size:13px;">Carregando dados...</div>
-                </div>
-                <!-- Etapas do processo: Emenda → Plano de Ação → Empenho → Liquidação → Pagamento -->
-                <div class="funil-exec" id="funilExec" style="display:none;"></div>
                 <div class="toolbar">
                     <div class="toolbar-left">
                         <button class="btn-export" id="exportCSVExec"><i class="material-icons">description</i>CSV</button>
@@ -1018,16 +980,6 @@
 
             </div><!-- /dashboard3 -->
 
-            <!-- ==================== DASHBOARD 5: CONCILIAÇÃO DAS BASES ==================== -->
-            <div class="tab-pane fade" id="dashboard5" role="tabpanel">
-                <div id="conciliacaoConteudo">
-                    <div class="text-center text-muted" style="font-size:13px;">Carregando dados...</div>
-                </div>
-                <div style="display:flex;justify-content:flex-end;margin-top:10px;">
-                    <div class="btn-topo" onclick="voltarAoTopo()"><i class="material-icons">arrow_upward</i>Voltar ao topo</div>
-                </div>
-            </div><!-- /dashboard5 -->
-
             <!-- ==================== DASHBOARD 4: DOWNLOADS ==================== -->
             <div class="tab-pane fade" id="dashboard4" role="tabpanel">
 
@@ -1117,8 +1069,6 @@
 // ============================================================
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/transparencia-mg/portal_emendas_federais/main/dataset/data/';
 const GITHUB_API_COMMITS = 'https://api.github.com/repos/transparencia-mg/portal_emendas_federais/commits?path=dataset/data&per_page=1';
-// Exibe a aba de conciliação (divergências entre as bases). Use false para ocultá-la do público.
-const MOSTRAR_ABA_CONCILIACAO = true;
 const CONVENIOS_CSV_URL = 'https://raw.githubusercontent.com/transparencia-mg/portal_convenios_entrada/main/dataset/data/convenios.csv';
 
 const ARQUIVOS = {
@@ -1519,7 +1469,6 @@ function carregarTodosDados() {
         populaFiltros();
         aplicarFiltros('dg');
         aplicarFiltros('exec');
-        renderConciliacao();
         renderAvisosCarga();
     }).catch(err => {
         console.error('Erro ao carregar dados:', err);
@@ -2142,76 +2091,7 @@ window.mostrarDetalhesDG = function(item) {
 // ============================================================
 // DASHBOARD 2 — EXECUÇÃO
 // ============================================================
-function updateDashboard2() { updateCardsExec(); updateFunilExec(); updateTabelaExec(); }
-
-function cardMetrica(col, titulo, dica, valor, extraStyle) {
-    return `<div class="${col}" ${extraStyle ? `style="${extraStyle}"` : ''}><div class="metric-card">
-        <div class="metric-header">${titulo} <i class="material-icons" data-bs-toggle="tooltip" title="${escHtml(dica)}">info_outline</i></div>
-        <div class="metric-body"><div class="metric-value">${valor}</div></div>
-    </div></div>`;
-}
-
-function updateCardsExec() {
-    const c = document.getElementById('summaryCardsExec');
-    if (!c) return;
-    if (!filteredExecBase.length) { c.innerHTML = '<div class="col-12 text-center text-muted">Nenhum dado encontrado.</div>'; return; }
-    const soma = (lista, campo) => lista.reduce((s, i) => s + (i[campo] || 0), 0);
-    const totalInd  = soma(filteredExecBase, 'valor_indicado');
-    const totalEmp  = soma(filteredExec, 'valor_empenhado');
-    const totalLiq  = soma(filteredExec, 'valor_liquidado');
-    const totalPago = soma(filteredExec, 'valor_pago');
-    const pct = (a, b) => b ? (a / b * 100).toFixed(1).replace('.', ',') + '%' : '0%';
-    const credores = new Set(filteredExec.map(d => d.cnpj_credor).filter(Boolean)).size;
-    // O número do empenho reinicia a cada ano: a chave precisa incluir SIAFI e ano
-    const empenhos = new Set(filteredExec.map(d => `${d.numero_siafi}|${d.ano}|${d.numero_empenho}`)).size;
-    const m = 'margin-top:14px;';
-    c.innerHTML =
-        cardMetrica('col-md-3 col-6', 'Instrumentos (Nº SIAFI)', 'Quantidade de Nº SIAFI distintos no filtro atual — mesma contagem da tabela abaixo', filteredExecBase.length.toLocaleString('pt-BR')) +
-        cardMetrica('col-md-3 col-6', 'Valor Indicado', 'Soma do valor indicado das emendas no filtro atual', formatarMoeda(totalInd)) +
-        cardMetrica('col-md-3 col-6', 'Total Empenhado', 'Soma dos empenhos dos instrumentos exibidos na tabela', formatarMoeda(totalEmp)) +
-        cardMetrica('col-md-3 col-6', 'Total Pago', 'Soma dos pagamentos dos instrumentos exibidos na tabela', formatarMoeda(totalPago)) +
-        cardMetrica('col-md-3 col-6', 'Total Liquidado', 'Soma das liquidações dos instrumentos exibidos na tabela', formatarMoeda(totalLiq), m) +
-        cardMetrica('col-md-3 col-6', 'Taxa de Liquidação', 'Liquidado ÷ Empenhado', pct(totalLiq, totalEmp), m) +
-        cardMetrica('col-md-3 col-6', 'Taxa de Pagamento', 'Pago ÷ Liquidado', pct(totalPago, totalLiq), m) +
-        cardMetrica('col-md-3 col-6', 'Credores / Empenhos', 'Credores distintos (CNPJ/CPF) e empenhos distintos (Nº SIAFI + ano + nº do empenho)',
-            `${credores.toLocaleString('pt-BR')} <span style="font-size:13px;color:#94a3b8;font-weight:600;">/ ${empenhos.toLocaleString('pt-BR')} empenhos</span>`, m);
-    setTimeout(() => document.querySelectorAll('#summaryCardsExec [data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el)), 100);
-}
-
-// Etapas do processo: Emenda -> Plano de Ação -> Empenho -> Liquidação -> Pagamento
-function updateFunilExec() {
-    const el = document.getElementById('funilExec');
-    if (!el) return;
-    if (!filteredExecBase.length) { el.innerHTML = ''; el.style.display = 'none'; return; }
-    el.style.display = '';
-    const pix  = filteredExecBase.filter(c => ehTE(c.tipo_instrumento) || c.complementar);
-    const fora = filteredExecBase.length - pix.length;
-    const nComp = filteredExecBase.filter(c => c.complementar).length;
-    const somaItens = (c, campo) => (c.itens || []).reduce((s, i) => s + (i[campo] || 0), 0);
-    const etapas = [
-        ['Transferências Especiais', pix.length],
-        ['Com Plano de Ação', pix.filter(c => (siafiToPlanos[c.siafi] || []).length).length],
-        ['Com empenho', pix.filter(c => (c.itens || []).length).length],
-        ['Com liquidação', pix.filter(c => somaItens(c, 'valor_liquidado') > 0).length],
-        ['Com pagamento', pix.filter(c => somaItens(c, 'valor_pago') > 0).length]
-    ];
-    const total = pix.length || 1;
-    const notas = [];
-    if (fora) notas.push(`${fora.toLocaleString('pt-BR')} convênio(s)/portaria(s) no filtro: a execução desses instrumentos não faz parte desta base.`);
-    if (nComp) notas.push(`${nComp.toLocaleString('pt-BR')} Nº SIAFI aparecem na Execução ou no Plano, mas não em Emendas Geral (marcados como "sem cadastro geral").`);
-    el.innerHTML = `
-        <div class="funil-titulo">Etapas do processo, em Nº SIAFI distintos</div>
-        <div class="funil-etapas">
-            ${etapas.map(([nome, n], i) => `
-            <div class="funil-etapa">
-                <div class="funil-num">${n.toLocaleString('pt-BR')}</div>
-                <div class="funil-nome">${nome}</div>
-                <div class="funil-pct">${i === 0 ? 'base do filtro' : ((n / total) * 100).toFixed(0) + '% da base'}</div>
-                <div class="funil-barra"><span style="width:${(n / total) * 100}%"></span></div>
-            </div>`).join('')}
-        </div>
-        ${notas.length ? `<div class="funil-nota">${notas.join(' ')}</div>` : ''}`;
-}
+function updateDashboard2() { updateTabelaExec(); }
 
 // ============================================================
 // PAINEL DE ANÁLISE — EXECUÇÃO PIX (gráfico + rankings)
@@ -2644,170 +2524,6 @@ window.mostrarDetalhesExecAgregado = function(siafi) {
     new bootstrap.Modal(document.getElementById('detailModal')).show();
 };
 
-// ============================================================
-// CONCILIAÇÃO DAS BASES (Emendas Geral × Plano de Ação × Execução)
-// ============================================================
-let conciliacaoTabelas = {};
-
-function secaoConciliacao(s) {
-    conciliacaoTabelas[s.id] = s;
-    const n = s.rows.length;
-    const celula = (v, col) => {
-        if (col.tipo === 'moeda') return `<td style="text-align:right;white-space:nowrap">${formatarMoeda(v)}</td>`;
-        if (col.tipo === 'siafi') return `<td style="white-space:nowrap">${v ? linkSiafi(v) : '-'}</td>`;
-        return `<td>${(v === '' || v === null || v === undefined) ? '-' : escHtml(v)}</td>`;
-    };
-    return `
-    <details class="conc-secao">
-        <summary><span class="conc-qtd ${n ? '' : 'conc-zero'}">${n.toLocaleString('pt-BR')}</span><span>${s.titulo}</span></summary>
-        <div class="conc-corpo">
-            <p class="conc-desc">${s.desc}</p>
-            ${n ? `
-            <div class="conc-acoes"><button class="btn-export" onclick="baixarConciliacao(${jsArg(s.id)})"><i class="material-icons">description</i>CSV</button></div>
-            <div class="conc-tabela-wrap">
-                <table class="conc-tabela">
-                    <thead><tr>${s.cols.map(c => `<th${c.tipo === 'moeda' ? ' style="text-align:right"' : ''}>${c.t}</th>`).join('')}</tr></thead>
-                    <tbody>${s.rows.map(r => `<tr>${r.map((v, i) => celula(v, s.cols[i])).join('')}</tr>`).join('')}</tbody>
-                </table>
-            </div>` : '<p class="conc-ok">Nenhuma ocorrência.</p>'}
-        </div>
-    </details>`;
-}
-
-window.baixarConciliacao = function(id) {
-    const s = conciliacaoTabelas[id];
-    if (!s) return;
-    const linhas = [s.cols.map(c => c.t), ...s.rows.map(r => r.map((v, i) => s.cols[i].tipo === 'moeda' ? numCSV(v) : v))];
-    baixarArquivo(linhas.map(l => l.map(aspasCSV).join(';')).join('\r\n'), `conciliacao_${id}_${new Date().toISOString().slice(0,10)}.csv`);
-};
-
-function renderConciliacao() {
-    const el = document.getElementById('conciliacaoConteudo');
-    if (!el) return;
-    conciliacaoTabelas = {};
-    const G = new Set(Object.keys(dgPorSiafi));
-    const E = new Set(Object.keys(execPorSiafi));
-    const P = new Set(Object.keys(siafiToPlanos));
-    const TE = new Set([...G].filter(k => dgPorSiafi[k].some(d => ehTE(d.tipo_instrumento))));
-    const U = new Set([...G, ...E, ...P]);
-    const cont = {}, contTE = {};
-    U.forEach(k => {
-        const c = (G.has(k) ? 'G' : '') + (P.has(k) ? 'P' : '') + (E.has(k) ? 'E' : '');
-        cont[c] = (cont[c] || 0) + 1;
-        if (TE.has(k) || !G.has(k)) contTE[c] = (contTE[c] || 0) + 1;
-    });
-    const em3 = cont.GPE || 0;
-    const em2 = (cont.GP || 0) + (cont.GE || 0) + (cont.PE || 0);
-    const em1 = (cont.G || 0) + (cont.P || 0) + (cont.E || 0);
-    const combos = [
-        ['GPE', 'Emendas Geral + Plano + Execução', 'Fluxo completo'],
-        ['GP',  'Emendas Geral + Plano', 'Plano cadastrado, ainda sem empenho'],
-        ['GE',  'Emendas Geral + Execução', 'Empenho sem Plano de Ação vinculado'],
-        ['PE',  'Plano + Execução', 'Ausente de Emendas Geral'],
-        ['G',   'Somente Emendas Geral', 'Convênios/Portarias (fora da base PIX) ou TE sem plano e sem empenho'],
-        ['P',   'Somente Plano', 'Plano sem cadastro geral e sem empenho'],
-        ['E',   'Somente Execução', 'Empenho sem cadastro geral e sem plano']
-    ];
-
-    const somaEmp = k => (execPorSiafi[k] || []).reduce((s, e) => s + (e.valor_empenhado || 0), 0);
-    const somaPago = k => (execPorSiafi[k] || []).reduce((s, e) => s + (e.valor_pago || 0), 0);
-    const reg = k => siafiToDG[k] || {};
-    const porAno = (a, b) => String(a[1]).localeCompare(String(b[1])) || String(a[0]).localeCompare(String(b[0]));
-
-    const nPlanoSemVinculo = planoExecucaoData.filter(p => !p.codigo_siafi_rel).length;
-    const metodo = planoTemColunaSiafi
-        ? 'O Plano de Ação é ligado às demais bases pelo Nº SIAFI informado na própria base do plano. Registros do plano sem Nº SIAFI são ligados pelo número da emenda e, se preciso, pelo órgão executor e valor.'
-        : `A base do Plano de Ação publicada não traz a coluna Nº SIAFI. O vínculo foi feito pelo número/ano da emenda e, quando uma emenda tem vários Nº SIAFI, pelo órgão executor e valor. ${nPlanoSemVinculo} registro(s) do plano não puderam ser vinculados com segurança. Incluir a coluna <code>no_siafi</code> em <code>plano_execucao_emendas_pix.csv</code> tornaria o vínculo exato.`;
-
-    const secoes = [];
-    secoes.push({
-        id: 'execSemGeral', titulo: 'Execução sem cadastro em Emendas Geral',
-        desc: 'Nº SIAFI com empenhos na base de execução que não constam em Emendas Geral. Aparecem na consulta PIX marcados como "sem cadastro geral".',
-        cols: [{t:'Nº SIAFI',tipo:'siafi'},{t:'Anos de empenho'},{t:'Registros'},{t:'Empenhado',tipo:'moeda'},{t:'Pago',tipo:'moeda'},{t:'Tem Plano de Ação?'}],
-        rows: [...E].filter(k => !G.has(k)).sort().map(k => [k, juntar(execPorSiafi[k], 'ano', ', '), execPorSiafi[k].length, somaEmp(k), somaPago(k), P.has(k) ? 'Sim' : 'Não'])
-    });
-    secoes.push({
-        id: 'planoSemGeral', titulo: 'Plano de Ação sem cadastro em Emendas Geral',
-        desc: 'Nº SIAFI informados no Plano de Ação que não constam em Emendas Geral. Pode indicar código divergente entre as bases ou emenda ainda não cadastrada.',
-        cols: [{t:'Nº SIAFI',tipo:'siafi'},{t:'Emenda / Parlamentar (plano)'},{t:'Executor'},{t:'Valor do plano',tipo:'moeda'},{t:'Tem empenho?'}],
-        rows: [...P].filter(k => !G.has(k)).sort().map(k => {
-            const pl = siafiToPlanos[k];
-            return [k, juntar(pl, 'codigo_emenda_parlamentar', '; '), juntar(pl, 'nome_executor', '; '), pl.reduce((s, p) => s + (p.valor_custeio || 0) + (p.valor_capital || 0), 0), E.has(k) ? 'Sim' : 'Não'];
-        })
-    });
-    secoes.push({
-        id: 'planoSemExec', titulo: 'Transferências Especiais com Plano de Ação e sem empenho',
-        desc: 'Emendas com plano cadastrado cuja execução financeira ainda não começou. Ordenadas por ano: as mais antigas merecem verificação.',
-        cols: [{t:'Nº SIAFI',tipo:'siafi'},{t:'Ano'},{t:'Nº Emenda'},{t:'Autoria'},{t:'Situação do plano'},{t:'Valor indicado',tipo:'moeda'}],
-        rows: [...TE].filter(k => P.has(k) && !E.has(k)).map(k => [k, reg(k).ano, reg(k).numero_emenda, reg(k).autoria, juntar(siafiToPlanos[k], 'situacao_plano', ', '), reg(k).valor_indicado]).sort(porAno)
-    });
-    secoes.push({
-        id: 'execSemPlano', titulo: 'Transferências Especiais com empenho e sem Plano de Ação',
-        desc: 'Nº SIAFI cadastrados em Emendas Geral, com empenhos, mas sem Plano de Ação vinculado.',
-        cols: [{t:'Nº SIAFI',tipo:'siafi'},{t:'Ano'},{t:'Nº Emenda'},{t:'Autoria'},{t:'Empenhado',tipo:'moeda'}],
-        rows: [...TE].filter(k => E.has(k) && !P.has(k)).map(k => [k, reg(k).ano, reg(k).numero_emenda, reg(k).autoria, somaEmp(k)]).sort(porAno)
-    });
-    secoes.push({
-        id: 'teSemNada', titulo: 'Transferências Especiais sem Plano de Ação e sem empenho',
-        desc: 'Nº SIAFI de Transferências Especiais que só existem em Emendas Geral.',
-        cols: [{t:'Nº SIAFI',tipo:'siafi'},{t:'Ano'},{t:'Nº Emenda'},{t:'Autoria'},{t:'Valor indicado',tipo:'moeda'}],
-        rows: [...TE].filter(k => !E.has(k) && !P.has(k)).map(k => [k, reg(k).ano, reg(k).numero_emenda, reg(k).autoria, reg(k).valor_indicado]).sort(porAno)
-    });
-    const motivo = p => {
-        if (planoTemColunaSiafi && !p.numero_siafi_plano) {
-            if (p.codigo_siafi_rel) return `Nº SIAFI em branco no plano; vinculado por estimativa ao ${p.codigo_siafi_rel}`;
-            return 'Nº SIAFI em branco no plano';
-        }
-        if (p.vinculo === 'nenhum') return 'Emenda do plano não encontrada entre as Transferências Especiais de Emendas Geral';
-        if (p.vinculo === 'ambiguo') return `Emenda com ${p.candidatos_emenda.length} Nº SIAFI; não foi possível escolher com segurança`;
-        return '';
-    };
-    secoes.push({
-        id: 'planoSemVinculo', titulo: 'Registros do Plano de Ação sem Nº SIAFI ou sem vínculo seguro',
-        desc: 'Linhas do plano que não informam o Nº SIAFI ou que não puderam ser ligadas a um instrumento.',
-        cols: [{t:'ID Plano'},{t:'Emenda / Parlamentar'},{t:'Executor'},{t:'Valor',tipo:'moeda'},{t:'Motivo'}],
-        rows: planoExecucaoData.filter(p => motivo(p)).map(p => [p.id_plano_acao, p.codigo_emenda_parlamentar, p.nome_executor, (p.valor_custeio || 0) + (p.valor_capital || 0), motivo(p)])
-    });
-    if (planoTemColunaSiafi) {
-        secoes.push({
-            id: 'emendaDivergente', titulo: 'Mesmo Nº SIAFI com número de emenda diferente entre Plano e Emendas Geral',
-            desc: 'O Nº SIAFI existe nas duas bases, mas a emenda informada no Plano de Ação não é nenhuma das emendas cadastradas em Emendas Geral para esse instrumento.',
-            cols: [{t:'Nº SIAFI',tipo:'siafi'},{t:'Emenda no plano'},{t:'Emenda(s) em Emendas Geral'},{t:'Parlamentar (plano)'}],
-            rows: planoExecucaoData.filter(p => p.numero_siafi_plano && G.has(p.numero_siafi_plano)).filter(p =>
-                !dgPorSiafi[p.numero_siafi_plano].some(d => `${d.ano}${d.numero_emenda}` === `${p.ano_emenda}${p.numero_emenda_plano}`)
-            ).map(p => [p.numero_siafi_plano, `${p.ano_emenda}${p.numero_emenda_plano}`, dgPorSiafi[p.numero_siafi_plano].map(d => `${d.ano}${d.numero_emenda}`).join(', '), p.parlamentar])
-        });
-    }
-    secoes.push({
-        id: 'siafiCompartilhado', titulo: 'Nº SIAFI compartilhado por mais de uma emenda',
-        desc: 'Instrumentos que reúnem várias emendas (comum em portarias). A execução não pode ser separada por emenda; na Visão Geral, o valor repassado é rateado pelo valor indicado.',
-        cols: [{t:'Nº SIAFI',tipo:'siafi'},{t:'Forma de repasse'},{t:'Nº de emendas'},{t:'Autorias'},{t:'Valor indicado (soma)',tipo:'moeda'},{t:'Valor repassado do instrumento',tipo:'moeda'}],
-        rows: [...G].filter(k => dgPorSiafi[k].length > 1).sort().map(k => {
-            const rows = dgPorSiafi[k];
-            return [k, juntar(rows, 'tipo_instrumento', ', '), rows.length, juntar(rows, 'autoria', '; '), rows.reduce((s, r) => s + (r.valor_indicado || 0), 0), rows[0].valor_repassado_instrumento || 0];
-        })
-    });
-
-    el.innerHTML = `
-        <p class="conc-intro">Cruzamento das três bases pelo Nº SIAFI: <strong>Emendas Geral</strong> (cadastro), <strong>Plano de Ação</strong> (TransfereGov) e <strong>Execução</strong> (empenhos no SIAFI MG). Use esta aba para localizar códigos que não se correspondem.</p>
-        <div class="conc-metodo"><i class="material-icons" style="font-size:14px;vertical-align:middle;">info</i> ${metodo}</div>
-        <div class="row mb-4">
-            ${cardMetrica('col-md-3 col-6', 'Nº SIAFI distintos', 'Total de códigos distintos somando as três bases', U.size.toLocaleString('pt-BR'))}
-            ${cardMetrica('col-md-3 col-6', 'Nas 3 bases', 'Códigos presentes em Emendas Geral, Plano e Execução', em3.toLocaleString('pt-BR'))}
-            ${cardMetrica('col-md-3 col-6', 'Em 2 bases', 'Códigos presentes em exatamente duas bases', em2.toLocaleString('pt-BR'))}
-            ${cardMetrica('col-md-3 col-6', 'Em 1 base', 'Códigos presentes em apenas uma base', em1.toLocaleString('pt-BR'))}
-        </div>
-        <div class="conc-tabela-wrap" style="margin-bottom:18px;">
-            <table class="conc-tabela">
-                <thead><tr><th>Presença do Nº SIAFI</th><th style="text-align:right">Todos os instrumentos</th><th style="text-align:right">Só Transferências Especiais</th><th>Leitura</th></tr></thead>
-                <tbody>${combos.map(([k, nome, leitura]) => `<tr><td>${nome}</td><td style="text-align:right">${(cont[k] || 0).toLocaleString('pt-BR')}</td><td style="text-align:right">${(contTE[k] || 0).toLocaleString('pt-BR')}</td><td>${leitura}</td></tr>`).join('')}</tbody>
-            </table>
-        </div>
-        <div class="objeto-title" style="margin-bottom:10px;"><i class="material-icons">rule</i>DIVERGÊNCIAS ENCONTRADAS</div>
-        ${secoes.map(secaoConciliacao).join('')}`;
-    setTimeout(() => document.querySelectorAll('#conciliacaoConteudo [data-bs-toggle="tooltip"]').forEach(t => new bootstrap.Tooltip(t)), 100);
-}
-
 function renderAvisosCarga() {
     const el = document.getElementById('avisoCarga');
     if (!el) return;
@@ -3036,7 +2752,6 @@ function setupEventListeners() {
 // INICIALIZAÇÃO
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-    if (!MOSTRAR_ABA_CONCILIACAO) { document.getElementById('navConciliacao')?.remove(); document.getElementById('dashboard5')?.remove(); }
     setupAtualizacaoData();
     carregarTodosDados();
     setupEventListeners();
