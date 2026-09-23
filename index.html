@@ -15,6 +15,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <!-- Leitura do arquivo datas.xlsx (vigência dos instrumentos) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <style>
         /* ============================================================
@@ -612,6 +614,19 @@
         .alerta-dados { display:flex; gap:8px; align-items:flex-start; background:#fff8e6; border-left:4px solid #a9660b; border-radius:6px; padding:9px 12px; margin-bottom:8px; font-size:12px; color:#6b4507; }
         .alerta-dados .material-icons { font-size:16px; margin-top:1px; }
         .alerta-erro { background:#fdecee; border-left-color:#b93c42; color:#7a1f24; margin:10px 0; }
+        .alerta-info { background:#eef4fb; border-left-color:#1a3a5c; color:#1a3a5c; }
+
+        /* Situação / motivo da ausência de execução */
+        .status-text.st-alerta     { color:#b93c42; }
+        .motivo-txt { font-size:10.5px; color:#6c757d; line-height:1.25; margin-top:2px; white-space:normal; max-width:260px; }
+        .sem-exec { font-size:11px; color:#94a3b8; font-style:italic; white-space:nowrap; cursor:help; }
+        .tag-recurso { display:inline-block; font-size:10px; font-weight:600; padding:1px 6px; border-radius:3px; white-space:nowrap; }
+        .tag-recurso.rec-emenda   { background:#e6f4ea; color:#1e7e42; }
+        .tag-recurso.rec-estadual { background:#fff3cd; color:#8a5a00; }
+        .tag-recurso.rec-federal  { background:#e8eef4; color:#1a3a5c; }
+        .tag-recurso.rec-outro    { background:#f1f3f5; color:#4b5768; }
+        .vig-hist { font-size:11px; color:#4b5768; margin-top:6px; line-height:1.4; }
+        .nota-tabela { font-size:11px; color:#6c757d; margin:4px 0 0; }
 
     </style>
 </head>
@@ -630,7 +645,7 @@
                 </li>
                 <li class="nav-item">
                     <button class="nav-link" id="dashboard2-tab" data-bs-toggle="tab" data-bs-target="#dashboard2">
-                        <i class="material-icons">receipt</i>Consultas por Emendas - Transferências PIX
+                        <i class="material-icons">receipt</i>Consultas por Emendas - Execução
                     </button>
                 </li>
                 <li class="nav-item">
@@ -754,7 +769,7 @@
 
             </div><!-- /dashboard1 -->
 
-            <!-- ==================== DASHBOARD 2: EXECUÇÃO TRANSFERÊNCIAS PIX ==================== -->
+            <!-- ==================== DASHBOARD 2: EXECUÇÃO DAS EMENDAS (SIAFI-MG) ==================== -->
             <div class="tab-pane fade" id="dashboard2" role="tabpanel">
 
                 <div class="filter-container">
@@ -818,7 +833,16 @@
                             <label class="filter-label">CNPJ/CPF</label>
                             <input type="text" class="form-control" id="cnpjExec" placeholder="00.000.000/0001-00">
                         </div>
-                        <div class="filter-group" style="flex:2;"></div>
+                        <div class="filter-group">
+                            <label class="filter-label" title="Classificação pela fonte de recurso do empenho">Origem do Recurso</label>
+                            <select class="form-select" id="recursoExec">
+                                <option value="">Todas</option>
+                                <option value="emenda">Recurso da emenda</option>
+                                <option value="estadual">Contrapartida / recurso estadual</option>
+                                <option value="federal">Outro recurso federal</option>
+                            </select>
+                        </div>
+                        <div class="filter-group"></div>
                     </div>
                     <div class="botoes-abaixo">
                         <button class="btn-pesquisa" id="aplicarFiltrosExec"><i class="material-icons me-2">tune</i>Atualizar Filtros</button>
@@ -826,9 +850,12 @@
                     </div>
                 </div>
 
- 
+                <div id="avisoVigencia"></div>
+                <div class="row mb-4 g-3" id="summaryCardsExec"></div>
+
                 <div class="toolbar">
                     <div class="toolbar-left">
+                        <button class="btn-export" id="exportCSVEmpExec" title="Exporta um registro por empenho (item/fonte) dos instrumentos filtrados"><i class="material-icons">receipt_long</i>CSV Empenhos</button>
                         <button class="btn-export" id="exportCSVExec"><i class="material-icons">description</i>CSV</button>
                         <button class="btn-export" id="printExec"><i class="material-icons">print</i>PDF</button>
                         <div class="col-manager-dropdown">
@@ -848,13 +875,12 @@
                                 <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(10,this.checked)"> Data Início</label>
                                 <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(11,this.checked)"> Data Fim</label>
                                 <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(12,this.checked)"> Valor Indicado</label>
-                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(13,this.checked)"> Valor Empenhado (Repassado)</label>
+                                <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(13,this.checked)"> Valor Empenhado</label>
                                 <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(14,this.checked)"> Valor Liquidado</label>
                                 <label class="col-item"><input type="checkbox" checked onchange="toggleColExec(15,this.checked)"> Valor Pago</label>
                                 <div class="col-manager-title" style="margin-top:10px;border-top:1px solid #eee;padding-top:8px;">Colunas adicionais</div>
                                 <label class="col-item"><input type="checkbox" onchange="toggleColExecExtra('credor',this.checked)"> Credor</label>
                                 <label class="col-item"><input type="checkbox" onchange="toggleColExecExtra('cnpj',this.checked)"> CNPJ/CPF Credor</label>
-                                <label class="col-item"><input type="checkbox" onchange="toggleColExecExtra('situacao',this.checked)"> Situação</label>
                             </div>
                         </div>
                         <div class="share-dropdown">
@@ -869,7 +895,6 @@
                         </div>
                     </div>
                     <div class="toolbar-right">
-                        <span class="table-badge" id="countExec">0 registros</span>
                         <div class="table-search-container">
                             <i class="material-icons" style="font-size:16px;color:#94a3b8;">search</i>
                             <input type="text" id="searchExec" class="table-search-input" placeholder="Buscar registros...">
@@ -898,15 +923,14 @@
                                     <th class="sortable-header" onclick="ordenarAgregadoExec('orgao_executor')" title="Órgão Executor, obtido via correspondência do Nº SIAFI com dados_gerais_emendas">Órgão <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarAgregadoExec('objeto')" title="Objeto da emenda, obtido via correspondência do Nº SIAFI com dados_gerais_emendas">Objeto <i class="material-icons">unfold_more</i></th>
                                     <th title="Descrição da despesa, identificando o objeto do gasto (item 17.3)">Descrição da Despesa</th>
-                                    <th class="sortable-header" onclick="ordenarAgregadoExec('data_inicio')" title="Data de início da vigência, obtida via correspondência do Nº SIAFI com dados_gerais_emendas">Data Início <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarAgregadoExec('data_fim')" title="Data de fim da vigência, obtida via correspondência do Nº SIAFI com dados_gerais_emendas">Data Fim <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('data_inicio')" title="Data de início da vigência do instrumento (arquivo datas.xlsx)">Data Início <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('data_fim')" title="Data de fim da vigência do instrumento, considerando as prorrogações (arquivo datas.xlsx)">Data Fim <i class="material-icons">unfold_more</i></th>
                                     <th class="sortable-header" onclick="ordenarAgregadoExec('valor_indicado')" style="text-align:right;" title="Valor indicado da emenda, obtido via correspondência do Nº SIAFI com dados_gerais_emendas">Valor Indicado <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarAgregadoExec('empenhado')" style="text-align:right;" title="Valor empenhado (repassado), somando todos os empenhos deste Nº SIAFI">Valor Empenhado <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarAgregadoExec('liquidado')" style="text-align:right;" title="Valor liquidado da despesa (item 17.3), somando todos os empenhos deste Nº SIAFI">Valor Liquidado <i class="material-icons">unfold_more</i></th>
-                                    <th class="sortable-header" onclick="ordenarAgregadoExec('pago')" style="text-align:right;" title="Valor pago, somando todos os empenhos deste Nº SIAFI">Valor Pago <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('empenhado')" style="text-align:right;" title="Valor empenhado no SIAFI-MG, descontados os cancelamentos de restos a pagar, somando todos os empenhos deste Nº SIAFI">Valor Empenhado <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('liquidado')" style="text-align:right;" title="Valor liquidado no exercício do empenho + restos a pagar não processados pagos, somando todos os empenhos deste Nº SIAFI">Valor Liquidado <i class="material-icons">unfold_more</i></th>
+                                    <th class="sortable-header" onclick="ordenarAgregadoExec('pago')" style="text-align:right;" title="Valor pago no exercício do empenho + pagamentos de restos a pagar (processados e não processados), somando todos os empenhos deste Nº SIAFI">Valor Pago <i class="material-icons">unfold_more</i></th>
                                     <th id="thExecCredor" class="sortable-header" onclick="ordenarAgregadoExec('credorDisplay')" style="display:none;">Credor <i class="material-icons">unfold_more</i></th>
                                     <th id="thExecCnpj" style="display:none;">CNPJ/CPF Credor</th>
-                                    <th id="thExecSituacao" class="sortable-header" onclick="ordenarAgregadoExec('situacao')" style="display:none;">Situação <i class="material-icons">unfold_more</i></th>
                                     <th style="text-align:center;width:60px;">Ações</th>
                                 </tr>
                             </thead>
@@ -944,17 +968,19 @@
                                 <tr><td>Emendas Geral</td><td>Valor Indicado</td><td>Valor financeiro indicado associado à emenda.</td></tr>
                                 <tr><td>Emendas Geral</td><td>Valor Repassado</td><td>Valor financeiro repassado ao instrumento. Quando um mesmo Nº SIAFI reúne várias emendas, o valor repassado é rateado proporcionalmente ao valor indicado de cada emenda nos totais do painel.</td></tr>
                                 <tr><td>Emendas Geral</td><td>Objeto</td><td>Objeto da emenda.</td></tr>
-                                <tr><td>Emendas Geral</td><td>Data Início / Data Fim</td><td>Datas estimadas de início e término da vigência do instrumento, quando disponibilizadas pela fonte federal.</td></tr>
-                                <tr class="dicionario-secao"><td colspan="3">EXECUÇÃO TRANSFERÊNCIAS PIX</td></tr>
+                                <tr><td>Emendas Geral</td><td>Data Início / Data Fim</td><td>Início e término da vigência do instrumento, obtidos do arquivo datas.xlsx pelo Nº SIAFI. Quando o instrumento foi prorrogado, a Data Fim é a da última prorrogação.</td></tr>
+                                <tr class="dicionario-secao"><td colspan="3">EXECUÇÃO DAS EMENDAS (SIAFI-MG)</td></tr>
+                                <tr><td>Execução</td><td>Fontes</td><td>pagamentos.csv (empenhos, com valores empenhado, liquidado e pago no exercício) e pagamentosrp.csv (restos a pagar dos mesmos empenhos). Os dois arquivos são ligados por Nº SIAFI + ano + Nº empenho + item + fonte + elemento. Abrange convênios, portarias e transferências especiais.</td></tr>
                                 <tr><td>Execução</td><td>Ano</td><td>Ano da emenda, obtido via correspondência do Nº SIAFI com Emendas Geral. Cada linha da tabela corresponde a um Nº SIAFI e agrega todos os seus empenhos.</td></tr>
                                 <tr><td>Execução</td><td>CÓD. SIAFI</td><td>Número de controle do SIAFI MG. Clique para acessar o Inteiro Teor do instrumento.</td></tr>
                                 <tr><td>Execução</td><td>Autoria</td><td>Parlamentar autor da emenda, obtido via correspondência do Nº SIAFI com Emendas Geral (ou com o Plano de Ação, quando o Nº SIAFI não consta em Emendas Geral). Quando um Nº SIAFI reúne várias emendas, todos os autores são listados.</td></tr>
-                                <tr><td>Execução</td><td>Tipo de Emenda / Forma de Repasse / Função de Governo / Órgão</td><td>Obtidos via correspondência do Nº SIAFI com Emendas Geral.</td></tr>
-                                <tr><td>Execução</td><td>Nº Empenho / Data do Empenho</td><td>Disponíveis no detalhamento por empenho, ao clicar em Ações.</td></tr>
-                                <tr><td>Execução</td><td>Data Início / Data Fim</td><td>Datas estimadas de início e término da vigência da emenda vinculada, obtidas via correspondência do Nº SIAFI com Emendas Geral.</td></tr>
-                                <tr><td>Execução</td><td>Valor Empenhado (R$)</td><td>Despesa Empenhada ajustada, somada por Nº SIAFI.</td></tr>
-                                <tr><td>Execução</td><td>Valor Pago (R$)</td><td>Valor pago informado na base de execução (inclui pagamentos de restos a pagar), somado por Nº SIAFI.</td></tr>
-                                <tr><td>Execução</td><td>Valor RPP Pago</td><td>Restos a Pagar Processados pagos, disponível no detalhamento por empenho.</td></tr>
+                                <tr><td>Execução</td><td>Tipo de Emenda / Forma de Repasse / Função de Governo / Órgão</td><td>Obtidos via correspondência do Nº SIAFI com Emendas Geral. Quando o Nº SIAFI não consta em Emendas Geral, o órgão vem da base de execução.</td></tr>
+                                <tr><td>Execução</td><td>Nº Empenho / Data / Credor / Licitação</td><td>Disponíveis no detalhamento por empenho, ao clicar em Ações.</td></tr>
+                                <tr><td>Execução</td><td>Valor Empenhado (R$)</td><td>Empenhado líquido: soma do valor empenhado dos empenhos do Nº SIAFI, descontados os cancelamentos de restos a pagar (líquidos de restabelecimentos). Para empenhos que só aparecem em restos a pagar (em geral 2020 e 2021), usa-se o valor empenhado dessa base; se ele vier zerado, estima-se pelo pago + cancelado.</td></tr>
+                                <tr><td>Execução</td><td>Valor Liquidado (R$)</td><td>Liquidado no exercício do empenho + restos a pagar não processados pagos (que precisam ser liquidados antes do pagamento).</td></tr>
+                                <tr><td>Execução</td><td>Valor Pago (R$)</td><td>Pago no exercício do empenho + restos a pagar processados pagos + restos a pagar não processados pagos.</td></tr>
+                                <tr><td>Execução</td><td>Inscrito em Restos a Pagar</td><td>Exibido no detalhamento. Pode estar acumulado entre exercícios (reinscrições), por isso não é somado aos totais.</td></tr>
+                                <tr><td>Execução</td><td>Origem do Recurso</td><td>Classificação pela fonte do empenho: Recurso da emenda (fontes 1, 2, 5, 62, 63, 97, 98); Contrapartida / recurso estadual (fontes 10, 60, 71); Outro recurso federal (fontes 24 e 92).</td></tr>
                                 <tr><td>Execução</td><td>CNPJ/CPF Credor / Razão Social Credor</td><td>Identificação do credor — beneficiário final, disponível no detalhamento (Ações).</td></tr>
                                 <tr class="dicionario-secao"><td colspan="3">PLANO DE AÇÃO (TRANSFERÊNCIAS ESPECIAIS)</td></tr>
                                 <tr><td>Plano de Ação</td><td>Nº SIAFI</td><td>Código do instrumento no SIAFI. É a chave que liga o Plano de Ação a Emendas Geral e à Execução. Quando não informado, o vínculo é feito pelo número da emenda e, se necessário, pelo órgão executor e valor.</td></tr>
@@ -964,11 +990,14 @@
                                 <tr><td>Plano de Ação</td><td>Situação</td><td>Situação do Plano de Ação no TransfereGov (ex.: CIENTE).</td></tr>
                                 <tr><td>Plano de Ação</td><td>Beneficiário</td><td>Ente beneficiário da transferência, exibido como credor previsto enquanto não há empenho.</td></tr>
                                 <tr class="dicionario-secao"><td colspan="3">SITUAÇÃO DO INSTRUMENTO NO PAINEL</td></tr>
-                                <tr><td>Situação</td><td>Em execução financeira</td><td>Há ao menos um empenho registrado para o Nº SIAFI.</td></tr>
-                                <tr><td>Situação</td><td>Situação do plano (ex.: CIENTE)</td><td>Plano de Ação cadastrado, mas ainda sem empenho.</td></tr>
-                                <tr><td>Situação</td><td>Execução não iniciada</td><td>Transferência Especial sem Plano de Ação vinculado e sem empenho.</td></tr>
-                                <tr><td>Situação</td><td>Fora da base PIX (Convênio/Portaria)</td><td>Instrumento cuja execução não é acompanhada pela base de Transferências Especiais.</td></tr>
-                                <tr><td>Situação</td><td>Sem cadastro geral</td><td>Nº SIAFI que aparece na Execução ou no Plano de Ação, mas não em Emendas Geral.</td></tr>
+                                <tr><td>Situação</td><td>Em execução financeira</td><td>Há empenho registrado no SIAFI-MG e ao menos um pagamento.</td></tr>
+                                <tr><td>Situação</td><td>Empenhado, sem pagamento</td><td>Há empenho registrado, mas nenhum pagamento até o momento.</td></tr>
+                                <tr><td>Situação</td><td>Sem execução: aguardando repasse</td><td>O valor repassado pela União ao instrumento é zero. Sem o recurso em caixa, o Estado não empenha.</td></tr>
+                                <tr><td>Situação</td><td>Sem execução: aguardando empenho</td><td>O recurso já foi repassado, a vigência está em curso, mas ainda não há empenho. Para transferências especiais, mostra a situação do Plano de Ação.</td></tr>
+                                <tr><td>Situação</td><td>Sem execução: vigência não iniciada</td><td>A data de início da vigência é posterior à data de hoje.</td></tr>
+                                <tr><td>Situação</td><td>Sem execução: vigência encerrada</td><td>A vigência terminou sem empenho registrado para o Nº SIAFI (com ou sem repasse). Recomenda-se verificar devolução do recurso.</td></tr>
+                                <tr><td>Situação</td><td>Sem execução: sem cadastro geral</td><td>Nº SIAFI que aparece apenas no Plano de Ação, sem cadastro em Emendas Geral e sem empenho.</td></tr>
+                                <tr><td>Situação</td><td>Sem cadastro geral (selo)</td><td>Nº SIAFI que aparece na Execução ou no Plano de Ação, mas não em Emendas Geral.</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -1071,16 +1100,28 @@ const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/transparencia-mg/port
 const GITHUB_API_COMMITS = 'https://api.github.com/repos/transparencia-mg/portal_emendas_federais/commits?path=dataset/data&per_page=1';
 const CONVENIOS_CSV_URL = 'https://raw.githubusercontent.com/transparencia-mg/portal_convenios_entrada/main/dataset/data/convenios.csv';
 
+const GITHUB_RAW_ROOT = 'https://raw.githubusercontent.com/transparencia-mg/portal_emendas_federais/main/';
+
 const ARQUIVOS = {
     dadosGerais:   GITHUB_RAW_BASE + 'dados_gerais_emendas.csv',
-    execucao:      GITHUB_RAW_BASE + 'execucao_transferencias_especiais_pix.csv',
-    planoExecucao: GITHUB_RAW_BASE + 'plano_execucao_emendas_pix.csv'
+    pagamentos:    GITHUB_RAW_BASE + 'pagamentos.csv',      // empenhos: empenhado, liquidado e pago no exercício
+    pagamentosRP:  GITHUB_RAW_BASE + 'pagamentosrp.csv',    // restos a pagar dos empenhos
+    execucaoPix:   GITHUB_RAW_BASE + 'execucao_transferencias_especiais_pix.csv', // histórico (só complementa)
+    planoExecucao: GITHUB_RAW_BASE + 'plano_execucao_emendas_pix.csv',
+    datas:         GITHUB_RAW_ROOT + 'datas.xlsx',          // vigência dos instrumentos
+    datasCSV:      GITHUB_RAW_BASE + 'datas.csv'            // alternativa, caso o arquivo passe a ser publicado em CSV
 };
+
+// A base antiga de Transferências Especiais é usada apenas para acrescentar empenhos
+// que NÃO existem em pagamentos/pagamentosrp (ex.: empenhos de 2020–2021 pagos no próprio ano).
+// Para desligar, troque para false.
+const USAR_PIX_COMPLEMENTAR = true;
 
 // ============================================================
 // VARIÁVEIS GLOBAIS
 // ============================================================
 let dadosGerais = [], execucaoData = [], planoExecucaoData = [], conveniosData = {}, siafiToDG = {}, siafiToPlanos = {};
+let vigenciaPorSiafi = {};   // Nº SIAFI -> { inicio, fim, historico: [{inicio, fim}] }
 let filteredDG = [], filteredExec = [], filteredPlano = [], filteredExecBase = [];
 
 let currentPage    = { dg: 1, exec: 1, plano: 1 };
@@ -1235,7 +1276,7 @@ function irParaExecucaoPorAutoria(autoria, ano) {
     // Ano: usa o parâmetro explícito ou o ano selecionado na Visão Geral
     const anoAlvo = (ano !== undefined && ano !== null && ano !== '') ? ano : (document.getElementById('anoDG')?.value || '');
     // Limpa TODOS os filtros da aba de execução, para nenhum filtro antigo esconder resultados
-    ['anoExec','siafiExec','numeroEmendaExec','autoriaExec','modalidadeExec','formaRepasseExec','funcaoExec','orgaoExec','objetoExec','descricaoItem','situacaoExec','credorExec','cnpjExec','searchExec'].forEach(id => {
+    ['anoExec','siafiExec','numeroEmendaExec','autoriaExec','modalidadeExec','formaRepasseExec','funcaoExec','orgaoExec','objetoExec','descricaoItem','situacaoExec','credorExec','cnpjExec','recursoExec','searchExec'].forEach(id => {
         const el = document.getElementById(id); if (el) el.value = '';
     });
     currentSearch.exec = '';
@@ -1257,6 +1298,9 @@ function irParaExecucaoPorAutoria(autoria, ano) {
 function statusBadge(situacao) {
     if (!situacao) return '<span class="status-text st-default">Não informado</span>';
     const s = situacao.toString().trim().toUpperCase();
+    if (s.includes('VIGÊNCIA ENCERRADA')) return `<span class="status-text st-alerta">${situacao}</span>`;
+    if (s.startsWith('SEM EXECU'))  return `<span class="status-text st-pendente">${situacao}</span>`;
+    if (s.includes('EMPENHADO, SEM')) return `<span class="status-text st-ciente">${situacao}</span>`;
     if (s.includes('NÃO INICIADA') || s.includes('NAO INICIADA')) return `<span class="status-text st-default">${situacao}</span>`;
     if (s.includes('CONCLU')) return `<span class="status-text st-concluido">${situacao}</span>`;
     if (s.includes('EXECU'))  return `<span class="status-text st-execucao">${situacao}</span>`;
@@ -1319,10 +1363,15 @@ async function setupAtualizacaoData() {
 // ------------------------------------------------------------
 // Estruturas de cruzamento (chave: Nº SIAFI)
 // ------------------------------------------------------------
-const TIPO_TE     = 'Transferência Especial';
-const SIT_EXEC    = 'EM EXECUÇÃO FINANCEIRA';
-const SIT_NAO_INI = 'EXECUÇÃO NÃO INICIADA';
-const SIT_FORA    = 'FORA DA BASE PIX (CONVÊNIO/PORTARIA)';
+const TIPO_TE         = 'Transferência Especial';
+const SIT_EXEC        = 'EM EXECUÇÃO FINANCEIRA';
+const SIT_EMPENHADO   = 'EMPENHADO, SEM PAGAMENTO';
+const SIT_AG_REPASSE  = 'SEM EXECUÇÃO: AGUARDANDO REPASSE';
+const SIT_AG_EMPENHO  = 'SEM EXECUÇÃO: AGUARDANDO EMPENHO';
+const SIT_VIG_NAO_INI = 'SEM EXECUÇÃO: VIGÊNCIA NÃO INICIADA';
+const SIT_VIG_ENC     = 'SEM EXECUÇÃO: VIGÊNCIA ENCERRADA';
+const SIT_SEM_CAD     = 'SEM EXECUÇÃO: SEM CADASTRO GERAL';
+const SITUACOES = [SIT_EXEC, SIT_EMPENHADO, SIT_AG_REPASSE, SIT_AG_EMPENHO, SIT_VIG_NAO_INI, SIT_VIG_ENC, SIT_SEM_CAD];
 let dgPorSiafi = {};          // Nº SIAFI -> linhas de Emendas Geral (um SIAFI pode reunir várias emendas)
 let execPorSiafi = {};        // Nº SIAFI -> empenhos
 let dgComplementar = [];      // Nº SIAFI presentes na Execução/Plano mas ausentes de Emendas Geral
@@ -1348,8 +1397,9 @@ function consolidarRegistros(rows, siafi) {
         objeto: juntar(rows, 'objeto', ' | '),
         valor_indicado: rows.reduce((s, r) => s + (r.valor_indicado || 0), 0),
         link: rows.map(r => r.link).find(Boolean) || '',
-        data_inicio: rows.map(r => r.data_inicio).find(Boolean) || '',
-        data_fim: rows.map(r => r.data_fim).find(Boolean) || '',
+        data_inicio: (vigenciaPorSiafi[siafi] || {}).inicio || rows.map(r => r.data_inicio).find(Boolean) || '',
+        data_fim: (vigenciaPorSiafi[siafi] || {}).fim || rows.map(r => r.data_fim).find(Boolean) || '',
+        vigencia: vigenciaPorSiafi[siafi] || null,
         n_emendas_total: (dgPorSiafi[siafi] || rows).length,
         complementar: !!r0.complementar,
         origem_complementar: r0.origem_complementar || ''
@@ -1359,13 +1409,23 @@ function consolidarRegistros(rows, siafi) {
 function carregarTodosDados() {
     Promise.all([
         carregarCSV(ARQUIVOS.dadosGerais, mapDG, 'dadosGerais'),
-        carregarCSV(ARQUIVOS.execucao, mapExec, 'execucao'),
+        carregarCSV(ARQUIVOS.pagamentos, mapPagamento, 'pagamentos'),
+        carregarCSV(ARQUIVOS.pagamentosRP, mapPagamentoRP, 'pagamentosRP'),
+        USAR_PIX_COMPLEMENTAR ? carregarCSV(ARQUIVOS.execucaoPix, mapExecPix, 'execucaoPix') : Promise.resolve([]),
         carregarCSV(ARQUIVOS.planoExecucao, mapPlano, 'planoExecucao'),
+        carregarDatas(),
         carregarConvenios()
-    ]).then(([dg, exec, plano]) => {
+    ]).then(([dg, pag, rp, pix, plano, datas]) => {
         dadosGerais       = dg;
-        execucaoData      = exec;
+        execucaoData      = montarExecucao(pag, rp, pix);
         planoExecucaoData = plano;
+        vigenciaPorSiafi  = datas || {};
+
+        // 0) Vigência (datas.xlsx) em cada emenda
+        dadosGerais.forEach(d => {
+            const v = vigenciaPorSiafi[d.codigo_siafi];
+            if (v) { d.data_inicio = v.inicio; d.data_fim = v.fim; }
+        });
 
         // 1) Emendas Geral por Nº SIAFI
         dgPorSiafi = {};
@@ -1441,18 +1501,20 @@ function carregarTodosDados() {
             const itens  = execPorSiafi[k] || [];
             const p0 = planos[0] || {};
             const anosEmp = itens.map(i => parseInt(i.ano, 10)).filter(n => !isNaN(n));
+            const vig = vigenciaPorSiafi[k] || {};
             dgComplementar.push({
                 id: 'c' + k, codigo_siafi: k, complementar: true,
                 origem_complementar: itens.length && planos.length ? 'Execução e Plano de Ação' : (itens.length ? 'Execução' : 'Plano de Ação'),
                 ano: p0.ano_emenda || (anosEmp.length ? String(Math.min(...anosEmp)) : ''),
                 numero_emenda: p0.numero_emenda_plano || '',
                 autoria: p0.parlamentar ? p0.parlamentar.toUpperCase() : '',
-                esfera: 'FEDERAL', modalidade: '', tipo_instrumento: TIPO_TE, funcao: '',
-                orgao_executor: juntar(planos, 'nome_executor', '; '),
+                // Sem cadastro geral: só dá para afirmar que é Transferência Especial quando há Plano de Ação
+                esfera: 'FEDERAL', modalidade: '', tipo_instrumento: planos.length ? TIPO_TE : '', funcao: '',
+                orgao_executor: juntar(planos, 'nome_executor', '; ') || juntar(itens, 'nome_orgao', '; '),
                 objeto: juntar(planos, 'objeto', ' | '),
                 valor_indicado: planos.reduce((s, p) => s + (p.valor_custeio || 0) + (p.valor_capital || 0), 0),
                 valor_repassado: 0, valor_repassado_rateado: 0,
-                link: '', data_inicio: '', data_fim: ''
+                link: '', data_inicio: vig.inicio || '', data_fim: vig.fim || ''
             });
         });
 
@@ -1470,6 +1532,7 @@ function carregarTodosDados() {
         aplicarFiltros('dg');
         aplicarFiltros('exec');
         renderAvisosCarga();
+        renderAvisoVigencia();
     }).catch(err => {
         console.error('Erro ao carregar dados:', err);
         statusCarga.erroGeral = true;
@@ -1495,7 +1558,8 @@ function processarLinhasConvenios(rows) {
         // Link: prefere TransfereGov, usa SIGCON se nao houver
         const lt = (row.inteiro_teor_do_instrumento_transferegov || '').toString().trim();
         const ls = (row.inteiro_teor_do_instrumento_sigcon || '').toString().trim();
-        const link = isValidUrl(lt) ? lt : isValidUrl(ls) ? ls : '';
+        const li = (row.inteiro_teor || '').toString().trim(); // nome atual da coluna em convenios.csv
+        const link = isValidUrl(lt) ? lt : isValidUrl(ls) ? ls : isValidUrl(li) ? li : '';
         if (!link) return;
 
         const url = link.startsWith('http') ? link : 'https://' + link;
@@ -1588,34 +1652,271 @@ function mapDG(row, i) {
     };
 }
 
-function mapExec(row, i) {
-    return {
-        id: i + 1,
-        ano: row.ano_empenho || '',
-        numero_siafi: normSiafi(row.no_siafi || row.numero_siafi || ''),
-        numero_emenda: row.numero_emenda || '',
-        numero_empenho: row.no_empenho || row.numero_empenho || '',
-        data_empenho: row.data_empenho || '',
-        acao: row.acao || '',
-        categoria: row.categoria || '',
-        grupo: row.grupo || '',
-        modalidade: row.modalide || row.modalidade || '',
-        elemento_despesa: row.elemento_de_despesa || row.elemento_despes || row.elemento_despesa || '',
-        item_despesa: row.item_de_despesa || row.item_despesa || '',
-        descricao_item: row.descricao_item || '',
-        natureza_dea: row.natureza_dea || '',
-        ed_eda: row.ed_dea || row.ed_eda || '',
-        fonte: row.fonte || '',
-        procedencia: row.procedencia || row.procedência || '',
-        cnpj_credor: row.cnpj_cpf_credor || '',
-        razao_social_credor: row.razao_social_credor || '',
-        valor_empenhado: parseValor(row.valor_empenhado_r || row.valor_empenhado),
-        valor_liquidado: parseValor(row.valor_liquidado_r || row.valor_liquidado),
-        valor_pago: parseValor(row.valor_pago_r || row.valor_pago),
-        valor_pago_orcamentario: parseValor(row.pago_orcamentario),
-        valor_rpp_pago: parseValor(row.rpp_pago)
-    };
+// ------------------------------------------------------------
+// EXECUÇÃO — pagamentos.csv + pagamentosrp.csv (SIAFI-MG)
+// ------------------------------------------------------------
+const FONTES_EMENDA    = new Set(['1','2','5','62','63','97','98']);
+const FONTES_ESTADUAIS = new Set(['10','60','71']);
+const FONTES_FED_OUTRAS = new Set(['24','92']);
+const TIPO_RECURSO = {
+    emenda:   'Recurso da emenda',
+    estadual: 'Contrapartida / recurso estadual',
+    federal:  'Outro recurso federal',
+    outro:    'Não classificado'
+};
+function tipoRecursoFonte(cod) {
+    const c = String(parseInt(cod, 10));
+    if (FONTES_EMENDA.has(c))     return 'emenda';
+    if (FONTES_ESTADUAIS.has(c))  return 'estadual';
+    if (FONTES_FED_OUTRAS.has(c)) return 'federal';
+    return 'outro';
 }
+function tagRecurso(tipo, fonte) {
+    return `<span class="tag-recurso rec-${tipo}" title="${escHtml(fonte || '')}">${TIPO_RECURSO[tipo] || tipo}</span>`;
+}
+function anoDeData(d) {
+    const s = (d || '').toString().trim();
+    const m = s.match(/^(\d{4})-/); if (m) return m[1];
+    const b = s.match(/\/(\d{4})/);  return b ? b[1] : '';
+}
+function limparCodigo(v) { return (v === null || v === undefined ? '' : v.toString().trim().replace(/[.,]0+$/, '')); }
+
+const CAMPOS_RP = ['rp_inscrito_rpp','rp_inscrito_rpnp','rp_cancelado_rpp','rp_cancelado_rpnp',
+                   'rp_restabelecido_rpp','rp_restabelecido_rpnp','valor_pago_rpp','valor_pago_rpnp'];
+
+function mapPagamento(row, i) {
+    const r = {
+        origem: 'pagamentos',
+        numero_siafi: normSiafi(row.codigo_siafi || row.no_siafi || ''),
+        numero_emenda: '',
+        numero_empenho: limparCodigo(row.numero_empenho),
+        data_empenho: row.data_empenho || '',
+        processo_siad: (row.processo_compra_siad || '').trim(),
+        modalidade_licitacao: (row.modalidade_licitacao || '').trim(),
+        razao_social_credor: (row.razao_social_credor || '').trim(),
+        cnpj_credor: row.cnpj_cpf_credor || '',
+        orgao_sigla: (row.orgao_sigla || '').trim(),
+        nome_orgao: (row.nome_orgao || '').trim(),
+        categoria: (row.categoria_economica_descricao || '').trim(),
+        grupo: (row.grupo_despesa_descricao || '').trim(),
+        modalidade: (row.modalidade_aplicacao_descricao || '').trim(),
+        codigo_elemento: limparCodigo(row.codigo_elemento),
+        elemento_despesa: (row.elemento_despesa || '').trim(),
+        codigo_item: limparCodigo(row.codigo_item),
+        item_despesa: (row.item_despesa || '').trim(),
+        descricao_item: (row.item_despesa || '').trim(),
+        codigo_fonte: limparCodigo(row.codigo_fonte),
+        fonte: (row.fonte_recurso || row.fonte_reucrso || '').trim(),
+        valor_empenhado: parseValor(row.valor_empenhado),
+        valor_liquidado_exercicio: parseValor(row.valor_liquidado),
+        valor_pago_exercicio: parseValor(row.valor_pago),
+        tem_rp: false
+    };
+    r.ano = anoDeData(r.data_empenho);
+    CAMPOS_RP.forEach(c => r[c] = 0);
+    return r;
+}
+
+function mapPagamentoRP(row, i) {
+    const r = mapPagamento(row, i);
+    r.origem = 'rp';
+    r.valor_empenhado_rp = parseValor(row.valor_empenhado);
+    r.valor_empenhado = 0;
+    r.valor_liquidado_exercicio = 0;
+    r.valor_pago_exercicio = 0;
+    r.rp_inscrito_rpp       = parseValor(row.valor_inscrito_rpp);
+    r.rp_inscrito_rpnp      = parseValor(row.valor_inscrito_rpnp);
+    r.rp_cancelado_rpp      = parseValor(row.valor_cancelado_rpp);
+    r.rp_cancelado_rpnp     = parseValor(row.valor_cancelado_rpnp);
+    r.rp_restabelecido_rpp  = parseValor(row.valor_restabelecido_rpp);
+    r.rp_restabelecido_rpnp = parseValor(row.valor_restabelecido_rpnp);
+    r.valor_pago_rpp        = parseValor(row.valor_pago_rpp);
+    r.valor_pago_rpnp       = parseValor(row.valor_pago_rpnp);
+    r.tem_rp = true;
+    return r;
+}
+
+// Base antiga (Transferências Especiais): usada só para empenhos ausentes das bases novas
+function mapExecPix(row, i) {
+    const r = {
+        origem: 'pix',
+        numero_siafi: normSiafi(row.no_siafi || row.numero_siafi || ''),
+        numero_emenda: '',
+        numero_empenho: limparCodigo(row.no_empenho || row.numero_empenho),
+        data_empenho: row.data_empenho || '',
+        processo_siad: '', modalidade_licitacao: '',
+        razao_social_credor: (row.razao_social_credor || '').trim(),
+        cnpj_credor: row.cnpj_cpf_credor || '',
+        orgao_sigla: '', nome_orgao: '', categoria: '', grupo: '', modalidade: '',
+        codigo_elemento: limparCodigo(row.elemento_de_despesa),
+        elemento_despesa: '',
+        codigo_item: limparCodigo(row.item_de_despesa),
+        item_despesa: (row.descricao_item || '').trim(),
+        descricao_item: (row.descricao_item || '').trim(),
+        codigo_fonte: limparCodigo(row.fonte),
+        fonte: 'TRANSFERENCIAS ESPECIAIS DE RECURSOS DA UNIAO',
+        valor_empenhado: parseValor(row.valor_empenhado_r || row.valor_empenhado),
+        valor_liquidado_exercicio: parseValor(row.valor_liquidado_r || row.valor_liquidado),
+        valor_pago_exercicio: parseValor(row.valor_pago_r || row.valor_pago),
+        tem_rp: false
+    };
+    r.ano = (row.ano_empenho || '').toString().trim() || anoDeData(r.data_empenho);
+    CAMPOS_RP.forEach(c => r[c] = 0);
+    return r;
+}
+
+function chaveLinhaExec(e) { return [e.numero_siafi, e.ano, e.numero_empenho, e.codigo_item, e.codigo_fonte, e.codigo_elemento].join('|'); }
+function chaveEmpenho(e)   { return [e.numero_siafi, e.ano, e.numero_empenho].join('|'); }
+
+// Junta empenhos (pagamentos) com restos a pagar (pagamentosrp) e calcula os totais de cada linha
+function montarExecucao(pag, rp, pix) {
+    const mapa = new Map();
+    (pag || []).forEach(p => {
+        if (!p.numero_siafi) return;
+        const k = chaveLinhaExec(p);
+        const ex = mapa.get(k);
+        if (ex) {
+            ex.valor_empenhado += p.valor_empenhado;
+            ex.valor_liquidado_exercicio += p.valor_liquidado_exercicio;
+            ex.valor_pago_exercicio += p.valor_pago_exercicio;
+        } else mapa.set(k, p);
+    });
+    (rp || []).forEach(r => {
+        if (!r.numero_siafi) return;
+        const k = chaveLinhaExec(r);
+        const ex = mapa.get(k);
+        if (ex) {
+            CAMPOS_RP.forEach(c => ex[c] += r[c]);
+            ex.tem_rp = true;
+        } else {
+            // Empenho que só existe em restos a pagar (exercício anterior à base de pagamentos)
+            r.valor_empenhado = r.valor_empenhado_rp || 0;
+            mapa.set(k, r);
+        }
+    });
+    const linhas = [...mapa.values()];
+    if (pix && pix.length) {
+        const existentes = new Set(linhas.map(chaveEmpenho));
+        pix.forEach(x => { if (x.numero_siafi && !existentes.has(chaveEmpenho(x))) linhas.push(x); });
+    }
+    linhas.forEach(e => {
+        e.tipo_recurso   = tipoRecursoFonte(e.codigo_fonte);
+        e.valor_pago_rp  = e.valor_pago_rpp + e.valor_pago_rpnp;
+        e.valor_pago     = e.valor_pago_exercicio + e.valor_pago_rp;
+        e.valor_liquidado = e.valor_liquidado_exercicio + e.valor_pago_rpnp;
+        e.valor_rpp_pago = e.valor_pago_rpp;
+        // Cancelamentos de restos a pagar (líquidos de restabelecimentos) reduzem o empenhado:
+        // é comum o empenho ser cancelado em RP e a despesa ser reempenhada em outro exercício.
+        e.valor_cancelado_rp = Math.max(0, (e.rp_cancelado_rpp + e.rp_cancelado_rpnp) - (e.rp_restabelecido_rpp + e.rp_restabelecido_rpnp));
+        e.empenhado_estimado = false;
+        if (e.origem === 'rp' && !e.valor_empenhado) {
+            // Base de RP sem valor empenhado: estima pelo que foi pago + cancelado
+            e.valor_empenhado = e.valor_pago_rp + e.valor_cancelado_rp;
+            e.empenhado_estimado = true;
+        }
+        e.valor_empenhado_bruto = e.valor_empenhado;
+        e.valor_empenhado = Math.max(0, e.valor_empenhado_bruto - e.valor_cancelado_rp);
+    });
+    console.log('[Execução] linhas:', linhas.length,
+        '| pagamentos:', (pag || []).length, '| RP:', (rp || []).length,
+        '| complementadas pela base PIX:', linhas.filter(l => l.origem === 'pix').length);
+    return linhas;
+}
+
+// ------------------------------------------------------------
+// VIGÊNCIA — datas.xlsx (CODIGO SIAFI | DATA INICIO | DATA FIM)
+// Um Nº SIAFI pode ter várias linhas (prorrogações): início = menor data, fim = maior data.
+// ------------------------------------------------------------
+function dataISO(v) {
+    if (v === null || v === undefined || v === '') return '';
+    if (typeof v === 'number' && window.XLSX) {
+        const d = XLSX.SSF.parse_date_code(v);
+        return d ? `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}` : '';
+    }
+    if (v instanceof Date) return `${v.getFullYear()}-${String(v.getMonth()+1).padStart(2,'0')}-${String(v.getDate()).padStart(2,'0')}`;
+    const s = v.toString().trim();
+    let m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);            if (m) return `${m[1]}-${m[2]}-${m[3]}`;
+    m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);            if (m) return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
+    return '';
+}
+
+function montarVigencias(linhas) {
+    // linhas: [[siafi, inicio, fim], ...] sem cabeçalho
+    const mapa = {};
+    linhas.forEach(([sf, ini, fim]) => {
+        const k = normSiafi(sf);
+        const i = dataISO(ini), f = dataISO(fim);
+        if (!k || (!i && !f)) return;
+        (mapa[k] = mapa[k] || []).push({ inicio: i, fim: f });
+    });
+    const out = {};
+    Object.entries(mapa).forEach(([k, lista]) => {
+        const hist = lista
+            .filter((h, idx, arr) => arr.findIndex(x => x.inicio === h.inicio && x.fim === h.fim) === idx)
+            .sort((a, b) => (a.fim || '').localeCompare(b.fim || '') || (a.inicio || '').localeCompare(b.inicio || ''));
+        const inicios = hist.map(h => h.inicio).filter(Boolean).sort();
+        const fins    = hist.map(h => h.fim).filter(Boolean).sort();
+        out[k] = { inicio: inicios[0] || '', fim: fins[fins.length - 1] || '', historico: hist };
+    });
+    return out;
+}
+
+function linhasDaPlanilha(rows) {
+    // Localiza o cabeçalho e as colunas pelo nome, para aceitar pequenas mudanças de layout
+    const norm = v => normTexto(v);
+    const iCab = rows.findIndex(r => (r || []).some(c => norm(c).includes('SIAFI')));
+    if (iCab < 0) return [];
+    const cab = rows[iCab].map(norm);
+    const cS = cab.findIndex(c => c.includes('SIAFI'));
+    const cI = cab.findIndex(c => c.includes('INIC'));
+    const cF = cab.findIndex(c => c.includes('FIM') || c.includes('FINAL'));
+    if (cS < 0 || cI < 0 || cF < 0) return [];
+    return rows.slice(iCab + 1).map(r => [r[cS], r[cI], r[cF]]);
+}
+
+async function carregarDatas() {
+    // 1ª opção: datas.xlsx na raiz do repositório
+    try {
+        if (!window.XLSX) throw new Error('Biblioteca XLSX não carregada');
+        const resp = await fetch(ARQUIVOS.datas);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const wb = XLSX.read(await resp.arrayBuffer(), { type: 'array' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: '' });
+        const v = montarVigencias(linhasDaPlanilha(rows));
+        statusCarga.datas = { ok: Object.keys(v).length > 0, n: Object.keys(v).length };
+        if (statusCarga.datas.ok) return v;
+    } catch (e) {
+        console.warn('[Datas] Falha ao ler datas.xlsx:', e.message);
+    }
+    // 2ª opção: datas.csv em dataset/data (separador ;)
+    return new Promise(resolve => {
+        Papa.parse(ARQUIVOS.datasCSV, {
+            download: true, header: false, delimiter: ';', skipEmptyLines: true,
+            complete: r => {
+                const v = montarVigencias(linhasDaPlanilha(r.data || []));
+                statusCarga.datas = { ok: Object.keys(v).length > 0, n: Object.keys(v).length };
+                resolve(v);
+            },
+            error: () => { statusCarga.datas = { ok: false, n: 0 }; resolve({}); }
+        });
+    });
+}
+
+function hojeISO() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+// vigente | encerrada | nao_iniciada | nao_informada
+function statusVigencia(c) {
+    const h = hojeISO();
+    const ini = String(c.data_inicio || '').slice(0, 10), fim = String(c.data_fim || '').slice(0, 10);
+    if (!ini && !fim) return 'nao_informada';
+    if (ini && ini > h) return 'nao_iniciada';
+    if (fim && fim < h) return 'encerrada';
+    return 'vigente';
+}
+const ROTULO_VIGENCIA = { vigente: 'Vigente', encerrada: 'Encerrada', nao_iniciada: 'Não iniciada', nao_informada: 'Não informada' };
 
 function parseCodEmenda(cod) {
     if (!cod) return { ano_emenda: '', numero_emenda_plano: '', parlamentar: '' };
@@ -1676,11 +1977,9 @@ function preencherSelect(id, valores, rotuloTodos) {
 }
 
 function definirFormaPadraoExec() {
-    // A aba trata de Transferências Especiais (PIX): esse é o recorte padrão
+    // A execução agora cobre convênios, portarias e transferências especiais: padrão = todas
     const sel = document.getElementById('formaRepasseExec');
-    if (!sel) return;
-    const opt = [...sel.options].find(o => ehTE(o.value));
-    sel.value = opt ? opt.value : '';
+    if (sel) sel.value = '';
 }
 
 function populaFiltros() {
@@ -1693,10 +1992,9 @@ function populaFiltros() {
     preencherSelect('modalidadeExec', modalidades, 'Todas');
     preencherSelect('formaRepasseExec', [...new Set(dadosGerais.map(d => d.tipo_instrumento).filter(Boolean))].sort(), 'Todas');
     preencherSelect('funcaoExec', [...new Set(dadosGerais.map(d => d.funcao).filter(Boolean))].sort(), 'Todas');
-    const situacoesPlano = [...new Set(planoExecucaoData.map(p => p.situacao_plano).filter(Boolean))].sort();
-    preencherSelect('situacaoExec', [SIT_EXEC, ...situacoesPlano, SIT_NAO_INI, SIT_FORA], 'Todas');
+    preencherSelect('situacaoExec', SITUACOES, 'Todas');
 
-    // Padrão: ano mais recente em ambas as abas; na aba PIX, somente Transferências Especiais
+    // Padrão: ano mais recente em ambas as abas; forma de repasse = todas
     if (anosDG.length)   document.getElementById('anoDG').value = anosDG[0];
     if (anosExec.length) document.getElementById('anoExec').value = anosExec[0];
     definirFormaPadraoExec();
@@ -1743,7 +2041,8 @@ function aplicarFiltros(dash) {
             obj:   normTexto(valorCampo('objetoExec')),
             cre:   normTexto(valorCampo('credorExec')),
             cnpj:  valorCampo('cnpjExec').replace(/\D/g, ''),
-            des:   normTexto(valorCampo('descricaoItem'))
+            des:   normTexto(valorCampo('descricaoItem')),
+            rec:   valorCampo('recursoExec')
         };
         const termo = normTexto(currentSearch.exec);
 
@@ -1766,7 +2065,8 @@ function aplicarFiltros(dash) {
         const filtraEmpenho = e => {
             if (f.cre  && !normTexto(e.razao_social_credor).includes(f.cre)) return false;
             if (f.cnpj && !(e.cnpj_credor || '').toString().replace(/\D/g, '').includes(f.cnpj)) return false;
-            if (f.des  && !normTexto(e.descricao_item).includes(f.des)) return false;
+            if (f.des  && !normTexto([e.descricao_item, e.elemento_despesa].join(' ')).includes(f.des)) return false;
+            if (f.rec  && e.tipo_recurso !== f.rec) return false;
             return true;
         };
         const temFiltroEmpenho = f.cre || f.cnpj || f.des;
@@ -1778,10 +2078,12 @@ function aplicarFiltros(dash) {
             return c;
         });
         if (temFiltroEmpenho) base = base.filter(c => c.itens.length);
+        // Filtro de origem do recurso: mantém os instrumentos sem execução (para mostrar o motivo)
+        if (f.rec) base = base.filter(c => c.itens.length || !(execPorSiafi[c.siafi] || []).length);
         if (termo) {
             base = base.filter(c =>
                 textoBuscaRegistro(c).includes(termo) ||
-                c.itens.some(e => normTexto([e.numero_empenho, e.razao_social_credor, e.cnpj_credor, e.descricao_item].join(' ')).includes(termo)) ||
+                c.itens.some(e => normTexto([e.numero_empenho, e.razao_social_credor, e.cnpj_credor, e.descricao_item, e.processo_siad, e.nome_orgao].join(' ')).includes(termo)) ||
                 (siafiToPlanos[c.siafi] || []).some(p => normTexto([p.nome_executor, p.objeto, p.beneficiario].join(' ')).includes(termo))
             );
         }
@@ -1799,7 +2101,7 @@ function aplicarFiltros(dash) {
 function limparFiltros(dash) {
     const ids = {
         dg:    ['anoDG','modalidadeDG','autoriaDG','esferaDG','searchDG'],
-        exec:  ['anoExec','siafiExec','numeroEmendaExec','autoriaExec','modalidadeExec','formaRepasseExec','funcaoExec','orgaoExec','objetoExec','descricaoItem','situacaoExec','credorExec','cnpjExec','searchExec']
+        exec:  ['anoExec','siafiExec','numeroEmendaExec','autoriaExec','modalidadeExec','formaRepasseExec','funcaoExec','orgaoExec','objetoExec','descricaoItem','situacaoExec','credorExec','cnpjExec','recursoExec','searchExec']
     };
     ids[dash].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
     currentSearch[dash] = '';
@@ -2019,7 +2321,7 @@ window.mostrarDetalhesDG = function(item) {
     // --- Seção Execução ---
     const execHtml = execRel.length ? `
         <div class="objeto-container" style="margin-top:12px;">
-            <div class="objeto-title"><i class="material-icons">receipt</i>EXECUÇÃO TRANSFERÊNCIAS PIX VINCULADA (${execRel.length} registro${execRel.length>1?'s':''})</div>
+            <div class="objeto-title"><i class="material-icons">receipt</i>EXECUÇÃO VINCULADA — SIAFI-MG (${execRel.length} registro${execRel.length>1?'s':''})</div>
             <div style="overflow-x:auto;">
             <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;">
                 <thead>
@@ -2030,7 +2332,7 @@ window.mostrarDetalhesDG = function(item) {
                         <th style="padding:8px 10px;">CNPJ/CPF Credor</th>
                         <th style="padding:8px 10px;">Credor</th>
                         <th style="padding:8px 10px;text-align:right;">Vl. Empenhado</th>
-                        <th style="padding:8px 10px;text-align:right;">Vl. Pago</th>
+                        <th style="padding:8px 10px;text-align:right;" title="Pago no exercício + restos a pagar pagos">Vl. Pago</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -2047,7 +2349,7 @@ window.mostrarDetalhesDG = function(item) {
                 </tbody>
             </table>
             </div>
-        </div>` : `<div class="objeto-container" style="margin-top:12px;"><div class="objeto-title"><i class="material-icons">receipt</i>EXECUÇÃO TRANSFERÊNCIAS PIX VINCULADA</div><div class="objeto-text" style="color:#94a3b8;">Nenhuma execução encontrada para o CÓD. SIAFI <strong>${item.codigo_siafi||'N/D'}</strong>.</div></div>`;
+        </div>` : `<div class="objeto-container" style="margin-top:12px;"><div class="objeto-title"><i class="material-icons">receipt</i>EXECUÇÃO VINCULADA — SIAFI-MG</div><div class="objeto-text" style="color:#94a3b8;">Nenhuma execução encontrada para o CÓD. SIAFI <strong>${escHtml(item.codigo_siafi)||'N/D'}</strong>.${item.codigo_siafi ? ' Motivo: ' + escHtml(avaliarSituacao(Object.assign({}, siafiToDG[item.codigo_siafi] || {}, { siafi: item.codigo_siafi })).motivo) : ''}</div></div>`;
 
     document.getElementById('detailModalLabel').innerHTML = `<i class="material-icons me-2">description</i>Detalhes da Emenda — ${item.numero_emenda||'N/D'}`;
     document.getElementById('detalhesConteudo').innerHTML = `
@@ -2094,7 +2396,7 @@ window.mostrarDetalhesDG = function(item) {
 function updateDashboard2() { updateTabelaExec(); }
 
 // ============================================================
-// PAINEL DE ANÁLISE — EXECUÇÃO PIX (gráfico + rankings)
+// PAINEL DE ANÁLISE — EXECUÇÃO (gráfico + rankings) — não utilizado no layout atual
 // ============================================================
 let chartExecAnoInstance = null;
 function updateAnalysisExec() {
@@ -2183,18 +2485,18 @@ function updateAnalysisExec() {
 }
 
 // ============================================================
-// EXECUÇÃO TRANSFERÊNCIAS PIX — AGREGAÇÃO POR Nº SIAFI / EMENDA
+// EXECUÇÃO (SIAFI-MG) — AGREGAÇÃO POR Nº SIAFI / EMENDA
 // (cada linha da tabela = uma emenda/instrumento; os empenhos individuais
 //  ficam disponíveis no detalhe, ao clicar em Ações)
 // ============================================================
 let execAgregadoSort = { field: 'pago', dir: 'desc' };
 let execAgregadoFull  = [];
 let execAgregadoMap   = {};
-let execColVisible    = { credor: false, cnpj: false, situacao: false };
+let execColVisible    = { credor: false, cnpj: false };
 
 function toggleColExecExtra(key, show) {
     execColVisible[key] = show;
-    const thMap = { credor: 'thExecCredor', cnpj: 'thExecCnpj', situacao: 'thExecSituacao' };
+    const thMap = { credor: 'thExecCredor', cnpj: 'thExecCnpj' };
     const th = document.getElementById(thMap[key]);
     if (th) th.style.display = show ? '' : 'none';
     updateTabelaExec();
@@ -2225,14 +2527,48 @@ function resolverCredorInfo(itens, planos) {
     return { origem: 'nenhum', lista: [] };
 }
 
-// Situação de um instrumento (Nº SIAFI) no processo
-function situacaoDe(c) {
-    const planos = siafiToPlanos[c.siafi] || [];
-    if ((c.itens || []).length) return SIT_EXEC;
-    if (!(ehTE(c.tipo_instrumento) || c.complementar)) return SIT_FORA;
-    if (planos.length) return [...new Set(planos.map(p => p.situacao_plano).filter(Boolean))].join(', ') || 'CIENTE';
-    return SIT_NAO_INI;
+// Valor repassado do instrumento (Emendas Geral). null = Nº SIAFI sem cadastro geral
+function valorRepassadoInstrumento(siafi) {
+    const rows = dgPorSiafi[siafi] || [];
+    return rows.length ? Math.max(...rows.map(r => r.valor_repassado || 0)) : null;
 }
+
+// Situação de um instrumento (Nº SIAFI) e, quando não há execução, o MOTIVO.
+// Usa todos os empenhos do Nº SIAFI (não só os que passaram pelos filtros de credor/fonte).
+function avaliarSituacao(c) {
+    const todos  = execPorSiafi[c.siafi] || [];
+    const planos = siafiToPlanos[c.siafi] || [];
+    const vig    = statusVigencia(c);
+    const sitPlano = [...new Set(planos.map(p => p.situacao_plano).filter(Boolean))].join(', ') || 'cadastrado';
+    const txtVig = c.data_fim ? ` Vigência: ${formatarData(c.data_inicio)} a ${formatarData(c.data_fim)}.` : ' Vigência não informada no arquivo de datas.';
+
+    if (todos.length) {
+        const pago = todos.reduce((s, i) => s + (i.valor_pago || 0), 0);
+        if (pago > 0) return { sit: SIT_EXEC, motivo: '' };
+        return { sit: SIT_EMPENHADO, motivo: `Há ${new Set(todos.map(chaveEmpenho)).size} empenho(s) no SIAFI-MG, mas nenhum pagamento até o momento.` };
+    }
+    if (c.complementar) {
+        return { sit: SIT_SEM_CAD, motivo: `Nº SIAFI presente apenas no Plano de Ação (situação: ${sitPlano}); não consta em Emendas Geral e não há empenho no SIAFI-MG.` };
+    }
+    const rep = valorRepassadoInstrumento(c.siafi);
+    if (rep === 0 && vig === 'encerrada') {
+        return { sit: SIT_VIG_ENC, motivo: `Vigência encerrada em ${formatarData(c.data_fim)} sem repasse de recursos pela União (valor repassado R$ 0,00) e sem empenho no SIAFI-MG.` };
+    }
+    if (rep === 0) {
+        return { sit: SIT_AG_REPASSE, motivo: `A União ainda não repassou o recurso (valor repassado R$ 0,00). Sem o recurso em caixa, o Estado não empenha a despesa.${planos.length ? ` Plano de Ação: ${sitPlano}.` : ''}${txtVig}` };
+    }
+    if (vig === 'nao_iniciada') {
+        return { sit: SIT_VIG_NAO_INI, motivo: `Recurso repassado (${formatarMoeda(rep)}), mas a vigência do instrumento só começa em ${formatarData(c.data_inicio)}.` };
+    }
+    if (vig === 'encerrada') {
+        return { sit: SIT_VIG_ENC, motivo: `Recurso repassado (${formatarMoeda(rep)}), vigência encerrada em ${formatarData(c.data_fim)} e nenhum empenho registrado no SIAFI-MG para este Nº SIAFI. Verificar devolução do recurso ou registro da execução em outro Nº SIAFI.` };
+    }
+    let txtPlano = '';
+    if (planos.length) txtPlano = ` Plano de Ação cadastrado (situação: ${sitPlano}).`;
+    else if (ehTE(c.tipo_instrumento)) txtPlano = ' Nenhum Plano de Ação vinculado.';
+    return { sit: SIT_AG_EMPENHO, motivo: `Recurso repassado (${formatarMoeda(rep)}), mas ainda não há empenho no SIAFI-MG.${txtPlano}${txtVig}` };
+}
+function situacaoDe(c) { return avaliarSituacao(c).sit; }
 
 function calcularAgregadoExec() {
     const linhas = filteredExecBase.map(c => {
@@ -2242,9 +2578,16 @@ function calcularAgregadoExec() {
         const empenhado = soma('valor_empenhado');
         const liquidado = soma('valor_liquidado');
         const pago      = soma('valor_pago');
+        const pagoExercicio = soma('valor_pago_exercicio');
+        const pagoRP    = soma('valor_pago_rp');
         const iniciouExecucao = itens.length > 0;
-        const ehPix = ehTE(c.tipo_instrumento) || c.complementar;
-        const situacao = situacaoDe(c);
+        // Plano de Ação só existe para Transferências Especiais
+        const aplicaPlano = ehTE(c.tipo_instrumento) || planos.length > 0;
+        const ehPix = aplicaPlano; // compatibilidade
+        const av = avaliarSituacao(c);
+        const situacao = av.sit, motivo = av.motivo;
+        const nEmpenhos = new Set(itens.map(chaveEmpenho)).size;
+        const vig = statusVigencia(c);
         const credorInfo = resolverCredorInfo(itens, planos);
         const credorDisplay = credorInfo.lista.length
             ? (credorInfo.lista.length === 1 ? credorInfo.lista[0].nome : `Diversos (${credorInfo.lista.length})`)
@@ -2254,14 +2597,14 @@ function calcularAgregadoExec() {
             : '-';
         return Object.assign({}, c, {
             itens, planos,
-            n: itens.length,
-            iniciouExecucao, ehPix, situacao,
+            n: itens.length, nEmpenhos,
+            iniciouExecucao, ehPix, aplicaPlano, situacao, motivo, vig,
             credorInfo, credorDisplay, cnpjDisplay,
-            orgao_executor: c.orgao_executor || juntar(planos, 'nome_executor', '; '),
+            orgao_executor: c.orgao_executor || juntar(planos, 'nome_executor', '; ') || juntar(itens, 'nome_orgao', '; '),
             objeto: c.objeto || juntar(planos, 'objeto', ' | '),
             descricao_item: itens.length ? agregarDimensao(itens, 'descricao_item') : '',
             descricao_item_txt: juntar(itens, 'descricao_item', ' | '),
-            empenhado, liquidado, pago
+            empenhado, liquidado, pago, pagoExercicio, pagoRP
         });
     });
     // O filtro de Situação já é aplicado em aplicarFiltros, para que cards e tabela usem a mesma base
@@ -2299,6 +2642,7 @@ function updateTabelaExec() {
     if (!execAgregadoFull.length) {
         if (tbody) tbody.innerHTML = '<tr><td colspan="20" class="text-center text-muted">Nenhuma emenda encontrada para os filtros selecionados.</td></tr>';
         if (countEl) countEl.textContent = '0 registros';
+        updateCardsExec();
         renderizarPaginacao('paginacaoExec','exec',0,1,itemsPerPage.exec); return;
     }
     const totalPaginas = Math.max(1, Math.ceil(execAgregadoFull.length / itemsPerPage.exec));
@@ -2307,9 +2651,10 @@ function updateTabelaExec() {
     const data  = execAgregadoFull.slice(start, start + itemsPerPage.exec);
     const dCredor   = execColVisible.credor   ? '' : 'display:none;';
     const dCnpj     = execColVisible.cnpj     ? '' : 'display:none;';
-    const dSituacao = execColVisible.situacao ? '' : 'display:none;';
     const vazio = '<span style="color:#94a3b8;">—</span>';
+    updateCardsExec();
     tbody.innerHTML = data.map(g => {
+        const semExec = `<span class="sem-exec" title="${escHtml(g.motivo)}">sem execução</span>`;
         const abrir = `mostrarDetalhesExecAgregado(${jsArg(g.siafi)})`;
         const selos = [];
         if (g.complementar) selos.push(`<span class="selo selo-alerta" title="Nº SIAFI presente na base de ${escHtml(g.origem_complementar)}, mas ausente de Emendas Geral">sem cadastro geral</span>`);
@@ -2330,12 +2675,11 @@ function updateTabelaExec() {
             <td style="white-space:nowrap">${formatarData(g.data_inicio)}</td>
             <td style="white-space:nowrap">${formatarData(g.data_fim)}</td>
             <td class="valor-monetario">${formatarMoeda(g.valor_indicado)}</td>
-            <td class="valor-monetario" style="white-space:nowrap">${g.iniciouExecucao ? formatarMoeda(g.empenhado) : vazio}</td>
+            <td class="valor-monetario" style="white-space:nowrap">${g.iniciouExecucao ? formatarMoeda(g.empenhado) : semExec}</td>
             <td class="valor-monetario">${g.iniciouExecucao ? formatarMoeda(g.liquidado) : vazio}</td>
             <td class="valor-monetario">${g.iniciouExecucao ? formatarMoeda(g.pago) : vazio}</td>
             <td style="${dCredor}" title="${escHtml(g.credorDisplay)}">${truncar(g.credorDisplay, 25)}</td>
             <td style="${dCnpj}white-space:nowrap">${escHtml(g.cnpjDisplay) || '-'}</td>
-            <td style="${dSituacao}white-space:nowrap">${statusBadge(g.situacao)}</td>
             <td style="text-align:center;">
                 <button class="btn-action" onclick="${abrir}" title="Ver detalhes" aria-label="Ver detalhes do Nº SIAFI ${escHtml(g.siafi)}">
                     <i class="material-icons">visibility</i>
@@ -2345,8 +2689,32 @@ function updateTabelaExec() {
     }).join('');
     aplicarColunasOcultas('tabelaExec');
     const nComExecucao = execAgregadoFull.filter(g => g.iniciouExecucao).length;
-    if (countEl) countEl.textContent = `${execAgregadoFull.length.toLocaleString('pt-BR')} instrumentos (Nº SIAFI), ${nComExecucao.toLocaleString('pt-BR')} já em execução financeira`;
+    const nSem = execAgregadoFull.length - nComExecucao;
+    if (countEl) countEl.textContent = `${execAgregadoFull.length.toLocaleString('pt-BR')} instrumentos (Nº SIAFI): ${nComExecucao.toLocaleString('pt-BR')} com execução, ${nSem.toLocaleString('pt-BR')} sem execução`;
     renderizarPaginacao('paginacaoExec','exec',execAgregadoFull.length,currentPage.exec,itemsPerPage.exec);
+}
+
+// Cards de resumo da aba de execução (mesma base da tabela)
+function updateCardsExec() {
+    const c = document.getElementById('summaryCardsExec');
+    if (!c) return;
+    const lista = execAgregadoFull || [];
+    if (!lista.length) { c.innerHTML = ''; return; }
+    const tot = campo => lista.reduce((s, g) => s + (g[campo] || 0), 0);
+    const emp = tot('empenhado'), pago = tot('pago'), pagoRP = tot('pagoRP');
+    const nSem = lista.filter(g => !g.iniciouExecucao).length;
+    const pct = emp ? (pago / emp * 100).toFixed(1).replace('.', ',') + '% do empenhado' : '';
+    const card = (titulo, dica, valor, sub) => `
+        <div class="col-md-3 col-6"><div class="metric-card">
+            <div class="metric-header">${titulo} <i class="material-icons" data-bs-toggle="tooltip" title="${escHtml(dica)}">info_outline</i></div>
+            <div class="metric-body"><div class="metric-value">${valor}</div>${sub ? `<div style="font-size:11px;color:#6c757d;margin-top:2px;">${sub}</div>` : ''}</div>
+        </div></div>`;
+    c.innerHTML =
+        card('Instrumentos (Nº SIAFI)', 'Quantidade de Nº SIAFI exibidos com os filtros atuais', lista.length.toLocaleString('pt-BR'), `${(lista.length - nSem).toLocaleString('pt-BR')} com execução`) +
+        card('Valor Empenhado', 'Soma do valor empenhado no SIAFI-MG, descontados os cancelamentos de restos a pagar', formatarMoeda(emp), '') +
+        card('Valor Pago', 'Pago no exercício do empenho + restos a pagar pagos', formatarMoeda(pago), [pct, pagoRP ? `${formatarMoeda(pagoRP)} em restos a pagar` : ''].filter(Boolean).join(' · ')) +
+        card('Sem Execução', 'Instrumentos sem empenho no SIAFI-MG. O motivo aparece ao passar o mouse sobre "sem execução" e no detalhamento (Ações)', nSem.toLocaleString('pt-BR'), 'filtre por Situação para ver cada motivo');
+    setTimeout(() => document.querySelectorAll('#summaryCardsExec [data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el)), 100);
 }
 
 const ROTULO_VINCULO = {
@@ -2355,30 +2723,65 @@ const ROTULO_VINCULO = {
     estimado: 'Estimado (emenda + órgão/valor)'
 };
 
+// Agrupa as linhas (item/fonte) por empenho, para a tabela do detalhamento
+function agruparPorEmpenho(itens) {
+    const mapa = {};
+    itens.forEach(i => {
+        const k = chaveEmpenho(i);
+        if (!mapa[k]) mapa[k] = { ano: i.ano, numero_empenho: i.numero_empenho, data_empenho: i.data_empenho,
+            credores: new Set(), fontes: {}, elementos: new Set(), licitacao: new Set(), processos: new Set(), origens: new Set(),
+            valor_empenhado: 0, valor_empenhado_bruto: 0, valor_cancelado_rp: 0, valor_liquidado: 0, valor_pago_exercicio: 0, valor_pago_rp: 0, valor_pago: 0, estimado: false,
+            rp: { inscrito_rpp: 0, inscrito_rpnp: 0, cancelado: 0, restabelecido: 0, pago_rpp: 0, pago_rpnp: 0 }, tem_rp: false };
+        const g = mapa[k];
+        if (i.razao_social_credor) g.credores.add(i.razao_social_credor);
+        g.fontes[i.codigo_fonte || '?'] = { tipo: i.tipo_recurso, desc: i.fonte };
+        const el = [i.elemento_despesa, i.item_despesa].filter(Boolean).join(' / ');
+        if (el) g.elementos.add(el);
+        if (i.modalidade_licitacao) g.licitacao.add(i.modalidade_licitacao);
+        if (i.processo_siad && !/^0+\s0+\/0+$/.test(i.processo_siad)) g.processos.add(i.processo_siad);
+        g.origens.add(i.origem);
+        ['valor_empenhado','valor_empenhado_bruto','valor_cancelado_rp','valor_liquidado','valor_pago_exercicio','valor_pago_rp','valor_pago'].forEach(c => g[c] += (i[c] || 0));
+        if (i.empenhado_estimado) g.estimado = true;
+        g.rp.inscrito_rpp  += i.rp_inscrito_rpp || 0;
+        g.rp.inscrito_rpnp += i.rp_inscrito_rpnp || 0;
+        g.rp.cancelado     += (i.rp_cancelado_rpp || 0) + (i.rp_cancelado_rpnp || 0);
+        g.rp.restabelecido += (i.rp_restabelecido_rpp || 0) + (i.rp_restabelecido_rpnp || 0);
+        g.rp.pago_rpp      += i.valor_pago_rpp || 0;
+        g.rp.pago_rpnp     += i.valor_pago_rpnp || 0;
+        if (i.tem_rp) g.tem_rp = true;
+    });
+    return Object.values(mapa).sort((a, b) => String(a.data_empenho).localeCompare(String(b.data_empenho)) || String(a.numero_empenho).localeCompare(String(b.numero_empenho), undefined, { numeric: true }));
+}
+
 window.mostrarDetalhesExecAgregado = function(siafi) {
     const g = execAgregadoMap[normSiafi(siafi)];
     if (!g) return;
     const itens  = g.itens  || [];
     const planos = g.planos || [];
-    const ehPix  = g.ehPix;
+    const aplicaPlano = g.aplicaPlano;
     const situacoesPlano = [...new Set(planos.map(p => p.situacao_plano).filter(Boolean))];
     const vazio = '<span style="color:#94a3b8;">—</span>';
     const pct = (a, b) => b ? ` (${(a / b * 100).toFixed(1).replace('.', ',')}%)` : '';
+    const rep = valorRepassadoInstrumento(g.siafi);
+    const todosDoSiafi = execPorSiafi[g.siafi] || [];
+    const filtrado = itens.length !== todosDoSiafi.length;
 
     // --- Banner de status ---
     let bannerCfg;
-    if (g.iniciouExecucao) bannerCfg = { bg:'#e8f0fe', bd:'#1a3a5c', cor:'#1a3a5c', txt:`<strong>Execução financeira em andamento</strong>: dados consolidados do Nº SIAFI ${escHtml(g.siafi)}, somando ${g.n} registro${g.n === 1 ? '' : 's'} de empenho.` };
-    else if (!ehPix) bannerCfg = { bg:'#f1f3f5', bd:'#6c757d', cor:'#495057', txt:`<strong>Execução fora desta base</strong>: a execução de ${escHtml(g.tipo_instrumento || 'convênios e portarias')} não é acompanhada pela base de Transferências Especiais.` };
-    else if (planos.length) bannerCfg = { bg:'#fff8e6', bd:'#a9660b', cor:'#7a4a06', txt:`<strong>Execução financeira ainda não iniciada</strong>: há Plano de Ação cadastrado (situação: ${statusBadge(g.situacao)}), mas ainda não há empenhos para o Nº SIAFI ${escHtml(g.siafi)}.` };
-    else bannerCfg = { bg:'#f1f3f5', bd:'#6c757d', cor:'#495057', txt:`<strong>Execução não iniciada</strong>: Nº SIAFI ${escHtml(g.siafi)} sem Plano de Ação vinculado e sem empenhos.` };
+    if (g.iniciouExecucao) bannerCfg = { bg:'#e8f0fe', bd:'#1a3a5c', cor:'#1a3a5c', txt:`<strong>${escHtml(g.situacao === SIT_EMPENHADO ? 'Empenhado, sem pagamento' : 'Execução financeira registrada no SIAFI-MG')}</strong>: ${g.nEmpenhos} empenho${g.nEmpenhos === 1 ? '' : 's'} vinculado${g.nEmpenhos === 1 ? '' : 's'} ao Nº SIAFI ${escHtml(g.siafi)}${filtrado ? ` (exibindo ${itens.length} de ${todosDoSiafi.length} registros, conforme os filtros)` : ''}.` };
+    else if (todosDoSiafi.length) bannerCfg = { bg:'#f1f3f5', bd:'#6c757d', cor:'#495057', txt:`<strong>Nenhum empenho atende aos filtros atuais</strong>, mas o Nº SIAFI ${escHtml(g.siafi)} possui execução. Limpe os filtros de credor, descrição ou origem do recurso para ver todos os empenhos.` };
+    else bannerCfg = { bg:'#fff8e6', bd:'#a9660b', cor:'#7a4a06', txt:`<strong>Sem execução financeira — motivo:</strong> ${escHtml(g.motivo)}` };
 
     // --- Etapas do processo ---
+    const vigDet = g.data_fim ? `${formatarData(g.data_inicio)} a ${formatarData(g.data_fim)}` : 'Não informada';
     const etapas = [
         { nome: 'Emenda cadastrada', ok: !g.complementar, det: g.complementar ? 'Ausente de Emendas Geral' : `${g.n_emendas_total} emenda${g.n_emendas_total > 1 ? 's' : ''}` },
-        { nome: 'Plano de Ação', ok: planos.length > 0, na: !ehPix, det: !ehPix ? 'Não se aplica' : (planos.length ? escHtml(situacoesPlano.join(', ') || 'Cadastrado') : 'Não vinculado') },
-        { nome: 'Empenho', ok: g.empenhado > 0, na: !ehPix, det: !ehPix ? 'Fora desta base' : (itens.length ? formatarMoeda(g.empenhado) : 'Não iniciado') },
-        { nome: 'Liquidação', ok: g.liquidado > 0, na: !ehPix, det: !ehPix ? '—' : (g.liquidado > 0 ? formatarMoeda(g.liquidado) + pct(g.liquidado, g.empenhado) : '—') },
-        { nome: 'Pagamento', ok: g.pago > 0, na: !ehPix, det: !ehPix ? '—' : (g.pago > 0 ? formatarMoeda(g.pago) + pct(g.pago, g.empenhado) : '—') }
+        { nome: 'Vigência', ok: g.vig === 'vigente' || g.vig === 'encerrada', det: `${ROTULO_VIGENCIA[g.vig]}<br>${vigDet}` },
+        { nome: 'Repasse da União', ok: (rep || 0) > 0, na: rep === null, det: rep === null ? 'Não informado' : (rep > 0 ? formatarMoeda(rep) : 'Não repassado') },
+        { nome: 'Plano de Ação', ok: planos.length > 0, na: !aplicaPlano, det: !aplicaPlano ? 'Não se aplica' : (planos.length ? escHtml(situacoesPlano.join(', ') || 'Cadastrado') : 'Não vinculado') },
+        { nome: 'Empenho', ok: g.empenhado > 0, det: itens.length ? formatarMoeda(g.empenhado) : 'Não iniciado' },
+        { nome: 'Liquidação', ok: g.liquidado > 0, det: g.liquidado > 0 ? formatarMoeda(g.liquidado) + pct(g.liquidado, g.empenhado) : '—' },
+        { nome: 'Pagamento', ok: g.pago > 0, det: g.pago > 0 ? formatarMoeda(g.pago) + pct(g.pago, g.empenhado) : '—' }
     ];
     const etapasHtml = `<div class="etapas" role="list" aria-label="Etapas do processo">${etapas.map((e, i) => `
         <div class="etapa ${e.na ? 'etapa-na' : (e.ok ? 'etapa-ok' : 'etapa-pendente')}" role="listitem">
@@ -2387,15 +2790,23 @@ window.mostrarDetalhesExecAgregado = function(siafi) {
             <div class="etapa-det">${e.det}</div>
         </div>`).join('')}</div>`;
 
-    // --- Alertas de consistência entre as bases ---
+    // --- Alertas de consistência ---
     const alertas = [];
     if (g.complementar) alertas.push(`Este Nº SIAFI aparece na base de ${escHtml(g.origem_complementar)}, mas <strong>não está cadastrado em Emendas Geral</strong>. Ano, número da emenda e autoria foram obtidos do Plano de Ação, quando disponível.`);
     if (g.n_emendas_total > 1) {
         const todas = dgPorSiafi[g.siafi] || [];
         alertas.push(`Este Nº SIAFI reúne <strong>${todas.length} emendas</strong> (${escHtml(juntar(todas, 'autoria', '; '))}). Os valores de execução referem-se ao instrumento inteiro e não podem ser separados por emenda.`);
     }
-    if (!ehPix) alertas.push(`Para convênios e portarias, consulte o Inteiro Teor do instrumento ou o repositório Transparência Convênios (aba Downloads).`);
-    if (ehPix && itens.length && !planos.length) alertas.push('Há empenhos registrados, mas nenhum Plano de Ação foi vinculado a este Nº SIAFI.');
+    if (g.empenhado > 0 && g.pago > g.empenhado * 1.001) alertas.push(`<strong>Possível inconsistência na base:</strong> o valor pago (${formatarMoeda(g.pago)}) é maior que o empenhado (${formatarMoeda(g.empenhado)}). Pode haver pagamento de restos a pagar duplicado na extração, ou empenho de exercício anterior ausente da base.`);
+    const valCanc = itens.reduce((s, i) => s + (i.valor_cancelado_rp || 0), 0);
+    if (valCanc > 0) alertas.push(`${formatarMoeda(valCanc)} foram <strong>cancelados em restos a pagar</strong> (em geral, empenhos anulados e reempenhados em outro exercício). O valor empenhado exibido já desconta esses cancelamentos.`);
+    const nRpSo = new Set(itens.filter(i => i.origem === 'rp').map(chaveEmpenho)).size;
+    if (nRpSo) alertas.push(`${nRpSo} empenho(s) de exercícios anteriores constam apenas na base de restos a pagar; para eles, o valor empenhado foi obtido dessa base.`);
+    const nPix = new Set(itens.filter(i => i.origem === 'pix').map(chaveEmpenho)).size;
+    if (nPix) alertas.push(`${nPix} empenho(s) foram obtidos da base histórica de Transferências Especiais, pois não constam em pagamentos/pagamentosrp.`);
+    const valEst = itens.filter(i => i.tipo_recurso === 'estadual').reduce((s, i) => s + (i.valor_empenhado || 0), 0);
+    if (valEst > 0) alertas.push(`A execução inclui <strong>${formatarMoeda(valEst)}</strong> empenhados com contrapartida / recursos estaduais (fontes 10, 60 ou 71). Use o filtro <em>Origem do Recurso</em> para ver só o recurso da emenda.`);
+    if (aplicaPlano && itens.length && !planos.length) alertas.push('Há empenhos registrados, mas nenhum Plano de Ação foi vinculado a este Nº SIAFI.');
     const nEstimados = planos.filter(p => p.vinculo === 'estimado' || p.vinculo === 'emenda').length;
     if (nEstimados) alertas.push(`${nEstimados} registro(s) do Plano de Ação foram vinculados pelo número da emenda (e, quando necessário, pelo órgão executor e valor), pois o Nº SIAFI não está informado na base do plano.`);
     const alertasHtml = alertas.map(a => `<div class="alerta-dados"><i class="material-icons">warning_amber</i><div>${a}</div></div>`).join('');
@@ -2405,6 +2816,13 @@ window.mostrarDetalhesExecAgregado = function(siafi) {
     const autoresHtml = g.autoria
         ? g.autoria.split('; ').map(a => `<a href="javascript:void(0)" onclick="irParaExecucaoPorAutoria(${jsArg(a)}, ${jsArg(anoUnico)})" class="link-dados" title="Ver todas as execuções deste autor">${escHtml(a)}</a>`).join('<br>')
         : '-';
+
+    // --- Vigência (com prorrogações) ---
+    const hist = (g.vigencia && g.vigencia.historico) || [];
+    const nProrrog = new Set(hist.map(h => h.fim)).size - 1;
+    const histHtml = hist.length > 1
+        ? `<div class="vig-hist"><strong>Histórico (${hist.length} registros${nProrrog > 0 ? `, ${nProrrog} prorrogaç${nProrrog === 1 ? 'ão' : 'ões'}` : ''}):</strong><br>${hist.map(h => `${formatarData(h.inicio)} a ${formatarData(h.fim)}`).join('<br>')}</div>`
+        : '';
 
     // --- Credor / Beneficiário ---
     const credorInfo = g.credorInfo || resolverCredorInfo(itens, planos);
@@ -2423,44 +2841,67 @@ window.mostrarDetalhesExecAgregado = function(siafi) {
                  <div class="info-label" style="margin-top:8px;">CNPJ/CPF</div><div class="info-value">${formatarCNPJ(lista[0].cnpj)}</div></div>`
             : tabelaSimples(['Beneficiário (Plano)','CNPJ/CPF'], lista.map(c => [escHtml(c.nome), formatarCNPJ(c.cnpj)])));
     } else {
-        credorHtml = `<div class="info-card"><div class="info-label">Credor</div><div class="info-value" style="color:#94a3b8;">Não disponível ainda</div></div>`;
+        credorHtml = `<div class="info-card"><div class="info-label">Credor</div><div class="info-value" style="color:#94a3b8;">Não disponível — ${g.iniciouExecucao ? 'credor não informado' : 'sem execução'}</div></div>`;
     }
 
-    // --- Detalhamento Elemento/Item de despesa ---
-    let despesaDetalheHtml = '';
+    // --- Valores por origem do recurso ---
+    let origemHtml = '';
     if (itens.length) {
-        const combosMap = {};
+        const porTipo = {};
         itens.forEach(i => {
-            const key = (i.elemento_despesa || '') + '|' + (i.item_despesa || '') + '|' + (i.descricao_item || '');
-            if (!combosMap[key]) combosMap[key] = { elemento: i.elemento_despesa || '-', item: i.item_despesa || '-', descricao: i.descricao_item || '-' };
+            const t = i.tipo_recurso || 'outro';
+            porTipo[t] = porTipo[t] || { emp: 0, pago: 0, fontes: new Set() };
+            porTipo[t].emp += i.valor_empenhado || 0; porTipo[t].pago += i.valor_pago || 0;
+            if (i.codigo_fonte) porTipo[t].fontes.add(i.codigo_fonte);
         });
-        const combos = Object.values(combosMap);
-        despesaDetalheHtml = combos.length === 1
-            ? `<div class="info-grid">
-                 <div class="info-card"><div class="info-label">Elemento de Despesa</div><div class="info-value">${escHtml(combos[0].elemento)}</div></div>
-                 <div class="info-card"><div class="info-label">Item de Despesa</div><div class="info-value">${escHtml(combos[0].item)}</div></div>
-               </div>`
-            : tabelaSimples(['Elemento','Item','Descrição'], combos.map(c => [escHtml(c.elemento), escHtml(c.item), escHtml(c.descricao)]));
+        origemHtml = tabelaSimples(['Origem do Recurso','Fontes','Empenhado','Pago'],
+            Object.entries(porTipo).map(([t, v]) => [tagRecurso(t), [...v.fontes].sort((a, b) => a - b).join(', '), formatarMoeda(v.emp), formatarMoeda(v.pago)]));
     }
 
-    // --- Plano de Ação (exibido sempre que houver, mesmo com empenhos) ---
+    // --- Plano de Ação ---
     const planoHtml = planos.length
         ? tabelaSimples(['Situação','Executor','CNPJ Executor','Objeto','Valor Custeio','Valor Capital','Vínculo'],
             planos.map(p => [statusBadge(p.situacao_plano), truncar(p.nome_executor, 40), formatarCNPJ(p.cnpj_executor), truncar(p.objeto, 60),
                 formatarMoeda(p.valor_custeio), formatarMoeda(p.valor_capital), escHtml(ROTULO_VINCULO[p.vinculo] || '-')]))
-        : `<div class="objeto-text" style="color:#94a3b8;">${ehPix ? 'Nenhum Plano de Ação vinculado a este Nº SIAFI.' : 'Não se aplica a este tipo de instrumento.'}</div>`;
+        : `<div class="objeto-text" style="color:#94a3b8;">${aplicaPlano ? 'Nenhum Plano de Ação vinculado a este Nº SIAFI.' : 'Não se aplica a este tipo de instrumento (Plano de Ação existe apenas para Transferências Especiais).'}</div>`;
 
-    // --- Empenhos ---
-    let empenhoHtml;
-    if (itens.length) {
-        const soma = campo => itens.reduce((s, i) => s + (i[campo] || 0), 0);
-        const ordenados = [...itens].sort((a, b) => (String(a.data_empenho)).localeCompare(String(b.data_empenho)));
-        const linhasEmp = ordenados.map(it => [escHtml(it.ano) || '-', escHtml(it.numero_empenho) || '-', formatarData(it.data_empenho),
-            truncar(it.razao_social_credor, 35), formatarMoeda(it.valor_empenhado), formatarMoeda(it.valor_liquidado), formatarMoeda(it.valor_pago), formatarMoeda(it.valor_rpp_pago)]);
-        linhasEmp.push(['<strong>Total</strong>', '', '', '', `<strong>${formatarMoeda(soma('valor_empenhado'))}</strong>`, `<strong>${formatarMoeda(soma('valor_liquidado'))}</strong>`, `<strong>${formatarMoeda(soma('valor_pago'))}</strong>`, `<strong>${formatarMoeda(soma('valor_rpp_pago'))}</strong>`]);
-        empenhoHtml = tabelaSimples(['Ano','Nº Empenho','Data','Credor','Vl. Empenhado','Vl. Liquidado','Vl. Pago','Vl. RPP Pago'], linhasEmp);
+    // --- Empenhos (um por linha) ---
+    let empenhoHtml, rpHtml = '';
+    const empenhos = agruparPorEmpenho(itens);
+    if (empenhos.length) {
+        const tot = campo => empenhos.reduce((s, e) => s + (e[campo] || 0), 0);
+        const linhasEmp = empenhos.map(e => [
+            escHtml(e.ano) || '-',
+            `<strong>${escHtml(e.numero_empenho) || '-'}</strong>${e.origens.has('rp') && !e.origens.has('pagamentos') ? '<div class="selos"><span class="selo" title="Empenho de exercício anterior, presente apenas na base de restos a pagar">só RP</span></div>' : ''}${e.origens.has('pix') ? '<div class="selos"><span class="selo" title="Empenho obtido da base histórica de Transferências Especiais">base PIX</span></div>' : ''}`,
+            `<span style="white-space:nowrap">${formatarData(e.data_empenho)}</span>`,
+            truncar([...e.credores].join('; '), 35),
+            Object.entries(e.fontes).map(([cod, f]) => `<div style="white-space:nowrap">${escHtml(cod)} ${tagRecurso(f.tipo, f.desc)}</div>`).join(''),
+            `<span title="${escHtml([...e.elementos].join(' | '))}">${truncar([...e.elementos].join(' | '), 45)}</span>`,
+            `<span title="${escHtml([...e.processos].join(', '))}">${truncar([...e.licitacao].join(', '), 25)}</span>`,
+            `${formatarMoeda(e.valor_empenhado_bruto)}${e.estimado ? ' <span title="Valor empenhado não informado na base de restos a pagar; estimado pelo pago + cancelado">*</span>' : ''}`,
+            e.valor_cancelado_rp ? `<span style="color:#b93c42;">−${formatarMoeda(e.valor_cancelado_rp)}</span>` : '-',
+            formatarMoeda(e.valor_liquidado), formatarMoeda(e.valor_pago_exercicio),
+            formatarMoeda(e.valor_pago_rp), `<strong>${formatarMoeda(e.valor_pago)}</strong>`
+        ]);
+        linhasEmp.push(['<strong>Total</strong>', `<strong>${empenhos.length}</strong>`, '', '', '', '', '',
+            `<strong>${formatarMoeda(tot('valor_empenhado_bruto'))}</strong>`, tot('valor_cancelado_rp') ? `<strong style="color:#b93c42;">−${formatarMoeda(tot('valor_cancelado_rp'))}</strong>` : '-', `<strong>${formatarMoeda(tot('valor_liquidado'))}</strong>`,
+            `<strong>${formatarMoeda(tot('valor_pago_exercicio'))}</strong>`, `<strong>${formatarMoeda(tot('valor_pago_rp'))}</strong>`, `<strong>${formatarMoeda(tot('valor_pago'))}</strong>`]);
+        linhasEmp.push(['<strong>Empenhado líquido</strong>', '', '', '', '', '', '', `<strong>${formatarMoeda(tot('valor_empenhado'))}</strong>`, '', '', '', '', '']);
+        empenhoHtml = tabelaSimples(['Ano','Nº Empenho','Data','Credor','Fonte','Elemento / Item','Licitação','Empenhado','Cancelado em RP','Liquidado','Pago no ano','Pago em RP','Pago total'], linhasEmp)
+            + `<div class="nota-tabela">Empenhado líquido = empenhado − cancelamentos de restos a pagar (líquidos de restabelecimentos). Liquidado = liquidado no ano do empenho + restos a pagar não processados pagos. Pago total = pago no ano do empenho + restos a pagar pagos (processados e não processados).${empenhos.some(e => e.estimado) ? ' (*) valor estimado.' : ''}</div>`;
+
+        const comRP = empenhos.filter(e => e.tem_rp);
+        if (comRP.length) {
+            rpHtml = `<div class="objeto-title" style="margin-bottom:8px;margin-top:16px;"><i class="material-icons">history</i>RESTOS A PAGAR (${comRP.length})</div>`
+                + tabelaSimples(['Ano','Nº Empenho','Inscrito Processado','Inscrito Não Processado','Cancelado','Restabelecido','Pago RPP','Pago RPNP'],
+                    comRP.map(e => [escHtml(e.ano), escHtml(e.numero_empenho), formatarMoeda(e.rp.inscrito_rpp), formatarMoeda(e.rp.inscrito_rpnp),
+                        formatarMoeda(e.rp.cancelado), formatarMoeda(e.rp.restabelecido), formatarMoeda(e.rp.pago_rpp), formatarMoeda(e.rp.pago_rpnp)]))
+                + `<div class="nota-tabela">O valor inscrito pode aparecer acumulado quando o empenho foi reinscrito em mais de um exercício; por isso ele não entra nos totais.</div>`;
+        }
+    } else if (todosDoSiafi.length) {
+        empenhoHtml = `<div class="objeto-text" style="color:#94a3b8;">Nenhum empenho atende aos filtros atuais (este Nº SIAFI possui ${new Set(todosDoSiafi.map(chaveEmpenho)).size} empenho(s)).</div>`;
     } else {
-        empenhoHtml = `<div class="objeto-text" style="color:#94a3b8;">${ehPix ? 'Ainda não há empenhos publicados no SIAFI para este Nº SIAFI.' : 'A execução deste instrumento não faz parte desta base.'}</div>`;
+        empenhoHtml = `<div class="alerta-dados alerta-info"><i class="material-icons">info</i><div><strong>Sem empenhos no SIAFI-MG.</strong> ${escHtml(g.motivo)}</div></div>`;
     }
 
     document.getElementById('detailModalLabel').innerHTML = `<i class="material-icons me-2">receipt</i>Detalhes da Execução — SIAFI ${escHtml(g.siafi) || 'N/D'}`;
@@ -2479,11 +2920,12 @@ window.mostrarDetalhesExecAgregado = function(siafi) {
             <div class="info-card"><div class="info-label">Código SIAFI</div><div class="info-value highlight">${linkSiafi(g.siafi)}</div></div>
             <div class="info-card">
                 <div class="info-label">Tipo de Emenda</div><div class="info-value">${escHtml(g.modalidade) || '-'}</div>
-                <div class="info-label" style="margin-top:8px;">Forma de Repasse</div><div class="info-value">${escHtml(g.tipo_instrumento) || '-'}</div>
+                <div class="info-label" style="margin-top:8px;">Forma de Repasse</div><div class="info-value">${escHtml(g.tipo_instrumento) || 'Não identificada'}</div>
             </div>
             <div class="info-card">
                 <div class="info-label">Função de Governo</div><div class="info-value">${escHtml(g.funcao) || '-'}</div>
-                <div class="info-label" style="margin-top:8px;">${g.complementar ? 'Valor do Plano de Ação' : 'Valor Indicado'}</div><div class="info-value">${formatarMoeda(g.valor_indicado)}</div>
+                <div class="info-label" style="margin-top:8px;">${g.complementar ? 'Valor do Plano de Ação' : 'Valor Indicado'}</div><div class="info-value">${g.complementar && !planos.length ? '-' : formatarMoeda(g.valor_indicado)}</div>
+                ${rep !== null ? `<div class="info-label" style="margin-top:8px;">Valor Repassado</div><div class="info-value">${formatarMoeda(rep)}</div>` : ''}
             </div>
             <div class="info-card"><div class="info-label">Inteiro Teor</div><div class="info-value highlight">${linkDocumento(g.link, 'Ver Inteiro Teor')}</div></div>
         </div>
@@ -2491,11 +2933,17 @@ window.mostrarDetalhesExecAgregado = function(siafi) {
         <div class="objeto-title" style="margin-bottom:8px;margin-top:16px;"><i class="material-icons">receipt</i>DADOS DA EXECUÇÃO</div>
         <div class="info-grid">
             <div class="info-card">
-                <div class="info-label">Data Início</div><div class="info-value">${formatarData(g.data_inicio)}</div>
-                <div class="info-label" style="margin-top:8px;">Data Fim</div><div class="info-value">${formatarData(g.data_fim)}</div>
+                <div class="info-label">Vigência — Início</div><div class="info-value">${formatarData(g.data_inicio)}</div>
+                <div class="info-label" style="margin-top:8px;">Vigência — Fim</div><div class="info-value">${formatarData(g.data_fim)}</div>
+                <div class="info-label" style="margin-top:8px;">Situação da vigência</div><div class="info-value">${ROTULO_VIGENCIA[g.vig]}</div>
+                ${histHtml}
             </div>
-            <div class="info-card"><div class="info-label">Órgão Executor</div><div class="info-value">${escHtml(g.orgao_executor) || '-'}</div></div>
-            <div class="info-card"><div class="info-label">Situação</div><div class="info-value">${statusBadge(g.situacao)}</div></div>
+            <div class="info-card"><div class="info-label">Órgão Executor</div><div class="info-value">${escHtml(g.orgao_executor) || '-'}</div>
+                ${juntar(itens, 'nome_orgao') && normTexto(juntar(itens, 'nome_orgao')) !== normTexto(g.orgao_executor) ? `<div class="info-label" style="margin-top:8px;">Órgão no SIAFI-MG</div><div class="info-value">${escHtml(juntar(itens, 'nome_orgao', '; '))}</div>` : ''}
+            </div>
+            <div class="info-card"><div class="info-label">Situação</div><div class="info-value">${statusBadge(g.situacao)}</div>
+                ${g.motivo ? `<div class="info-label" style="margin-top:8px;">Motivo</div><div class="info-value" style="font-weight:500;">${escHtml(g.motivo)}</div>` : ''}
+            </div>
         </div>
         ${credorHtml}
 
@@ -2503,31 +2951,31 @@ window.mostrarDetalhesExecAgregado = function(siafi) {
             <div class="objeto-title"><i class="material-icons">subject</i>OBJETO</div>
             <div class="objeto-text">${escHtml(g.objeto) || 'Objeto não informado.'}</div>
         </div>
-        <div class="objeto-container">
-            <div class="objeto-title"><i class="material-icons">subject</i>DESCRIÇÃO DA DESPESA</div>
-            <div class="objeto-text">${escHtml(g.descricao_item_txt) || (itens.length ? 'Descrição não informada.' : 'Disponível após o início da execução financeira.')}</div>
-        </div>
-        ${despesaDetalheHtml}
 
         <div class="objeto-title" style="margin-bottom:8px;margin-top:16px;"><i class="material-icons">payments</i>VALORES</div>
         <div class="info-grid">
-            <div class="info-card"><div class="info-label">Valor Empenhado</div><div class="info-value">${g.iniciouExecucao ? formatarMoeda(g.empenhado) : vazio}</div></div>
-            <div class="info-card"><div class="info-label">Valor Liquidado</div><div class="info-value">${g.iniciouExecucao ? formatarMoeda(g.liquidado) : vazio}</div></div>
-            <div class="info-card"><div class="info-label">Valor Pago</div><div class="info-value">${g.iniciouExecucao ? formatarMoeda(g.pago) : vazio}</div></div>
+            <div class="info-card"><div class="info-label">Valor Empenhado (líquido)</div><div class="info-value">${g.iniciouExecucao ? formatarMoeda(g.empenhado) : vazio}</div>
+                ${valCanc > 0 ? `<div class="info-label" style="margin-top:8px;">Cancelado em RP</div><div class="info-value" style="color:#b93c42;">−${formatarMoeda(valCanc)}</div>` : ''}</div>
+            <div class="info-card"><div class="info-label">Valor Liquidado</div><div class="info-value">${g.iniciouExecucao ? formatarMoeda(g.liquidado) + pct(g.liquidado, g.empenhado) : vazio}</div></div>
+            <div class="info-card"><div class="info-label">Pago no ano do empenho</div><div class="info-value">${g.iniciouExecucao ? formatarMoeda(g.pagoExercicio) : vazio}</div>
+                <div class="info-label" style="margin-top:8px;">Pago em restos a pagar</div><div class="info-value">${g.iniciouExecucao ? formatarMoeda(g.pagoRP) : vazio}</div></div>
+            <div class="info-card"><div class="info-label">Valor Pago (total)</div><div class="info-value highlight">${g.iniciouExecucao ? formatarMoeda(g.pago) + pct(g.pago, g.empenhado) : vazio}</div></div>
         </div>
+        ${origemHtml}
+
+        <div class="objeto-title" style="margin-bottom:8px;margin-top:16px;"><i class="material-icons">receipt_long</i>EMPENHOS DO Nº SIAFI ${escHtml(g.siafi)} ${empenhos.length ? `(${empenhos.length})` : ''}</div>
+        ${empenhoHtml}
+        ${rpHtml}
 
         <div class="objeto-title" style="margin-bottom:8px;margin-top:16px;"><i class="material-icons">assignment</i>PLANO DE AÇÃO ${planos.length ? `(${planos.length})` : ''}</div>
-        ${planoHtml}
-
-        <div class="objeto-title" style="margin-bottom:8px;margin-top:16px;"><i class="material-icons">receipt_long</i>EMPENHOS ${itens.length ? `(${g.n})` : ''}</div>
-        ${empenhoHtml}`;
+        ${planoHtml}`;
     new bootstrap.Modal(document.getElementById('detailModal')).show();
 };
 
 function renderAvisosCarga() {
     const el = document.getElementById('avisoCarga');
     if (!el) return;
-    const nomes = { dadosGerais: 'Emendas Geral', execucao: 'Execução das Transferências Especiais', planoExecucao: 'Plano de Ação' };
+    const nomes = { dadosGerais: 'Emendas Geral', pagamentos: 'Execução (pagamentos.csv)', pagamentosRP: 'Restos a pagar (pagamentosrp.csv)', planoExecucao: 'Plano de Ação', datas: 'Vigência (datas.xlsx)' };
     const falhas = Object.entries(nomes).filter(([k]) => !(statusCarga[k] && statusCarga[k].ok)).map(([, n]) => n);
     if (statusCarga.erroGeral && !falhas.length) falhas.push('processamento dos dados');
     el.innerHTML = falhas.length
@@ -2535,6 +2983,14 @@ function renderAvisosCarga() {
         : '';
 }
 
+
+// Aviso na aba de execução quando a vigência não pôde ser lida
+function renderAvisoVigencia() {
+    const el = document.getElementById('avisoVigencia');
+    if (!el) return;
+    el.innerHTML = (statusCarga.datas && statusCarga.datas.ok) ? '' :
+        `<div class="alerta-dados alerta-erro" role="alert"><i class="material-icons">event_busy</i><div>Não foi possível ler o arquivo de datas de vigência (datas.xlsx). As colunas Data Início / Data Fim e os motivos ligados à vigência ficarão incompletos.</div></div>`;
+}
 
 function aspasCSV(c) { return `"${(c === null || c === undefined ? '' : c).toString().replace(/"/g, '""')}"`; }
 
@@ -2548,6 +3004,27 @@ function baixarArquivo(conteudo, nome) {
     setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
 
+// Um registro por empenho/item/fonte dos instrumentos exibidos na tabela
+function exportarCSVEmpenhos() {
+    const agregado = calcularAgregadoExec();
+    const cab = ['Código SIAFI','Ano Emenda','Nº Emenda','Autoria','Forma de Repasse','Ano Empenho','Nº Empenho','Data Empenho','Órgão','Credor','CNPJ/CPF Credor',
+        'Processo SIAD','Modalidade Licitação','Categoria Econômica','Grupo de Despesa','Modalidade de Aplicação','Elemento de Despesa','Item de Despesa',
+        'Código Fonte','Fonte de Recurso','Origem do Recurso','Valor Empenhado Original (R$)','Cancelado em RP (R$)','Valor Empenhado Líquido (R$)','Liquidado no Exercício (R$)','Pago no Exercício (R$)',
+        'Inscrito RPP (R$)','Inscrito RPNP (R$)','Cancelado RP (R$)','Pago RPP (R$)','Pago RPNP (R$)','Valor Pago Total (R$)','Base de Origem'];
+    const baseOrigem = { pagamentos: 'pagamentos.csv', rp: 'pagamentosrp.csv (só RP)', pix: 'base PIX (histórico)' };
+    const linhas = [];
+    agregado.forEach(g => (g.itens || []).forEach(e => linhas.push([
+        g.siafi, g.ano, g.numero_emenda, g.autoria, g.tipo_instrumento, e.ano, e.numero_empenho, formatarData(e.data_empenho), e.nome_orgao,
+        e.razao_social_credor, formatarCNPJ(e.cnpj_credor), e.processo_siad, e.modalidade_licitacao, e.categoria, e.grupo, e.modalidade,
+        e.elemento_despesa, e.item_despesa, e.codigo_fonte, e.fonte, TIPO_RECURSO[e.tipo_recurso] || '',
+        numCSV(e.valor_empenhado_bruto), numCSV(e.valor_cancelado_rp), numCSV(e.valor_empenhado), numCSV(e.valor_liquidado_exercicio), numCSV(e.valor_pago_exercicio),
+        numCSV(e.rp_inscrito_rpp), numCSV(e.rp_inscrito_rpnp), numCSV((e.rp_cancelado_rpp || 0) + (e.rp_cancelado_rpnp || 0)),
+        numCSV(e.valor_pago_rpp), numCSV(e.valor_pago_rpnp), numCSV(e.valor_pago), baseOrigem[e.origem] || e.origem
+    ])));
+    const csv = [cab, ...linhas].map(l => l.map(aspasCSV).join(';')).join('\r\n');
+    baixarArquivo(csv, `emendas_empenhos_${new Date().toISOString().slice(0,10)}.csv`);
+}
+
 function exportarCSV(dash) {
     let cabecalhos, linhas;
     if (dash === 'dg') {
@@ -2559,15 +3036,18 @@ function exportarCSV(dash) {
         ]);
     } else {
         const agregado = calcularAgregadoExec();
-        cabecalhos = ['Ano','Nº Emenda','Autoria','Código SIAFI','Tipo de Emenda','Forma de Repasse','Função de Governo','Órgão','Objeto','Descrição da Despesa','Data Início','Data Fim','Valor Indicado (R$)','Valor Empenhado (R$)','Valor Liquidado (R$)','Valor Pago (R$)','Situação','Credor / Beneficiário','CNPJ/CPF','Plano de Ação vinculado','Observações'];
+        cabecalhos = ['Ano','Nº Emenda','Autoria','Código SIAFI','Tipo de Emenda','Forma de Repasse','Função de Governo','Órgão','Objeto','Descrição da Despesa','Data Início Vigência','Data Fim Vigência','Situação da Vigência','Valor Indicado (R$)','Valor Repassado (R$)','Nº Empenhos','Valor Empenhado (R$)','Valor Liquidado (R$)','Pago no Exercício (R$)','Pago em Restos a Pagar (R$)','Valor Pago Total (R$)','Situação','Motivo (sem execução)','Credor / Beneficiário','CNPJ/CPF','Plano de Ação vinculado','Observações'];
         linhas = agregado.map(g => {
             const obs = [];
             if (g.complementar) obs.push('Nº SIAFI ausente de Emendas Geral');
             if (g.n_emendas_total > 1) obs.push(`Nº SIAFI reúne ${g.n_emendas_total} emendas`);
+            if (g.empenhado > 0 && g.pago > g.empenhado * 1.001) obs.push('Pago maior que o empenhado: verificar base');
+            const rep = valorRepassadoInstrumento(g.siafi);
             return [
                 g.ano, g.numero_emenda, g.autoria, g.siafi, g.modalidade, g.tipo_instrumento, g.funcao, g.orgao_executor, g.objeto,
-                g.descricao_item_txt, g.data_inicio ? formatarData(g.data_inicio) : '', g.data_fim ? formatarData(g.data_fim) : '',
-                numCSV(g.valor_indicado), numCSV(g.empenhado), numCSV(g.liquidado), numCSV(g.pago), g.situacao,
+                g.descricao_item_txt, g.data_inicio ? formatarData(g.data_inicio) : '', g.data_fim ? formatarData(g.data_fim) : '', ROTULO_VIGENCIA[g.vig],
+                numCSV(g.valor_indicado), rep === null ? '' : numCSV(rep), g.nEmpenhos, numCSV(g.empenhado), numCSV(g.liquidado),
+                numCSV(g.pagoExercicio), numCSV(g.pagoRP), numCSV(g.pago), g.situacao, g.motivo,
                 g.credorInfo.lista.map(c => c.nome).join('; '), g.credorInfo.lista.map(c => formatarCNPJ(c.cnpj)).join('; '),
                 g.planos.length ? 'Sim' : 'Não', obs.join('; ')
             ];
@@ -2599,12 +3079,14 @@ function exportarPDF(dash) {
     } else {
         const agregado = calcularAgregadoExec();
         total = agregado.length;
-        titulo = 'Emendas Federais — Execução Transferências PIX';
-        head = [['Ano','Nº Emenda','Autoria','SIAFI','Tipo Emenda','Forma Repasse','Função','Órgão','Objeto','Desc. Despesa','Situação','Vl. Indicado','Vl. Empenhado','Vl. Liquidado','Vl. Pago']];
+        titulo = 'Emendas Federais — Execução (SIAFI-MG)';
+        head = [['Ano','Nº Emenda','Autoria','SIAFI','Tipo Emenda','Forma Repasse','Órgão','Objeto','Vigência','Situação / Motivo','Vl. Indicado','Vl. Empenhado','Vl. Liquidado','Vl. Pago']];
         body = agregado.slice(0, LIMITE).map(g => [
             truncarTxt(g.ano, 12), truncarTxt(g.numero_emenda, 20), truncarTxt(g.autoria, 18), g.siafi,
-            truncarTxt(g.modalidade, 14), truncarTxt(g.tipo_instrumento, 14), truncarTxt(g.funcao, 14),
-            truncarTxt(g.orgao_executor, 15), truncarTxt(g.objeto, 18), truncarTxt(g.descricao_item_txt, 18), truncarTxt(g.situacao, 18),
+            truncarTxt(g.modalidade, 14), truncarTxt(g.tipo_instrumento, 14),
+            truncarTxt(g.orgao_executor, 15), truncarTxt(g.objeto, 18),
+            g.data_fim ? `${formatarData(g.data_inicio)} a ${formatarData(g.data_fim)}` : '-',
+            truncarTxt(g.situacao + (g.motivo ? ' — ' + g.motivo : ''), 70),
             formatarMoeda(g.valor_indicado), formatarMoeda(g.empenhado), formatarMoeda(g.liquidado), formatarMoeda(g.pago)
         ]);
     }
@@ -2731,6 +3213,8 @@ function setupEventListeners() {
     document.querySelectorAll('#dashboard2 .filter-container input').forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') aplicarFiltros('exec'); }));
     document.getElementById('itemsPerPageExec')?.addEventListener('change', function() { alterarItensPorPagina('exec', this.value); });
     document.getElementById('exportCSVExec')?.addEventListener('click', () => exportarCSV('exec'));
+    document.getElementById('exportCSVEmpExec')?.addEventListener('click', () => exportarCSVEmpenhos());
+    document.getElementById('recursoExec')?.addEventListener('change', () => aplicarFiltros('exec'));
     document.getElementById('printExec')?.addEventListener('click',     () => exportarPDF('exec'));
 
     // Fechar share dropdown ao clicar fora
