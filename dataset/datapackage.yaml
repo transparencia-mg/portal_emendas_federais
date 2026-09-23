@@ -305,7 +305,7 @@ resources:
         - name: valor_liquidado_rp
           type: number
         - name: valor_cancelado_rpp
-         type: number
+          type: number
         - name: valor_cancelado_rpnp
           type: number
         - name: valor_restabelecido_rpp
