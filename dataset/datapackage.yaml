@@ -1,9 +1,8 @@
 name: portal_emendas_federais
-owner_org: ''
+owner_org: secretaria-geral-do-estado-de-minas-gerais
 profile: data-package
 resources:
-  - description: Insira a descrição/explicação detalhada deste recurso.
-    dialect:
+  - dialect:
       delimiter: ;
     encoding: utf-8-sig
     format: csv
@@ -50,9 +49,8 @@ resources:
         - name: link
           type: string
     scheme: file
-    title: Insira um título humanamente legível para este recurso.
-  - description: Insira a descrição/explicação detalhada deste recurso.
-    dialect:
+    title: Emendas Dados Gerais
+  - dialect:
       delimiter: ;
     encoding: utf-8-sig
     format: csv
@@ -137,9 +135,8 @@ resources:
         - name: rpp_anulado_retencao
           type: integer
     scheme: file
-    title: Insira um título humanamente legível para este recurso.
-  - description: Insira a descrição/explicação detalhada deste recurso.
-    dialect:
+    title: Execução Transferências Especiais PIX
+  - dialect:
       delimiter: ;
     encoding: utf-8-sig
     format: csv
@@ -182,5 +179,143 @@ resources:
         - name: classificacao_orcamentaria_plano_de_trabalho
           type: string
     scheme: file
-    title: Insira um título humanamente legível para este recurso.
-title: Portal_emendas_federais
+    title: Plano de Execução Transferências PIX
+  - dialect:
+      delimiter: ;
+    encoding: utf-8-sig
+    format: csv
+    hashing: md5
+    name: pagamentos
+    path: data/pagamentos.csv
+    profile: tabular-data-resource
+    schema:
+      fields:
+        - name: codigo_siafi
+          type: integer
+        - name: processo_compra_siad
+          type: string
+        - name: modalidade_licitacao
+          type: string
+        - name: numero_empenho
+          type: integer
+        - name: data_empenho
+          type: date
+        - name: razao_social_credor
+          type: string
+        - name: cnpj_cpf_credor
+          type: string
+        - name: orgao_sigla
+          type: string
+        - name: orgao_codigo
+          type: integer
+        - name: nome_orgao
+          type: string
+        - name: categoria_economica_codigo
+          type: integer
+        - name: categoria_economica_descricao
+          type: string
+        - name: grupo_despesa_codigo
+          type: integer
+        - name: grupo_despesa_descricao
+          type: string
+        - name: modalidade_aplicacao_codigo
+          type: integer
+        - name: modalidade_aplicacao_descricao
+          type: string
+        - name: codigo_elemento
+          type: integer
+        - name: elemento_despesa
+          type: string
+        - name: codigo_item
+          type: integer
+        - name: item_despesa
+          type: string
+        - name: codigo_fonte
+          type: integer
+        - name: fonte_recurso
+          type: string
+        - name: valor_empenhado
+          type: number
+        - name: valor_liquidado
+          type: number
+        - name: valor_pago
+          type: number
+    scheme: file
+    title: Pagamentos
+  - dialect:
+      delimiter: ;
+    encoding: utf-8-sig
+    format: csv
+    hashing: md5
+    name: pagamentos
+    path: data/pagamentosrp.csv
+    profile: tabular-data-resource
+    schema:
+      fields:
+        - name: codigo_siafi
+          type: integer
+        - name: processo_compra_siad
+          type: string
+        - name: modalidade_licitacao
+          type: string
+        - name: numero_empenho
+          type: integer
+        - name: data_empenho
+          type: date
+        - name: razao_social_credor
+          type: string
+        - name: cnpj_cpf_credor
+          type: string
+        - name: orgao_sigla
+          type: string
+        - name: orgao_codigo
+          type: integer
+        - name: nome_orgao
+          type: string
+        - name: categoria_economica_codigo
+          type: integer
+        - name: categoria_economica_descricao
+          type: string
+        - name: grupo_despesa_codigo
+          type: integer
+        - name: grupo_despesa_descricao
+          type: string
+        - name: modalidade_aplicacao_codigo
+          type: integer
+        - name: modalidade_aplicacao_descricao
+          type: string
+        - name: codigo_elemento
+          type: integer
+        - name: elemento_despesa
+          type: string
+        - name: codigo_item
+          type: integer
+        - name: item_despesa
+          type: string
+        - name: codigo_fonte
+          type: integer
+        - name: fonte_recurso
+          type: string
+        - name: valor_empenhado
+          type: number
+        - name: valor_inscrito_rpp
+          type: number
+        - name: valor_inscrito_rpnp
+          type: number
+        - name: valor_liquidado_rp
+          type: number
+        - name: valor_cancelado_rpp
+         type: number
+        - name: valor_cancelado_rpnp
+          type: number
+        - name: valor_restabelecido_rpp
+          type: number
+        - name: valor_restabelecido_rpnp
+          type: number
+        - name: valor_pago_rpp
+          type: number
+        - name: valor_pago_rpnp
+          type: number
+    scheme: file
+    title: Pagamentos Restos a Pagar
+title: Emendas Federais
