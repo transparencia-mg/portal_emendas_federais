@@ -1,4 +1,4 @@
-Conjunto de dados que reúne informações sobre os **Emendas Federais** recebidas pelo Estado de Minas Gerais e disponibilizado em conformidade com a política estadual de transparência e de dados abertos.
+Conjunto de dados que reúne informações sobre os Emendas Parlamentares Federais recebidas pelo Estado de Minas Gerais e disponibilizado em conformidade com a política estadual de transparência e de dados abertos.
 
 Os dados são organizados em arquivos anuais e seguem um padrão estruturado, facilitando o uso por cidadãos, pesquisadores, órgãos de controle e desenvolvedores
 
