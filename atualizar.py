@@ -8,7 +8,7 @@ Fica na RAIZ do repositório portal_emendas_federais. Rode:
 Etapas:
  1. git pull — sincroniza com o GitHub antes de mexer em qualquer arquivo.
  2. scripts/atualizar_bases.py — gera datas.xlsx e as planilhas da pasta upload a partir de
-    EMENDASFEDERAIS.xlsx e de "Dados Emendas - ATUALIZADO <data>.xlsx" (se estiverem na pasta upload).
+    EMENDAS_FEDERAIS.xlsx e de "Dados Emendas - ATUALIZADO <data>.xlsx" (se estiverem na pasta upload).
  3. scripts/atualizar_links.py — preenche a coluna Link (Inteiro Teor) de dados_gerais_emendas.xlsx
     e confere as bases.
  4. Apaga os arquivos de origem (só se as etapas 2 e 3 deram certo).
