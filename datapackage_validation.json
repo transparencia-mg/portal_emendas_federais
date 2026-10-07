@@ -1,6 +1,6 @@
 {
   "version": "4.16.6",
-  "time": 0.281,
+  "time": 0.376,
   "errors": [],
   "tasks": [
     {
@@ -99,7 +99,7 @@
           "rows": 0
         }
       },
-      "time": 0.036,
+      "time": 0.045,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -2907,7 +2907,7 @@
             "916805/2021",
             "477358,01",
             "924647,1900000002",
-            "924647,1900000002",
+            "924647,19",
             "Estruturar diversas unidades da PCMG, mediante modernização e renovação da frota de veículos materiais bélicos, mobiliários e equipamentos de informatica, visando as atividades de repressão à criminalidade",
             "SEGURANCA PUBLICA",
             "POLÍCIA CIVIL DO ESTADO DE MINAS GERAIS",
@@ -2942,7 +2942,7 @@
             "916805/2021",
             "477358,01",
             "924647,1900000002",
-            "924647,1900000002",
+            "924647,19",
             "Estruturar diversas unidades da PCMG, mediante modernização e renovação da frota de veículos materiais bélicos, mobiliários e equipamentos de informatica, visando as atividades de repressão à criminalidade",
             "SEGURANCA PUBLICA",
             "POLÍCIA CIVIL DO ESTADO DE MINAS GERAIS",
@@ -2977,7 +2977,7 @@
             "916805/2021",
             "477358,01",
             "924647,1900000002",
-            "924647,1900000002",
+            "924647,19",
             "Estruturar diversas unidades da PCMG, mediante modernização e renovação da frota de veículos materiais bélicos, mobiliários e equipamentos de informatica, visando as atividades de repressão à criminalidade",
             "SEGURANCA PUBLICA",
             "POLÍCIA CIVIL DO ESTADO DE MINAS GERAIS",
@@ -35298,13 +35298,13 @@
         "scheme": "file",
         "title": "Execução Transferências Especiais PIX",
         "stats": {
-          "hash": "52aa27e56281d712e52d6eb96a9a54d3",
-          "bytes": 340876,
+          "hash": "5d766e27c6b292e7050a43233b73b0f1",
+          "bytes": 348433,
           "fields": 37,
-          "rows": 1425
+          "rows": 1456
         }
       },
-      "time": 0.063,
+      "time": 0.079,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -35371,8 +35371,8 @@
             "0,0",
             "0"
           ],
-          "rowNumber": 210,
-          "rowPosition": 211,
+          "rowNumber": 216,
+          "rowPosition": 217,
           "code": "type-error",
           "name": "Type Error",
           "tags": [
@@ -35381,7 +35381,7 @@
             "#cell"
           ],
           "note": "type is \"geopoint/default\"",
-          "message": "Type error in the cell \"21377,93\" in row \"211\" and field \"rpp_cancelado\" at position \"31\": type is \"geopoint/default\"",
+          "message": "Type error in the cell \"21377,93\" in row \"217\" and field \"rpp_cancelado\" at position \"31\": type is \"geopoint/default\"",
           "description": "The value does not match the schema type and format for this field."
         },
         {
@@ -35428,8 +35428,8 @@
             "0,0",
             "0"
           ],
-          "rowNumber": 505,
-          "rowPosition": 506,
+          "rowNumber": 513,
+          "rowPosition": 514,
           "code": "type-error",
           "name": "Type Error",
           "tags": [
@@ -35438,7 +35438,7 @@
             "#cell"
           ],
           "note": "type is \"geopoint/default\"",
-          "message": "Type error in the cell \"133817,29\" in row \"506\" and field \"rpnp_restabelecido\" at position \"26\": type is \"geopoint/default\"",
+          "message": "Type error in the cell \"133817,29\" in row \"514\" and field \"rpnp_restabelecido\" at position \"26\": type is \"geopoint/default\"",
           "description": "The value does not match the schema type and format for this field."
         }
       ],
@@ -35535,7 +35535,7 @@
           "rows": 0
         }
       },
-      "time": 0.058,
+      "time": 0.079,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -72703,7 +72703,7 @@
           "rows": 0
         }
       },
-      "time": 0.035,
+      "time": 0.055,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -117885,7 +117885,7 @@
           "rows": 0
         }
       },
-      "time": 0.031,
+      "time": 0.042,
       "scope": [
         "hash-count-error",
         "byte-count-error",
