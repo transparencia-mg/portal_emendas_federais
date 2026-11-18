@@ -599,6 +599,40 @@
       },
       "scheme": "file",
       "title": "Pagamentos Restos a Pagar"
+    },
+    {
+      "path": "data/Emendas_Federais.csv",
+      "name": "emendas_federais",
+      "profile": "tabular-data-resource",
+      "scheme": "file",
+      "format": "csv",
+      "hashing": "md5",
+      "encoding": "utf-8-sig",
+      "dialect": {
+        "delimiter": ";"
+      },
+      "schema": {
+        "fields": [
+          {
+            "name": "unnamed_0",
+            "type": "any"
+          },
+          {
+            "name": "unnamed_1",
+            "type": "string"
+          },
+          {
+            "name": "unnamed_2",
+            "type": "string"
+          },
+          {
+            "name": "unnamed_3",
+            "type": "string"
+          }
+        ]
+      },
+      "title": "Insira um título humanamente legível para este recurso.",
+      "description": "Insira a descrição/explicação detalhada deste recurso."
     }
   ],
   "title": "Emendas Parlamentares Federais"
